@@ -31,13 +31,15 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         menuEquipos = new javax.swing.JMenu();
         mnuEqRegistro = new javax.swing.JMenuItem();
         mnuEqConsulta = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        menuJugadores = new javax.swing.JMenu();
+        mnuJugConsulta = new javax.swing.JMenuItem();
+        mnuJugRegistro = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         menuEquipos.setText("Equipos");
 
-        mnuEqRegistro.setText("Registro");
+        mnuEqRegistro.setText("Registro/Consulta");
         mnuEqRegistro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuEqRegistroActionPerformed(evt);
@@ -45,13 +47,20 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         });
         menuEquipos.add(mnuEqRegistro);
 
-        mnuEqConsulta.setText("Consulta");
+        mnuEqConsulta.setText("Alta Jugadores");
         menuEquipos.add(mnuEqConsulta);
 
         jMenuBar1.add(menuEquipos);
 
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
+        menuJugadores.setText("Jugadores");
+
+        mnuJugConsulta.setText("Consulta");
+        menuJugadores.add(mnuJugConsulta);
+
+        mnuJugRegistro.setText("Registro");
+        menuJugadores.add(mnuJugRegistro);
+
+        jMenuBar1.add(menuJugadores);
 
         setJMenuBar(jMenuBar1);
 
@@ -111,10 +120,12 @@ public class LigaFutbolMain extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu menuEquipos;
+    private javax.swing.JMenu menuJugadores;
     private javax.swing.JMenuItem mnuEqConsulta;
     private javax.swing.JMenuItem mnuEqRegistro;
+    private javax.swing.JMenuItem mnuJugConsulta;
+    private javax.swing.JMenuItem mnuJugRegistro;
     // End of variables declaration//GEN-END:variables
 }

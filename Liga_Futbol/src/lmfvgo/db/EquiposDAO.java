@@ -36,7 +36,7 @@ public class EquiposDAO extends BaseDAO {
                         .append(new SimpleDateFormat("yyyy-MM-dd").format(new Date())).append("')");
             } else {
                 sb.append("update equipos set nombre = '").append(equipo.getNombre().trim().toUpperCase()).append("', ")
-                        .append("fuerza = ").append(equipo.getFuerza()).append(", ")
+                        .append("fuerza = ").append(equipo.getFuerza()).append(" ")
                         .append("where id_equipo = ").append(equipo.getIdEquipo());
             }
             getConnection().prepareStatement(sb.toString()).execute();
@@ -49,7 +49,7 @@ public class EquiposDAO extends BaseDAO {
         try {
             sb = new StringBuilder();
             sb.append("update equipos set motivo_baja = '").append(motivoBaja.trim().toUpperCase()).append("', ")
-                    .append("fecha_baja = '").append(new SimpleDateFormat("yyyy-MM-dd").format(new Date())).append("', ")
+                    .append("fecha_baja = '").append(new SimpleDateFormat("yyyy-MM-dd").format(new Date())).append("' ")
                     .append("where id_equipo = ").append(idEquipo);
             getConnection().prepareStatement(sb.toString()).execute();
         } catch (SQLException ex) {

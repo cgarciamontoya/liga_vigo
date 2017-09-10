@@ -11,7 +11,7 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="mnuEqRegistro">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Registro"/>
+                <Property name="text" type="java.lang.String" value="Registro/Consulta"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuEqRegistroActionPerformed"/>
@@ -19,15 +19,27 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnuEqConsulta">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Consulta"/>
+                <Property name="text" type="java.lang.String" value="Alta Jugadores"/>
               </Properties>
             </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="jMenu2">
+        <Menu class="javax.swing.JMenu" name="menuJugadores">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Edit"/>
+            <Property name="text" type="java.lang.String" value="Jugadores"/>
           </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuJugConsulta">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Consulta"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuJugRegistro">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Registro"/>
+              </Properties>
+            </MenuItem>
+          </SubComponents>
         </Menu>
       </SubComponents>
     </Menu>

@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import lmfvgo.db.EquiposDAO;
 import lmfvgo.excepciones.LMFVGOException;
@@ -20,8 +22,9 @@ import lmfvgo.modelo.Equipos;
  */
 public class EquipoRegistroVista extends FormBase {
     
-    private EquiposDAO equiposDAO;
-    private Map<String, Integer> catFuerza;
+    private final EquiposDAO equiposDAO;
+    private final Map<String, Integer> catFuerza;
+    private Integer equipoSeleccionado;
 
     /**
      * Creates new form EquipoRegistroVista
@@ -29,6 +32,7 @@ public class EquipoRegistroVista extends FormBase {
     public EquipoRegistroVista() {
         initComponents();
         lblActualizando.setVisible(false);
+        btnEliminar.setVisible(false);
         equiposDAO = new EquiposDAO();
         catFuerza = new HashMap<>();
         catFuerza.put("SELECCIONE", 0);
@@ -55,6 +59,8 @@ public class EquipoRegistroVista extends FormBase {
         lblActualizando = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblResultado = new javax.swing.JTable();
+        btnEliminar = new javax.swing.JButton();
+        btnSalir = new javax.swing.JButton();
 
         setClosable(true);
         setTitle("REGISTRO DE EQUIPOS");
@@ -100,7 +106,7 @@ public class EquipoRegistroVista extends FormBase {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false
@@ -114,6 +120,11 @@ public class EquipoRegistroVista extends FormBase {
                 return canEdit [columnIndex];
             }
         });
+        tblResultado.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                editarEquipo(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblResultado);
         if (tblResultado.getColumnModel().getColumnCount() > 0) {
             tblResultado.getColumnModel().getColumn(0).setPreferredWidth(10);
@@ -121,32 +132,56 @@ public class EquipoRegistroVista extends FormBase {
             tblResultado.getColumnModel().getColumn(2).setPreferredWidth(20);
         }
 
+        btnEliminar.setText("Baja");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bajaEquipo(evt);
+            }
+        });
+
+        btnSalir.setText("Salir");
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cerrar(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnGuardar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnBuscar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnLimpiar))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(cboFuerza, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addComponent(lblActualizando, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cboFuerza, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(5, 5, 5))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1)
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnEliminar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnGuardar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnBuscar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnLimpiar)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(lblActualizando, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnSalir)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -154,21 +189,22 @@ public class EquipoRegistroVista extends FormBase {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
-                    .addComponent(cboFuerza, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(cboFuerza, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLimpiar)
                     .addComponent(btnBuscar)
-                    .addComponent(btnGuardar))
+                    .addComponent(btnGuardar)
+                    .addComponent(btnEliminar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblActualizando)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnSalir)
+                .addGap(7, 7, 7))
         );
 
         pack();
@@ -179,6 +215,7 @@ public class EquipoRegistroVista extends FormBase {
         cboFuerza.setSelectedIndex(0);
         limpiarTabla(tblResultado);
         lblActualizando.setVisible(false);
+        btnEliminar.setVisible(false);
     }//GEN-LAST:event_limpiar
 
     private void buscar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscar
@@ -211,20 +248,60 @@ public class EquipoRegistroVista extends FormBase {
             agregarMensajeAdvertencia("La fuerza es requerida.");
             return;
         }
-        Equipos eq = new Equipos(null, txtNombre.getText().trim(), cboFuerza.getSelectedIndex(), new Date());
+        Equipos eq = new Equipos(equipoSeleccionado != null && equipoSeleccionado > 0 ? equipoSeleccionado : null, 
+                txtNombre.getText().trim(), cboFuerza.getSelectedIndex(), new Date());
         try {
             equiposDAO.guardarEquipo(eq);
             agregarMensajeExito("El registro fue guardado correctamente");
+            limpiar(evt);
         } catch (LMFVGOException ex) {
             agregarMensajeError(ex.getMessage());
         }
     }//GEN-LAST:event_guardar
 
+    private void editarEquipo(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editarEquipo
+        if (SwingUtilities.isRightMouseButton(evt)) {
+            int dialogResult = JOptionPane.showConfirmDialog(null, "Desea editar el registro?", "Advertencia", JOptionPane.YES_NO_OPTION);
+            if (dialogResult == JOptionPane.YES_OPTION) {
+                DefaultTableModel modelo = (DefaultTableModel) tblResultado.getModel();
+                equipoSeleccionado = (Integer) modelo.getValueAt(tblResultado.getSelectedRow(), 0);
+                txtNombre.setText((String) modelo.getValueAt(tblResultado.getSelectedRow(), 1));
+                cboFuerza.setSelectedItem((String) modelo.getValueAt(tblResultado.getSelectedRow(), 2));
+                lblActualizando.setVisible(true);
+                btnEliminar.setVisible(true);
+            }
+        }
+    }//GEN-LAST:event_editarEquipo
+
+    private void bajaEquipo(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bajaEquipo
+        String motivoBaja = JOptionPane.showInputDialog(null, "Para realizar la baja ingrese el motivo", "");
+        if (motivoBaja == null) {
+            return;
+        }
+        if (motivoBaja.trim().isEmpty()) {
+            agregarMensajeAdvertencia("Debe ingresar un motivo de baja");
+            return;
+        }
+        try {
+            equiposDAO.bajaEquipo(equipoSeleccionado, motivoBaja);
+            agregarMensajeExito("El equipo fue dado de baja correctamente");
+            limpiar(evt);
+        } catch (LMFVGOException ex) {
+            agregarMensajeError(ex.getMessage());
+        }
+    }//GEN-LAST:event_bajaEquipo
+
+    private void cerrar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cerrar
+        this.dispose();
+    }//GEN-LAST:event_cerrar
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnLimpiar;
+    private javax.swing.JButton btnSalir;
     private javax.swing.JComboBox<String> cboFuerza;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
