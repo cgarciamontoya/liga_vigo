@@ -35,17 +35,24 @@ public class JugadoresDAO extends BaseDAO {
         try {
             PreparedStatement ps = null;
             if (jugador.getIdJugador() != null && jugador.getIdJugador() > 0) {
-                sb.append("update jugadores set nombre = ?, paterno = ?, materno = ?, fecha_nacimiento = ?, lugar_procedencia = ?, ")
-                        .append("fecha_registro = ?, imagen = ? where id_jugador = ?");
+                sb.append("update jugadores set nombre = ?, paterno = ?, materno = ?, fecha_nacimiento = ?, lugar_procedencia = ?");
+                if (jugador.getImagen() != null && jugador.getImagen().length > 0) {
+                    sb.append(", imagen = ?");
+                }
+                sb.append(" where id_jugador = ?");
                 ps = getConnection().prepareStatement(sb.toString());
                 ps.setString(1, jugador.getNombre().trim().toUpperCase());
                 ps.setString(2, jugador.getPaterno().trim().toUpperCase());
                 ps.setString(3, jugador.getMaterno());
                 ps.setDate(4, new java.sql.Date(jugador.getFechaNacimiento().getTime()));
                 ps.setString(5, jugador.getLugarProcedencia().trim().toUpperCase());
-                ps.setDate(6, new java.sql.Date(jugador.getFechaRegistro().getTime()));
-                ps.setBytes(7, jugador.getImagen());
-                ps.setInt(8, jugador.getIdJugador());
+                if (jugador.getImagen() != null && jugador.getImagen().length > 0) {
+                    ps.setBytes(6, jugador.getImagen());
+                    ps.setInt(7, jugador.getIdJugador());
+                } else {
+                    ps.setInt(6, jugador.getIdJugador());
+                }
+                
             } else {
                 sb.append("insert into jugadores(nombre, paterno, materno, fecha_nacimiento, lugar_procedencia, fecha_registro, ")
                         .append("imagen) values(?,?,?,?,?,?,?)");
@@ -56,7 +63,7 @@ public class JugadoresDAO extends BaseDAO {
                 ps.setDate(4, new java.sql.Date(jugador.getFechaNacimiento().getTime()));
                 ps.setString(5, jugador.getLugarProcedencia().trim().toUpperCase());
                 ps.setDate(6, new java.sql.Date(jugador.getFechaRegistro().getTime()));
-                if (jugador.getImagen().length > 0) {
+                if (jugador.getImagen() != null && jugador.getImagen().length > 0) {
                     ps.setBytes(7, jugador.getImagen());
                 } else {
                     ps.setNull(7, Types.BLOB);
@@ -101,6 +108,31 @@ public class JugadoresDAO extends BaseDAO {
                 resultado.add(j);
             }
             return resultado;
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
+
+    public Jugadores consultarJugadorId(int idJugador) {
+        sb = new StringBuilder();
+        sb.append("select id_jugador, nombre, paterno, materno, fecha_nacimiento, lugar_procedencia, ")
+                .append("fecha_registro, imagen ")
+                .append("from jugadores where id_jugador = ? ");
+        try {
+            PreparedStatement ps = getConnection().prepareStatement(sb.toString());
+            ps.setInt(1, idJugador);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            Jugadores j = new Jugadores();
+            j.setIdJugador(rs.getInt("id_jugador"));
+            j.setNombre(rs.getString("nombre"));
+            j.setPaterno(rs.getString("paterno"));
+            j.setMaterno(rs.getString("materno"));
+            j.setFechaNacimiento(rs.getDate("fecha_nacimiento"));
+            j.setLugarProcedencia(rs.getString("lugar_procedencia"));
+            j.setFechaRegistro(rs.getDate("fecha_registro"));
+            j.setImagen(rs.getBytes("imagen"));
+            return j;
         } catch (SQLException ex) {
             return null;
         }

@@ -36,6 +36,7 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         mnuJugRegistro = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Liga Municipal de Futbol de Villa González Ortega");
 
         menuEquipos.setText("Equipos");
 
@@ -58,6 +59,11 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         menuJugadores.add(mnuJugConsulta);
 
         mnuJugRegistro.setText("Registro");
+        mnuJugRegistro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jugadorRegistro(evt);
+            }
+        });
         menuJugadores.add(mnuJugRegistro);
 
         jMenuBar1.add(menuJugadores);
@@ -83,6 +89,12 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         this.add(equipos);
         equipos.show();
     }//GEN-LAST:event_mnuEqRegistroActionPerformed
+
+    private void jugadorRegistro(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jugadorRegistro
+        JugadoresRegistroVista jugadores = new JugadoresRegistroVista(1);
+        this.add(jugadores);
+        jugadores.show();
+    }//GEN-LAST:event_jugadorRegistro
 
     /**
      * @param args the command line arguments
