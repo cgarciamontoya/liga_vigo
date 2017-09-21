@@ -56,6 +56,11 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         menuJugadores.setText("Jugadores");
 
         mnuJugConsulta.setText("Consulta");
+        mnuJugConsulta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                abrirConsultaJugadores(evt);
+            }
+        });
         menuJugadores.add(mnuJugConsulta);
 
         mnuJugRegistro.setText("Registro");
@@ -91,10 +96,16 @@ public class LigaFutbolMain extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuEqRegistroActionPerformed
 
     private void jugadorRegistro(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jugadorRegistro
-        JugadoresRegistroVista jugadores = new JugadoresRegistroVista(1);
+        JugadoresRegistroVista jugadores = new JugadoresRegistroVista();
         this.add(jugadores);
         jugadores.show();
     }//GEN-LAST:event_jugadorRegistro
+
+    private void abrirConsultaJugadores(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirConsultaJugadores
+        JugadorConsultaVista jcv = new JugadorConsultaVista();
+        this.add(jcv);
+        jcv.show();
+    }//GEN-LAST:event_abrirConsultaJugadores
 
     /**
      * @param args the command line arguments

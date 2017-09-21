@@ -77,21 +77,30 @@ public class JugadoresDAO extends BaseDAO {
     
     public List<Jugadores> consultarJugadores(Jugadores filtros) {
         sb = new StringBuilder();
-        sb.append("select id_jugador, nombre, paterno, materno, fecha_nacimiento, lugar_procedencia, ")
-                .append("fecha_registro, imagen ")
-                .append("from jugadores ");
+        sb.append("select j.id_jugador, j.nombre, j.paterno, j.materno, j.lugar_procedencia, ")
+                .append("e.nombre equipo_nombre, e.fuerza ")
+                .append("from jugadores j left join rel_equipo_jugadores rel on rel.id_jugador = j.id_jugador ")
+                .append("left join equipos e on e.id_equipo = rel.id_equipo ");
         if (filtros.getNombre() != null && !filtros.getNombre().trim().isEmpty()) {
-            sb.append("where nombre like '").append(filtros.getNombre().trim().toUpperCase()).append("%' ");
+            sb.append("where j.nombre like '").append(filtros.getNombre().trim().toUpperCase()).append("%' ");
         }
         if (filtros.getPaterno() != null && !filtros.getPaterno().trim().isEmpty()) {
             sb.append(!sb.toString().contains("where") ? "where " : "and ")
-                    .append("paterno like '").append(filtros.getPaterno().trim().toUpperCase()).append("%' ");
+                    .append("j.paterno like '").append(filtros.getPaterno().trim().toUpperCase()).append("%' ");
         }
         if (filtros.getMaterno() != null && !filtros.getMaterno().trim().isEmpty()) {
             sb.append(!sb.toString().contains("where") ? "where " : "and ")
-                    .append("materno like '").append(filtros.getMaterno().trim().toUpperCase()).append("%' ");
+                    .append("j.materno like '").append(filtros.getMaterno().trim().toUpperCase()).append("%' ");
         }
-        sb.append("order by nombre, paterno, materno");
+        if (filtros.getEquipo() > 0) {
+            sb.append(!sb.toString().contains("where") ? "where " : "and ")
+                    .append("e.id_equipo = ").append(filtros.getEquipo()).append(" ");
+        }
+        if (filtros.getFuerza() > 0) {
+            sb.append(!sb.toString().contains("where") ? "where " : "and ")
+                    .append("e.fuerza = ").append(filtros.getFuerza()).append(" ");
+        }
+        sb.append("order by nombre, paterno, materno, equipo_nombre");
         try {
             List<Jugadores> resultado = new ArrayList<>();
             ResultSet rs = getConnection().prepareStatement(sb.toString()).executeQuery();
@@ -101,10 +110,9 @@ public class JugadoresDAO extends BaseDAO {
                 j.setNombre(rs.getString("nombre"));
                 j.setPaterno(rs.getString("paterno"));
                 j.setMaterno(rs.getString("materno"));
-                j.setFechaNacimiento(rs.getDate("fecha_nacimiento"));
                 j.setLugarProcedencia(rs.getString("lugar_procedencia"));
-                j.setFechaRegistro(rs.getDate("fecha_registro"));
-                j.setImagen(rs.getBytes("imagen"));
+                j.setEquipoNombre(rs.getString("equipo_nombre"));
+                j.setFuerza(rs.getInt("fuerza"));
                 resultado.add(j);
             }
             return resultado;

@@ -23,10 +23,15 @@ public class Jugadores implements Serializable {
     private String lugarProcedencia;
     private Date fechaRegistro;
     private byte[] imagen;
+    
+    //ATRIBUTOS UTILIZADOS PARA LA CONSULTA
+    private int equipo;
+    private String equipoNombre;
+    private int fuerza;
 
     public Jugadores() {
     }
-
+    
     public Jugadores(Integer idJugador) {
         this.idJugador = idJugador;
     }
@@ -39,6 +44,14 @@ public class Jugadores implements Serializable {
         this.fechaNacimiento = fechaNacimiento;
         this.lugarProcedencia = lugarProcedencia;
         this.fechaRegistro = fechaRegistro;
+    }
+
+    public String getEquipoNombre() {
+        return equipoNombre;
+    }
+
+    public void setEquipoNombre(String equipoNombre) {
+        this.equipoNombre = equipoNombre;
     }
 
     public Integer getIdJugador() {
@@ -105,6 +118,23 @@ public class Jugadores implements Serializable {
         this.imagen = imagen;
     }
 
+    public int getEquipo() {
+        return equipo;
+    }
+
+    public void setEquipo(int equipo) {
+        this.equipo = equipo;
+    }
+
+    public int getFuerza() {
+        return fuerza;
+    }
+
+    public void setFuerza(int fuerza) {
+        this.fuerza = fuerza;
+    }
+
+    
     @Override
     public int hashCode() {
         int hash = 0;
