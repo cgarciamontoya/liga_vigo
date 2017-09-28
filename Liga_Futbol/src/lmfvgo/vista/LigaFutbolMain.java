@@ -5,17 +5,27 @@
  */
 package lmfvgo.vista;
 
+import java.util.Map;
+import javax.swing.JOptionPane;
+import lmfvgo.db.TorneoDAO;
+
 /**
  *
- * @author sandra
+ * @author cgarcia
  */
 public class LigaFutbolMain extends javax.swing.JFrame {
 
+    private final TorneoDAO torneoDAO;
     /**
      * Creates new form LigaFutbolMain
      */
     public LigaFutbolMain() {
         initComponents();
+        torneoDAO = new TorneoDAO();
+        Map<String, Object> mapa = torneoDAO.torneoActivo();
+        if (mapa == null) {
+            JOptionPane.showMessageDialog(this, "NO EXISTE TORNEO ACTIVO", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     /**
@@ -28,6 +38,9 @@ public class LigaFutbolMain extends javax.swing.JFrame {
     private void initComponents() {
 
         jMenuBar1 = new javax.swing.JMenuBar();
+        menuTorneo = new javax.swing.JMenu();
+        mnuTorneoNuevo = new javax.swing.JMenuItem();
+        mnuTorneoCerrar = new javax.swing.JMenuItem();
         menuEquipos = new javax.swing.JMenu();
         mnuEqRegistro = new javax.swing.JMenuItem();
         mnuEqConsulta = new javax.swing.JMenuItem();
@@ -37,6 +50,21 @@ public class LigaFutbolMain extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Liga Municipal de Futbol de Villa González Ortega");
+
+        menuTorneo.setText("Torneos");
+
+        mnuTorneoNuevo.setText("Nuevo");
+        mnuTorneoNuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuTorneoNuevoActionPerformed(evt);
+            }
+        });
+        menuTorneo.add(mnuTorneoNuevo);
+
+        mnuTorneoCerrar.setText("Cerrar");
+        menuTorneo.add(mnuTorneoCerrar);
+
+        jMenuBar1.add(menuTorneo);
 
         menuEquipos.setText("Equipos");
 
@@ -49,6 +77,11 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         menuEquipos.add(mnuEqRegistro);
 
         mnuEqConsulta.setText("Alta Jugadores");
+        mnuEqConsulta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuEqConsultaActionPerformed(evt);
+            }
+        });
         menuEquipos.add(mnuEqConsulta);
 
         jMenuBar1.add(menuEquipos);
@@ -107,6 +140,18 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         jcv.show();
     }//GEN-LAST:event_abrirConsultaJugadores
 
+    private void mnuEqConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuEqConsultaActionPerformed
+        EquipoAltaJugadoresVista ejv = new EquipoAltaJugadoresVista();
+        this.add(ejv);
+        ejv.show();
+    }//GEN-LAST:event_mnuEqConsultaActionPerformed
+
+    private void mnuTorneoNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuTorneoNuevoActionPerformed
+        TorneoRegistroVista trv = new TorneoRegistroVista();
+        this.add(trv);
+        trv.show();
+    }//GEN-LAST:event_mnuTorneoNuevoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -146,9 +191,12 @@ public class LigaFutbolMain extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu menuEquipos;
     private javax.swing.JMenu menuJugadores;
+    private javax.swing.JMenu menuTorneo;
     private javax.swing.JMenuItem mnuEqConsulta;
     private javax.swing.JMenuItem mnuEqRegistro;
     private javax.swing.JMenuItem mnuJugConsulta;
     private javax.swing.JMenuItem mnuJugRegistro;
+    private javax.swing.JMenuItem mnuTorneoCerrar;
+    private javax.swing.JMenuItem mnuTorneoNuevo;
     // End of variables declaration//GEN-END:variables
 }

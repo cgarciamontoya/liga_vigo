@@ -28,7 +28,7 @@ import lmfvgo.modelo.Jugadores;
 
 /**
  *
- * @author sandra
+ * @author cgarcia
  */
 public class JugadoresRegistroVista extends FormBase {
 

@@ -5,6 +5,7 @@
  */
 package lmfvgo.db;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -16,7 +17,7 @@ import lmfvgo.modelo.Equipos;
 
 /**
  *
- * @author sandra
+ * @author cgarcia
  */
 public class EquiposDAO extends BaseDAO {
     
@@ -86,5 +87,33 @@ public class EquiposDAO extends BaseDAO {
             return null;
         }
     }
+    
+    public void limpiarEquipo(int idEquipo) throws LMFVGOException {
+        try {
+            getConnection().prepareStatement("delete from rel_equipo_jugadores where id_equipo = " + idEquipo).execute();
+        } catch (SQLException ex) {
+            throw new LMFVGOException("Ocurrio un error al limpiar los datos del equipo");
+        }
+    }
+    
+    public void guardarJugadoresEquipo(int idEquipo, List<Integer> idsJugadores) throws LMFVGOException {
+        try {
+            sb = new StringBuilder();
+            sb.append("insert into rel_equipo_jugadores (id_equipo, id_jugador, id_torneo) values (?,?,?)");
+            Integer idTorneo = getIdTorneoActivo();
+            PreparedStatement ps = getConnection().prepareStatement(sb.toString());
+            for (Integer idJug: idsJugadores) {
+                ps.setInt(1, idEquipo);
+                ps.setInt(2, idJug);
+                ps.setInt(3, idTorneo);
+                ps.addBatch();
+            }
+            ps.executeBatch();
+        } catch (SQLException ex) {
+            throw new LMFVGOException("No fue posible guardar los jugadores");
+        }
+    }
+    
+    
     
 }

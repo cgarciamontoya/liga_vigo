@@ -7,7 +7,6 @@ package lmfvgo.vista;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -19,7 +18,7 @@ import lmfvgo.modelo.Jugadores;
 
 /**
  *
- * @author sandra
+ * @author cgarcia
  */
 public class JugadorConsultaVista extends FormBase {
     
@@ -242,11 +241,11 @@ public class JugadorConsultaVista extends FormBase {
             idx++;
         }
         if (cboFuerza.getSelectedIndex() > 0) {
-            filtros.setFuerza(Integer.parseInt(cboFuerza.getSelectedItem().toString().split("-")[0]));
+            filtros.setFuerza(cboFuerza.getSelectedIndex());
             idx++;
         }
         if (cboEquipos.getSelectedIndex() > 0) {
-            filtros.setEquipo(Integer.parseInt(cboEquipos.getSelectedItem().toString().split("-")[0]));
+            filtros.setEquipo(Integer.parseInt(cboEquipos.getSelectedItem().toString().split(" - ")[0]));
             idx++;
         }
         return idx > 0 ? filtros : null;

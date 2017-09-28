@@ -145,4 +145,23 @@ public class JugadoresDAO extends BaseDAO {
             return null;
         }
     }
+    
+    public List<String> consultaJugadoresLibre() {
+        try {
+            sb = new StringBuilder();
+            sb.append("select j.id_jugador, j.nombre, j.paterno, j.materno ")
+                    .append("from jugadores j ")
+                    .append("where j.id_jugador not in ")
+                    .append("(select distinct(id_jugador) from rel_equipo_jugadores) ")
+                    .append("order by nombre, paterno, materno");
+            ResultSet rs = getConnection().prepareStatement(sb.toString()).executeQuery();
+            List<String> jug = new ArrayList<>();
+            while (rs.next()) {
+                jug.add(rs.getInt("id_jugador") + " - " + rs.getString("nombre") + " " + rs.getString("paterno") + " " + rs.getString("materno"));
+            }
+            return jug;
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
 }

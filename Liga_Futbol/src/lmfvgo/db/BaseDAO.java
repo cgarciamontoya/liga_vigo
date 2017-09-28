@@ -12,6 +12,7 @@ package lmfvgo.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class BaseDAO {
@@ -37,6 +38,16 @@ public class BaseDAO {
             }
         } else {
             return connection;
+        }
+    }
+    
+    public Integer getIdTorneoActivo() {
+        try {
+            ResultSet rs = getConnection().prepareStatement("select id_torneo from torneo where fecha_fin is null").executeQuery();
+            rs.next();
+            return rs.getInt("id_torneo");
+        } catch (SQLException ex) {
+            return null;
         }
     }
     
