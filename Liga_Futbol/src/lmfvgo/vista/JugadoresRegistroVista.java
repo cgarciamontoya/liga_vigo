@@ -5,12 +5,21 @@
  */
 package lmfvgo.vista;
 
+import com.github.sarxos.webcam.Webcam;
+import com.github.sarxos.webcam.WebcamPanel;
+import com.github.sarxos.webcam.WebcamResolution;
+import com.github.sarxos.webcam.WebcamUtils;
+import com.github.sarxos.webcam.util.ImageUtils;
+import java.awt.BorderLayout;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.text.ParseException;
@@ -19,7 +28,9 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 import lmfvgo.db.JugadoresDAO;
@@ -37,6 +48,7 @@ public class JugadoresRegistroVista extends FormBase {
     private Date fechaActual;
     private JugadoresDAO jugadoresDAO;
     private int idJugador;
+    private byte[] fotoBytes;
 
     public JugadoresRegistroVista(int idJugador) {
         initLocal();
@@ -116,6 +128,7 @@ public class JugadoresRegistroVista extends FormBase {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         lblFoto = new javax.swing.JLabel();
+        btnCamara = new javax.swing.JButton();
 
         setClosable(true);
         setTitle("Registro de Jugadores");
@@ -148,7 +161,6 @@ public class JugadoresRegistroVista extends FormBase {
         });
 
         jButton2.setText("Limpiar");
-        jButton2.setActionCommand("Limpiar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 limpiar(evt);
@@ -159,6 +171,13 @@ public class JugadoresRegistroVista extends FormBase {
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 guardar(evt);
+            }
+        });
+
+        btnCamara.setText("Camara");
+        btnCamara.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                abrirCamara(evt);
             }
         });
 
@@ -175,38 +194,42 @@ public class JugadoresRegistroVista extends FormBase {
                         .addComponent(jButton3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton2))
-                    .addComponent(txtLugar, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtPaterno, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(txtMaterno, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jLabel4)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtFechaNac, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel5))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel6)
-                                    .addComponent(txtFechaReg, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(txtFotografia, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton1)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(lblFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(txtLugar, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel1))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(txtPaterno, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel2))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel3)
+                                .addComponent(txtMaterno, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jLabel4)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(txtFechaNac, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel5))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel6)
+                                        .addComponent(txtFechaReg, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(txtFotografia, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel7))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jButton1)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnCamara))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(lblFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(0, 0, Short.MAX_VALUE))))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -242,7 +265,8 @@ public class JugadoresRegistroVista extends FormBase {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtFotografia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(jButton1)
+                    .addComponent(btnCamara))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -273,6 +297,7 @@ public class JugadoresRegistroVista extends FormBase {
         txtFechaNac.setText("");
         txtFechaReg.setText("");
         txtFotografia.setText("");
+        fotoBytes = null;
     }//GEN-LAST:event_limpiar
 
     private void guardar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardar
@@ -288,17 +313,21 @@ public class JugadoresRegistroVista extends FormBase {
             } catch (ParseException ex) {
                 Logger.getLogger(JugadoresRegistroVista.class.getName()).log(Level.SEVERE, null, ex);
             }
-            if (txtFotografia.getText() != null && !txtFotografia.getText().trim().isEmpty()) {
-                File foto = new File(txtFotografia.getText());
-                if (foto != null && foto.isFile()) {
-                    if (foto.length() > PICTURE_MAX_SIZE) {
-                        agregarMensajeAdvertencia("El tamaño de la imagen debe ser menor a 65KB");
-                        return;
-                    }
-                    try {
-                        jugador.setImagen(Files.readAllBytes(foto.toPath()));
-                    } catch (IOException ex) {
+            if (fotoBytes != null && fotoBytes.length > 0) {
+                jugador.setImagen(fotoBytes);
+            } else {
+                if (txtFotografia.getText() != null && !txtFotografia.getText().trim().isEmpty()) {
+                    File foto = new File(txtFotografia.getText());
+                    if (foto != null && foto.isFile()) {
+                        if (foto.length() > PICTURE_MAX_SIZE) {
+                            agregarMensajeAdvertencia("El tamaño de la imagen debe ser menor a 65KB");
+                            return;
+                        }
+                        try {
+                            jugador.setImagen(Files.readAllBytes(foto.toPath()));
+                        } catch (IOException ex) {
 
+                        }
                     }
                 }
             }
@@ -314,6 +343,35 @@ public class JugadoresRegistroVista extends FormBase {
             }
         }
     }//GEN-LAST:event_guardar
+
+    private void abrirCamara(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirCamara
+        final Webcam webcam = Webcam.getDefault();
+        webcam.setViewSize(WebcamResolution.VGA.getSize());
+        final JFrame window = new JFrame("CAPTURA");
+        WebcamPanel panel = new WebcamPanel(webcam);
+        panel.setFPSDisplayed(true);
+        panel.setDisplayDebugInfo(true);
+        panel.setImageSizeDisplayed(true);
+        panel.setMirrored(true);
+
+        JButton boton = new JButton();
+        boton.setText("Capturar");
+        boton.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                    WebcamUtils.capture(webcam, "foto1", ImageUtils.FORMAT_JPG);
+                    fotoBytes = WebcamUtils.getImageBytes(webcam, "jpg");
+                    txtFotografia.setText("FOTOGRAFIA CAPTURADA");
+                    window.dispose();
+            }
+        });
+        window.add(boton, BorderLayout.NORTH);
+        window.add(panel, BorderLayout.CENTER);
+        window.setResizable(true);
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.pack();
+        window.setVisible(true);
+    }//GEN-LAST:event_abrirCamara
 
     private boolean jugadorValido() {
         if (!datoValido(txtNombre.getText())) {
@@ -387,6 +445,7 @@ public class JugadoresRegistroVista extends FormBase {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCamara;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
