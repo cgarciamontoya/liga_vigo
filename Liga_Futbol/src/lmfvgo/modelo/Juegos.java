@@ -19,7 +19,9 @@ public class Juegos implements Serializable {
     private Integer idJuego;
     private Integer jornada;
     private Integer local;
+    private String localNombre;
     private Integer visitante;
+    private String visitanteNombre;
     private String lugar;
     private Integer resultado;
     private Integer idTorneo;
@@ -87,6 +89,22 @@ public class Juegos implements Serializable {
 
     public void setFecha(Date fecha) {
         this.fecha = fecha;
+    }
+
+    public String getLocalNombre() {
+        return localNombre;
+    }
+
+    public void setLocalNombre(String localNombre) {
+        this.localNombre = localNombre;
+    }
+
+    public String getVisitanteNombre() {
+        return visitanteNombre;
+    }
+
+    public void setVisitanteNombre(String visitanteNombre) {
+        this.visitanteNombre = visitanteNombre;
     }
     
     
