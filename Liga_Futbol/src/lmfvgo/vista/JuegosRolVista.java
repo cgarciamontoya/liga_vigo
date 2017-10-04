@@ -11,7 +11,9 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.table.DefaultTableModel;
 import lmfvgo.db.EquiposDAO;
+import lmfvgo.db.JuegosDAO;
 import lmfvgo.db.TorneoDAO;
+import lmfvgo.excepciones.LMFVGOException;
 import lmfvgo.modelo.Equipos;
 import lmfvgo.modelo.Juegos;
 import lmfvgo.util.GeneradorRolJuegos;
@@ -21,9 +23,11 @@ import lmfvgo.util.GeneradorRolJuegos;
  * @author cgarcia
  */
 public class JuegosRolVista extends FormBase {
+    private static final long serialVersionUID = 6782224013793706214L;
 
     private final EquiposDAO equiposDAO;
     private final TorneoDAO torneoDAO;
+    private final JuegosDAO juegosDAO;
     private Map<Integer, List<Juegos>> rol = null;
     
     /** Creates new form JuegosRolVista */
@@ -31,6 +35,7 @@ public class JuegosRolVista extends FormBase {
         initComponents();
         equiposDAO = new EquiposDAO();
         torneoDAO = new TorneoDAO();
+        juegosDAO = new JuegosDAO();
     }
 
     /** This method is called from within the constructor to
@@ -43,16 +48,18 @@ public class JuegosRolVista extends FormBase {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        cboFuerza = new javax.swing.JComboBox<>();
+        cboFuerza = new javax.swing.JComboBox<String>();
         btnGenerar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblRol = new javax.swing.JTable();
+        btnLimpiar = new javax.swing.JButton();
+        btnGuardar = new javax.swing.JButton();
 
         setTitle("Rol de Juegos");
 
         jLabel1.setText("Fuerza");
 
-        cboFuerza.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione", "Primera", "Segunda" }));
+        cboFuerza.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione", "Primera", "Segunda" }));
 
         btnGenerar.setText("Generar");
         btnGenerar.addActionListener(new java.awt.event.ActionListener() {
@@ -86,6 +93,20 @@ public class JuegosRolVista extends FormBase {
         });
         jScrollPane1.setViewportView(tblRol);
 
+        btnLimpiar.setText("Limpiar");
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                limpiar(evt);
+            }
+        });
+
+        btnGuardar.setText("Guardar");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                guardarRol(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -101,6 +122,12 @@ public class JuegosRolVista extends FormBase {
                         .addComponent(btnGenerar))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnGuardar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnLimpiar)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -112,6 +139,10 @@ public class JuegosRolVista extends FormBase {
                     .addComponent(btnGenerar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnLimpiar)
+                    .addComponent(btnGuardar))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -123,9 +154,17 @@ public class JuegosRolVista extends FormBase {
             agregarMensajeAdvertencia("Debe seleccionar la fuerza");
             return;
         }
-        List<Equipos> equipos = equiposDAO.consultarEquipo(null, cboFuerza.getSelectedIndex());
+        List<Equipos> equipos = equiposDAO.consultarEquipoRol(cboFuerza.getSelectedIndex());
         if ((equipos.size() % 2) > 0) {
-            equipos.add(new Equipos(99, "DESCANSA", cboFuerza.getSelectedIndex(), new Date()));
+            Equipos descansa = new Equipos(99, "DESCANSA", cboFuerza.getSelectedIndex(), new Date());
+            try {
+                equiposDAO.altaEquipoDescansa(cboFuerza.getSelectedIndex());
+            } catch(LMFVGOException ex) {
+                agregarMensajeError("No fue posible generar el rol de juegos");
+                return;
+            }
+            equipos.add(descansa);
+            
         }
         Map<String, Object> torneo = torneoDAO.torneoActivo();
         switch (equipos.size()) {
@@ -157,9 +196,32 @@ public class JuegosRolVista extends FormBase {
         
     }//GEN-LAST:event_generarRol
 
+    private void limpiar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_limpiar
+        limpiarTabla(tblRol);
+        cboFuerza.setSelectedIndex(0);
+    }//GEN-LAST:event_limpiar
+
+    private void guardarRol(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarRol
+        if (rol == null || rol.isEmpty()) {
+            agregarMensajeAdvertencia("No se ha generado el rol");
+            return;
+        }
+        if (cboFuerza.getSelectedIndex() == 0) {
+            agregarMensajeAdvertencia("No se seleccióno la fuerza");
+        }
+        try {
+            juegosDAO.guardarRol(rol, cboFuerza.getSelectedIndex());
+            agregarMensajeExito("El rol de guardó correctamente");
+        } catch (LMFVGOException ex) {
+            agregarMensajeError(ex.getMessage());
+        }
+    }//GEN-LAST:event_guardarRol
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGenerar;
+    private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnLimpiar;
     private javax.swing.JComboBox<String> cboFuerza;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;

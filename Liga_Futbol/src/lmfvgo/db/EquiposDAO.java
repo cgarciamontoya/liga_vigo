@@ -46,6 +46,20 @@ public class EquiposDAO extends BaseDAO {
         }
     }
     
+    public void altaEquipoDescansa(int fuerza) throws LMFVGOException {
+        sb = new StringBuilder();
+        sb.append("insert into equipos(id_equipo, nombre, fuerza, fecha_registro) values (99, 'DESCANSA', ?, ?)");
+        try {
+            PreparedStatement ps = getConnection().prepareStatement(sb.toString());
+            ps.setInt(1, fuerza);
+            ps.setDate(2, new java.sql.Date(new Date().getTime()));
+            
+            ps.execute();
+        } catch (SQLException ex) {
+            throw new LMFVGOException(ex.getMessage());
+        }
+    }
+    
     public void bajaEquipo(int idEquipo, String motivoBaja) throws LMFVGOException {
         try {
             sb = new StringBuilder();
@@ -62,10 +76,37 @@ public class EquiposDAO extends BaseDAO {
         try {
             sb = new StringBuilder();
             sb.append("select id_equipo, nombre, fuerza, fecha_registro, fecha_baja, motivo_baja ")
-                    .append("from equipos where fecha_baja is null ");
+                    .append("from equipos where id_equipo < 99 and fecha_baja is null ");
             if (nombre != null && !nombre.trim().isEmpty()) {
                 sb.append("and nombre like '").append(nombre.trim().toUpperCase()).append("%' ");
             }
+            if (fuerza > 0) {
+                sb.append("and fuerza = ").append(fuerza).append(" ");
+            }
+            sb.append("order by fuerza, nombre");
+            ResultSet rs = getConnection().prepareStatement(sb.toString()).executeQuery();
+            List<Equipos> resultado = new ArrayList<>();
+            while (rs.next()) {
+                Equipos eq = new Equipos();
+                eq.setIdEquipo(rs.getInt("id_equipo"));
+                eq.setNombre(rs.getString("nombre"));
+                eq.setFuerza(rs.getInt("fuerza"));
+                eq.setFechaRegistro(rs.getDate("fecha_registro"));
+                eq.setFechaBaja(rs.getObject("fecha_baja") != null ? rs.getDate("fecha_baja") : null);
+                eq.setMotivoBaja(rs.getObject("motivo_baja") != null ? rs.getString("motivo_baja") : null);
+                resultado.add(eq);
+            }
+            return resultado;
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
+    
+    public List<Equipos> consultarEquipoRol(int fuerza) {
+        try {
+            sb = new StringBuilder();
+            sb.append("select id_equipo, nombre, fuerza, fecha_registro, fecha_baja, motivo_baja ")
+                    .append("from equipos where fecha_baja is null ");
             if (fuerza > 0) {
                 sb.append("and fuerza = ").append(fuerza).append(" ");
             }

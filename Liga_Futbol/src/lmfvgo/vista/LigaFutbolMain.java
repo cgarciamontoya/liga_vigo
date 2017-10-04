@@ -176,11 +176,13 @@ public class LigaFutbolMain extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuTorneoNuevoActionPerformed
 
     private void abrirRolJuegos(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirRolJuegos
-        // TODO add your handling code here:
+        JuegosRolVista jrv = new JuegosRolVista();
+        this.add(jrv);
+        jrv.show();
     }//GEN-LAST:event_abrirRolJuegos
 
     private void abrirRegistroJornada(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirRegistroJornada
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_abrirRegistroJornada
 
     /**

@@ -31,15 +31,26 @@ public class GeneradorRolJuegos {
         Integer[] j8 = new Integer[]{0,6,1,3,4,2,5,8,9,7};
         Integer[] j9 = new Integer[]{2,9,3,0,6,5,7,1,8,4};
         
-        rol.put(1, generarJornada(j1, equipos, idTorneo));
-        rol.put(2, generarJornada(j2, equipos, idTorneo));
-        rol.put(3, generarJornada(j3, equipos, idTorneo));
-        rol.put(4, generarJornada(j4, equipos, idTorneo));
-        rol.put(5, generarJornada(j5, equipos, idTorneo));
-        rol.put(6, generarJornada(j6, equipos, idTorneo));
-        rol.put(7, generarJornada(j7, equipos, idTorneo));
-        rol.put(8, generarJornada(j8, equipos, idTorneo));
-        rol.put(9, generarJornada(j9, equipos, idTorneo));
+        rol.put(1, generarJornada(j1, equipos, idTorneo, 1));
+        rol.put(2, generarJornada(j2, equipos, idTorneo, 2));
+        rol.put(3, generarJornada(j3, equipos, idTorneo, 3));
+        rol.put(4, generarJornada(j4, equipos, idTorneo, 4));
+        rol.put(5, generarJornada(j5, equipos, idTorneo, 5));
+        rol.put(6, generarJornada(j6, equipos, idTorneo, 6));
+        rol.put(7, generarJornada(j7, equipos, idTorneo, 7));
+        rol.put(8, generarJornada(j8, equipos, idTorneo, 8));
+        rol.put(9, generarJornada(j9, equipos, idTorneo, 9));
+        
+        //2a vuelta
+        rol.put(10, generarJornada2a(j1, equipos, idTorneo, 10));
+        rol.put(11, generarJornada2a(j2, equipos, idTorneo, 11));
+        rol.put(12, generarJornada2a(j3, equipos, idTorneo, 12));
+        rol.put(13, generarJornada2a(j4, equipos, idTorneo, 13));
+        rol.put(14, generarJornada2a(j5, equipos, idTorneo, 14));
+        rol.put(15, generarJornada2a(j6, equipos, idTorneo, 15));
+        rol.put(16, generarJornada2a(j7, equipos, idTorneo, 16));
+        rol.put(17, generarJornada2a(j8, equipos, idTorneo, 17));
+        rol.put(18, generarJornada2a(j9, equipos, idTorneo, 18));
         
         return rol;
     }
@@ -58,17 +69,30 @@ public class GeneradorRolJuegos {
         Integer[] j10 = new Integer[]{1,3,10,11,2,0,6,9,7,4,8,5};
         Integer[] j11 = new Integer[]{0,7,11,6,3,10,4,1,5,2,9,8};
         
-        rol.put(1, generarJornada(j1, equipos, idTorneo));
-        rol.put(2, generarJornada(j2, equipos, idTorneo));
-        rol.put(3, generarJornada(j3, equipos, idTorneo));
-        rol.put(4, generarJornada(j4, equipos, idTorneo));
-        rol.put(5, generarJornada(j5, equipos, idTorneo));
-        rol.put(6, generarJornada(j6, equipos, idTorneo));
-        rol.put(7, generarJornada(j7, equipos, idTorneo));
-        rol.put(8, generarJornada(j8, equipos, idTorneo));
-        rol.put(9, generarJornada(j9, equipos, idTorneo));
-        rol.put(10, generarJornada(j10, equipos, idTorneo));
-        rol.put(11, generarJornada(j11, equipos, idTorneo));
+        rol.put(1, generarJornada(j1, equipos, idTorneo, 1));
+        rol.put(2, generarJornada(j2, equipos, idTorneo, 2));
+        rol.put(3, generarJornada(j3, equipos, idTorneo, 3));
+        rol.put(4, generarJornada(j4, equipos, idTorneo, 4));
+        rol.put(5, generarJornada(j5, equipos, idTorneo, 5));
+        rol.put(6, generarJornada(j6, equipos, idTorneo, 6));
+        rol.put(7, generarJornada(j7, equipos, idTorneo, 7));
+        rol.put(8, generarJornada(j8, equipos, idTorneo, 8));
+        rol.put(9, generarJornada(j9, equipos, idTorneo, 9));
+        rol.put(10, generarJornada(j10, equipos, idTorneo, 10));
+        rol.put(11, generarJornada(j11, equipos, idTorneo, 11));
+        
+        //2a Vuelta
+        rol.put(12, generarJornada2a(j1, equipos, idTorneo, 12));
+        rol.put(13, generarJornada2a(j2, equipos, idTorneo, 13));
+        rol.put(14, generarJornada2a(j3, equipos, idTorneo, 14));
+        rol.put(15, generarJornada2a(j4, equipos, idTorneo, 15));
+        rol.put(16, generarJornada2a(j5, equipos, idTorneo, 16));
+        rol.put(17, generarJornada2a(j6, equipos, idTorneo, 17));
+        rol.put(18, generarJornada2a(j7, equipos, idTorneo, 18));
+        rol.put(19, generarJornada2a(j8, equipos, idTorneo, 19));
+        rol.put(20, generarJornada2a(j9, equipos, idTorneo, 20));
+        rol.put(21, generarJornada2a(j10, equipos, idTorneo, 21));
+        rol.put(22, generarJornada2a(j11, equipos, idTorneo, 22));
         
         return rol;
     }
@@ -89,19 +113,34 @@ public class GeneradorRolJuegos {
         Integer[] j12 = new Integer[]{10,5,13,2,3,0,4,12,7,6,8,11,9,1};
         Integer[] j13 = new Integer[]{0,10,1,8,11,7,12,13,2,3,5,9,6,4};
         
-        rol.put(1, generarJornada(j1, equipos, idTorneo));
-        rol.put(2, generarJornada(j2, equipos, idTorneo));
-        rol.put(3, generarJornada(j3, equipos, idTorneo));
-        rol.put(4, generarJornada(j4, equipos, idTorneo));
-        rol.put(5, generarJornada(j5, equipos, idTorneo));
-        rol.put(6, generarJornada(j6, equipos, idTorneo));
-        rol.put(7, generarJornada(j7, equipos, idTorneo));
-        rol.put(8, generarJornada(j8, equipos, idTorneo));
-        rol.put(9, generarJornada(j9, equipos, idTorneo));
-        rol.put(10, generarJornada(j10, equipos, idTorneo));
-        rol.put(11, generarJornada(j11, equipos, idTorneo));
-        rol.put(12, generarJornada(j12, equipos, idTorneo));
-        rol.put(13, generarJornada(j13, equipos, idTorneo));
+        rol.put(1, generarJornada(j1, equipos, idTorneo, 1));
+        rol.put(2, generarJornada(j2, equipos, idTorneo, 2));
+        rol.put(3, generarJornada(j3, equipos, idTorneo, 3));
+        rol.put(4, generarJornada(j4, equipos, idTorneo, 4));
+        rol.put(5, generarJornada(j5, equipos, idTorneo, 5));
+        rol.put(6, generarJornada(j6, equipos, idTorneo, 6));
+        rol.put(7, generarJornada(j7, equipos, idTorneo, 7));
+        rol.put(8, generarJornada(j8, equipos, idTorneo, 8));
+        rol.put(9, generarJornada(j9, equipos, idTorneo, 9));
+        rol.put(10, generarJornada(j10, equipos, idTorneo, 10));
+        rol.put(11, generarJornada(j11, equipos, idTorneo, 11));
+        rol.put(12, generarJornada(j12, equipos, idTorneo, 12));
+        rol.put(13, generarJornada(j13, equipos, idTorneo, 13));
+        
+        //2a vuelta
+        rol.put(14, generarJornada2a(j1, equipos, idTorneo, 14));
+        rol.put(15, generarJornada2a(j2, equipos, idTorneo, 15));
+        rol.put(16, generarJornada2a(j3, equipos, idTorneo, 16));
+        rol.put(17, generarJornada2a(j4, equipos, idTorneo, 17));
+        rol.put(18, generarJornada2a(j5, equipos, idTorneo, 18));
+        rol.put(19, generarJornada2a(j6, equipos, idTorneo, 19));
+        rol.put(20, generarJornada2a(j7, equipos, idTorneo, 20));
+        rol.put(21, generarJornada2a(j8, equipos, idTorneo, 21));
+        rol.put(22, generarJornada2a(j9, equipos, idTorneo, 22));
+        rol.put(23, generarJornada2a(j10, equipos, idTorneo, 23));
+        rol.put(24, generarJornada2a(j11, equipos, idTorneo, 24));
+        rol.put(25, generarJornada2a(j12, equipos, idTorneo, 25));
+        rol.put(26, generarJornada2a(j13, equipos, idTorneo, 26));
         
         return rol;
     }
@@ -124,35 +163,68 @@ public class GeneradorRolJuegos {
         Integer[] j14 = new Integer[]{11,4,15,9,7,13,2,0,1,8,3,12,6,14,5,10};
         Integer[] j15 = new Integer[]{13,6,0,15,4,7,8,5,9,1,10,2,12,11,14,3};
         
-        rol.put(1, generarJornada(j1, equipos, idTorneo));
-        rol.put(2, generarJornada(j2, equipos, idTorneo));
-        rol.put(3, generarJornada(j3, equipos, idTorneo));
-        rol.put(4, generarJornada(j4, equipos, idTorneo));
-        rol.put(5, generarJornada(j5, equipos, idTorneo));
-        rol.put(6, generarJornada(j6, equipos, idTorneo));
-        rol.put(7, generarJornada(j7, equipos, idTorneo));
-        rol.put(8, generarJornada(j8, equipos, idTorneo));
-        rol.put(9, generarJornada(j9, equipos, idTorneo));
-        rol.put(10, generarJornada(j10, equipos, idTorneo));
-        rol.put(11, generarJornada(j11, equipos, idTorneo));
-        rol.put(12, generarJornada(j12, equipos, idTorneo));
-        rol.put(13, generarJornada(j13, equipos, idTorneo));
-        rol.put(12, generarJornada(j14, equipos, idTorneo));
-        rol.put(13, generarJornada(j15, equipos, idTorneo));
+        rol.put(1, generarJornada(j1, equipos, idTorneo, 1));
+        rol.put(2, generarJornada(j2, equipos, idTorneo, 2));
+        rol.put(3, generarJornada(j3, equipos, idTorneo, 3));
+        rol.put(4, generarJornada(j4, equipos, idTorneo, 4));
+        rol.put(5, generarJornada(j5, equipos, idTorneo, 5));
+        rol.put(6, generarJornada(j6, equipos, idTorneo, 6));
+        rol.put(7, generarJornada(j7, equipos, idTorneo, 7));
+        rol.put(8, generarJornada(j8, equipos, idTorneo, 8));
+        rol.put(9, generarJornada(j9, equipos, idTorneo, 9));
+        rol.put(10, generarJornada(j10, equipos, idTorneo, 10));
+        rol.put(11, generarJornada(j11, equipos, idTorneo, 11));
+        rol.put(12, generarJornada(j12, equipos, idTorneo, 12));
+        rol.put(13, generarJornada(j13, equipos, idTorneo, 13));
+        rol.put(14, generarJornada(j14, equipos, idTorneo, 14));
+        rol.put(15, generarJornada(j15, equipos, idTorneo, 15));
+        
+        //2a vuelta
+        rol.put(16, generarJornada2a(j1, equipos, idTorneo, 16));
+        rol.put(17, generarJornada2a(j2, equipos, idTorneo, 17));
+        rol.put(18, generarJornada2a(j3, equipos, idTorneo, 18));
+        rol.put(19, generarJornada2a(j4, equipos, idTorneo, 19));
+        rol.put(20, generarJornada2a(j5, equipos, idTorneo, 20));
+        rol.put(21, generarJornada2a(j6, equipos, idTorneo, 21));
+        rol.put(22, generarJornada2a(j7, equipos, idTorneo, 22));
+        rol.put(23, generarJornada2a(j8, equipos, idTorneo, 23));
+        rol.put(24, generarJornada2a(j9, equipos, idTorneo, 24));
+        rol.put(25, generarJornada2a(j10, equipos, idTorneo, 25));
+        rol.put(26, generarJornada2a(j11, equipos, idTorneo, 26));
+        rol.put(27, generarJornada2a(j12, equipos, idTorneo, 27));
+        rol.put(28, generarJornada2a(j13, equipos, idTorneo, 28));
+        rol.put(29, generarJornada2a(j14, equipos, idTorneo, 29));
+        rol.put(30, generarJornada2a(j15, equipos, idTorneo, 30));
         
         return rol;
     }    
-    private static List<Juegos> generarJornada(Integer[] juegosJornada, List<Equipos> equipos, Integer idTorneo) {
+    private static List<Juegos> generarJornada(Integer[] juegosJornada, List<Equipos> equipos, Integer idTorneo, Integer jornada) {
         List<Juegos> juegos = new ArrayList<>();
         int i = 0;
         for (i = 0; i < juegosJornada.length; i+=2) {
             Juegos jgo = new Juegos();
-            jgo.setJornada(1);
+            jgo.setJornada(jornada);
             jgo.setIdTorneo(idTorneo);
-            jgo.setLocal(equipos.get(i).getIdEquipo());
-            jgo.setLocalNombre(equipos.get(i).getNombre());
-            jgo.setVisitante(equipos.get(i+1).getIdEquipo());
-            jgo.setVisitanteNombre(equipos.get(i+1).getNombre());
+            jgo.setLocal(equipos.get(juegosJornada[i]).getIdEquipo());
+            jgo.setLocalNombre(equipos.get(juegosJornada[i]).getNombre());
+            jgo.setVisitante(equipos.get(juegosJornada[i+1]).getIdEquipo());
+            jgo.setVisitanteNombre(equipos.get(juegosJornada[i+1]).getNombre());
+            juegos.add(jgo);
+        }
+        return juegos;
+    }
+    
+    private static List<Juegos> generarJornada2a(Integer[] juegosJornada, List<Equipos> equipos, Integer idTorneo, Integer jornada) {
+        List<Juegos> juegos = new ArrayList<>();
+        int i = 0;
+        for (i = 0; i < juegosJornada.length; i+=2) {
+            Juegos jgo = new Juegos();
+            jgo.setJornada(jornada);
+            jgo.setIdTorneo(idTorneo);
+            jgo.setVisitante(equipos.get(juegosJornada[i]).getIdEquipo());
+            jgo.setVisitanteNombre(equipos.get(juegosJornada[i]).getNombre());
+            jgo.setLocal(equipos.get(juegosJornada[i+1]).getIdEquipo());
+            jgo.setLocalNombre(equipos.get(juegosJornada[i+1]).getNombre());
             juegos.add(jgo);
         }
         return juegos;
