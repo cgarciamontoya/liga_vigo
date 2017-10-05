@@ -77,7 +77,7 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="mnuJgosRol">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Generar Rol de Juegos"/>
+                <Property name="text" type="java.lang.String" value="Rol de Juegos"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="abrirRolJuegos"/>

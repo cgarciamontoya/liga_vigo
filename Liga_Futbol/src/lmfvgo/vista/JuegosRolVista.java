@@ -60,6 +60,11 @@ public class JuegosRolVista extends FormBase {
         jLabel1.setText("Fuerza");
 
         cboFuerza.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione", "Primera", "Segunda" }));
+        cboFuerza.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cargarRol(evt);
+            }
+        });
 
         btnGenerar.setText("Generar");
         btnGenerar.addActionListener(new java.awt.event.ActionListener() {
@@ -73,14 +78,14 @@ public class JuegosRolVista extends FormBase {
 
             },
             new String [] {
-                "Local", "VS", "Visitante"
+                "Local", "Visitante"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -155,6 +160,10 @@ public class JuegosRolVista extends FormBase {
             return;
         }
         List<Equipos> equipos = equiposDAO.consultarEquipoRol(cboFuerza.getSelectedIndex());
+        if (equipos == null || equipos.isEmpty()) {
+            agregarMensajeError("No existen equipos registrados");
+            return;
+        }
         if ((equipos.size() % 2) > 0) {
             Equipos descansa = new Equipos(99, "DESCANSA", cboFuerza.getSelectedIndex(), new Date());
             try {
@@ -185,20 +194,25 @@ public class JuegosRolVista extends FormBase {
                 return;
         }
         limpiarTabla(tblRol);
-        DefaultTableModel modelo = (DefaultTableModel) tblRol.getModel();
-        for (Integer jornada : rol.keySet()) {
-            List<Juegos> juegos = rol.get(jornada);
-            modelo.addRow(new Object[]{("Jornada " + jornada), "", ""});
-            for (int i = 0; i < juegos.size(); i++) {
-                modelo.addRow(new Object[]{juegos.get(i).getLocalNombre(), "VS", juegos.get(i).getVisitanteNombre()});
-            }
-        }
+        llenarRol();
         
     }//GEN-LAST:event_generarRol
 
+    private void llenarRol() {
+        DefaultTableModel modelo = (DefaultTableModel) tblRol.getModel();
+        for (Integer jornada : rol.keySet()) {
+            List<Juegos> juegos = rol.get(jornada);
+            modelo.addRow(new Object[]{("Jornada " + jornada), ""});
+            for (Juegos juego : juegos) {
+                modelo.addRow(new Object[]{juego.getLocalNombre(), juego.getVisitanteNombre()});
+            }
+        }
+    }
     private void limpiar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_limpiar
         limpiarTabla(tblRol);
         cboFuerza.setSelectedIndex(0);
+        btnGenerar.setEnabled(true);
+        btnGuardar.setEnabled(true);
     }//GEN-LAST:event_limpiar
 
     private void guardarRol(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarRol
@@ -216,6 +230,24 @@ public class JuegosRolVista extends FormBase {
             agregarMensajeError(ex.getMessage());
         }
     }//GEN-LAST:event_guardarRol
+
+    private void cargarRol(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargarRol
+        limpiarTabla(tblRol);
+        if (cboFuerza.getSelectedIndex() > 0) {
+            rol = juegosDAO.consultarRol(cboFuerza.getSelectedIndex());
+            if (rol != null && !rol.isEmpty()) {
+                llenarRol();
+                btnGenerar.setEnabled(false);
+                btnGuardar.setEnabled(false);
+            } else {
+                btnGenerar.setEnabled(true);
+                btnGuardar.setEnabled(true);
+            }
+        } else {
+            btnGenerar.setEnabled(true);
+            btnGuardar.setEnabled(true);
+        }
+    }//GEN-LAST:event_cargarRol
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

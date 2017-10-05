@@ -26,6 +26,8 @@ public class Juegos implements Serializable {
     private Integer resultado;
     private Integer idTorneo;
     private Date fecha;
+    private Integer fuerza;
+    private String marcador;
 
     public Integer getIdJuego() {
         return idJuego;
@@ -106,8 +108,20 @@ public class Juegos implements Serializable {
     public void setVisitanteNombre(String visitanteNombre) {
         this.visitanteNombre = visitanteNombre;
     }
-    
-    
-    
 
+    public Integer getFuerza() {
+        return fuerza;
+    }
+
+    public void setFuerza(Integer fuerza) {
+        this.fuerza = fuerza;
+    }
+
+    public String getMarcador() {
+        return marcador;
+    }
+
+    public void setMarcador(String marcador) {
+        this.marcador = marcador;
+    }
 }

@@ -111,7 +111,7 @@ public class LigaFutbolMain extends javax.swing.JFrame {
 
         menuJuegos.setText("Juegos");
 
-        mnuJgosRol.setText("Generar Rol de Juegos");
+        mnuJgosRol.setText("Rol de Juegos");
         mnuJgosRol.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 abrirRolJuegos(evt);
@@ -182,7 +182,9 @@ public class LigaFutbolMain extends javax.swing.JFrame {
     }//GEN-LAST:event_abrirRolJuegos
 
     private void abrirRegistroJornada(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirRegistroJornada
-        
+        JuegosJornadaVista jjv = new JuegosJornadaVista();
+        this.add(jjv);
+        jjv.show();
     }//GEN-LAST:event_abrirRegistroJornada
 
     /**
