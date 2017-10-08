@@ -28,6 +28,7 @@ public class Juegos implements Serializable {
     private Date fecha;
     private Integer fuerza;
     private String marcador;
+    private String hora;
 
     public Integer getIdJuego() {
         return idJuego;
@@ -123,5 +124,13 @@ public class Juegos implements Serializable {
 
     public void setMarcador(String marcador) {
         this.marcador = marcador;
+    }
+
+    public String getHora() {
+        return hora;
+    }
+
+    public void setHora(String hora) {
+        this.hora = hora;
     }
 }

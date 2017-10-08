@@ -5,9 +5,13 @@
  */
 package lmfvgo.vista;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import lmfvgo.db.JuegosDAO;
 import lmfvgo.db.JugadoresDAO;
+import lmfvgo.excepciones.LMFVGOException;
 import lmfvgo.modelo.Juegos;
 
 /**
@@ -28,14 +32,46 @@ public class JuegoDetalleVista extends FormBase {
     public JuegoDetalleVista(Juegos juego) {
         initComponents();
         juegosDAO = new JuegosDAO();
+        jugadoresDAO = new JugadoresDAO();
         this.juego = juego;
+        btnCedula.setEnabled(false);
+        cargarDatosJuego();
+    }
+    
+    private void cargarDatosJuego() {
         setTitle("Jornada " + juego.getJornada() + ": " + juego.getLocalNombre() + " vs " + juego.getVisitanteNombre());
         lblLocal.setText(juego.getLocalNombre());
         lblVisitante.setText(juego.getVisitanteNombre());
         
+        if (juego.getFecha() != null && juego.getHora() != null && !juego.getHora().isEmpty()
+                && juego.getLugar() != null && !juego.getLugar().isEmpty()) {
+            txtFecha.setText(new SimpleDateFormat("dd/MM/yyyy").format(juego.getFecha()));
+            txtHora.setText(juego.getHora());
+            txtLugar.setText(juego.getLugar());
+            btnCedula.setEnabled(true);
+            btnActualizar.setEnabled(false);
+            btnLimpiar.setEnabled(false);
+            txtFecha.setEnabled(false);
+            txtHora.setEnabled(false);
+            txtLugar.setEnabled(false);
+            btnActualizar.setEnabled(false);
+        }
+        
         limpiarTabla(tblLocal);
         DefaultTableModel local = (DefaultTableModel) tblLocal.getModel();
+        List<String> jLocal = jugadoresDAO.consultaJugadoresEquipo(juego.getLocal());
         
+        for (String jl : jLocal) {
+            local.addRow(new Object[]{jl});
+        }
+        
+        limpiarTabla(tblVisitante);
+        DefaultTableModel visitante = (DefaultTableModel) tblVisitante.getModel();
+        List<String> jVisitante = jugadoresDAO.consultaJugadoresEquipo(juego.getVisitante());
+        
+        for (String jv : jVisitante) {
+            visitante.addRow(new Object[]{jv});
+        }
     }
     
     /**
@@ -54,10 +90,15 @@ public class JuegoDetalleVista extends FormBase {
         btnActualizar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblLocal = new javax.swing.JTable();
-        lblLocal = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblVisitante = new javax.swing.JTable();
+        lblLocal = new javax.swing.JLabel();
         lblVisitante = new javax.swing.JLabel();
+        btnCedula = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        txtHora = new javax.swing.JTextField();
+
+        setClosable(true);
 
         jLabel1.setText("Fecha:");
 
@@ -112,8 +153,6 @@ public class JuegoDetalleVista extends FormBase {
             tblLocal.getColumnModel().getColumn(0).setResizable(false);
         }
 
-        lblLocal.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-
         tblVisitante.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -142,6 +181,23 @@ public class JuegoDetalleVista extends FormBase {
             tblVisitante.getColumnModel().getColumn(0).setResizable(false);
         }
 
+        lblLocal.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblLocal.setText("jLabel3");
+
+        lblVisitante.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblVisitante.setText("jLabel3");
+
+        btnCedula.setText("Cédula");
+        btnCedula.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                generarCedula(evt);
+            }
+        });
+
+        jLabel3.setText("Hora");
+
+        txtHora.setToolTipText("Formato: HH:mm Ejemplo: 10:00");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -157,21 +213,29 @@ public class JuegoDetalleVista extends FormBase {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 427, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtHora, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(txtLugar)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnCedula)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnActualizar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnLimpiar))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(lblLocal, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE))
-                        .addGap(41, 41, 41)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblVisitante, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(4, 4, 4)
+                                .addComponent(lblLocal, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(14, 14, 14)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 293, Short.MAX_VALUE)
+                            .addComponent(lblVisitante, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -180,24 +244,29 @@ public class JuegoDetalleVista extends FormBase {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtHora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txtLugar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnLimpiar)
-                    .addComponent(btnActualizar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lblVisitante)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(lblLocal)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnLimpiar)
+                            .addComponent(btnActualizar)
+                            .addComponent(btnCedula))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblVisitante)
+                            .addComponent(lblLocal))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -209,19 +278,80 @@ public class JuegoDetalleVista extends FormBase {
     }//GEN-LAST:event_txtFechaActionPerformed
 
     private void limpiar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_limpiar
-        // TODO add your handling code here:
+        txtFecha.setText(null);
+        txtHora.setText(null);
+        txtLugar.setText(null);
+        btnCedula.setEnabled(false);
     }//GEN-LAST:event_limpiar
 
     private void actualizarJuego(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarJuego
-        // TODO add your handling code here:
+        if (validarDatos()) {
+            try {
+                juegosDAO.actualizarDatosJornadaJuego(juego);
+                btnCedula.setEnabled(true);
+                txtFecha.setEnabled(false);
+                txtHora.setEnabled(false);
+                txtLugar.setEnabled(false);
+                btnLimpiar.setEnabled(false);
+                btnActualizar.setEnabled(false);
+            } catch (LMFVGOException ex) {
+                agregarMensajeError(ex.getMessage());
+            }
+        }
     }//GEN-LAST:event_actualizarJuego
+
+    private boolean validarDatos() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        if (txtFecha.getText() == null) {
+            agregarMensajeAdvertencia("La fecha es requerida");
+            return false;
+        }
+        try {
+            juego.setFecha(sdf.parse(txtFecha.getText()));
+        } catch (ParseException ex) {
+            agregarMensajeError("El formato de la fecha es incorrecto");
+            return false;
+        }
+        if (txtHora.getText() == null) {
+            agregarMensajeAdvertencia("La hora es requerida");
+            return false;
+        } 
+        if (!txtHora.getText().contains(":")) {
+            agregarMensajeAdvertencia("El formato de la hora es incorrecto");
+            return false;
+        } 
+        String[] hora = txtHora.getText().split(":");
+        try {
+            if (Integer.parseInt(hora[0]) < 13 && Integer.parseInt(hora[1]) < 60) {
+                juego.setHora(txtHora.getText());
+            } else {
+                agregarMensajeError("El valor de la hora es incorrecta");
+                return false;
+            }
+            
+        } catch (NumberFormatException ex) {
+            agregarMensajeError("El contenido del valor de la hora debe ser numérico");
+            return false;
+        }
+        if (txtLugar.getText() == null || txtLugar.getText().trim().isEmpty()) {
+            agregarMensajeAdvertencia("El lugar es requerido");
+            return false;
+        }
+        juego.setLugar(txtLugar.getText());
+        return true;
+    }
+    private void generarCedula(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generarCedula
+        // TODO add your handling code here:
+    }//GEN-LAST:event_generarCedula
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
+    private javax.swing.JButton btnCedula;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblLocal;
@@ -229,6 +359,7 @@ public class JuegoDetalleVista extends FormBase {
     private javax.swing.JTable tblLocal;
     private javax.swing.JTable tblVisitante;
     private javax.swing.JTextField txtFecha;
+    private javax.swing.JTextField txtHora;
     private javax.swing.JTextField txtLugar;
     // End of variables declaration//GEN-END:variables
 }

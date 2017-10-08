@@ -108,7 +108,7 @@ public class JuegosDAO extends BaseDAO {
         try {
             sb = new StringBuilder();
             sb.append("select j.id_juego, j.jornada, j.local, j.visitante, j.lugar, j.resultado, j.id_torneo, j.fecha, j.fuerza, j.marcador, ")
-                    .append("l.nombre local_nombre, v.nombre visitante_nombre ")
+                    .append("j.hora, l.nombre local_nombre, v.nombre visitante_nombre ")
                     .append("from juegos j inner join equipos l on l.id_equipo = j.local ")
                     .append("inner join equipos v on v.id_equipo = j.visitante ")
                     .append("where j.jornada = ? and j.fuerza = ? order by id_juego");
@@ -131,6 +131,7 @@ public class JuegosDAO extends BaseDAO {
                     j.setFecha(rs.getDate("fecha"));
                     j.setFuerza(rs.getInt("fuerza"));
                     j.setMarcador(rs.getString("marcador"));
+                    j.setHora(rs.getString("hora"));
                     juegos.add(j);
             }
             return juegos;
@@ -142,11 +143,12 @@ public class JuegosDAO extends BaseDAO {
     public void actualizarDatosJornadaJuego(Juegos juego) throws LMFVGOException {
         try {
             sb = new StringBuilder();
-            sb.append("update juegos set lugar = ?, fecha = ? where id_juego = ?");
+            sb.append("update juegos set lugar = ?, fecha = ?, hora = ? where id_juego = ?");
             PreparedStatement ps = getConnection().prepareStatement(sb.toString());
-            ps.setString(1, juego.getLugar());
+            ps.setString(1, juego.getLugar().trim().toUpperCase());
             ps.setDate(2, new java.sql.Date(juego.getFecha().getTime()));
-            ps.setInt(3, juego.getIdJuego());
+            ps.setString(3, juego.getHora());
+            ps.setInt(4, juego.getIdJuego());
             ps.execute();
         } catch (SQLException ex) {
             throw new LMFVGOException(ex.getMessage());

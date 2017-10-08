@@ -50,9 +50,11 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         menuJuegos = new javax.swing.JMenu();
         mnuJgosRol = new javax.swing.JMenuItem();
         mnuJgosJornada = new javax.swing.JMenuItem();
+        mnuJgoMarcador = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Liga Municipal de Futbol de Villa González Ortega");
+        setPreferredSize(new java.awt.Dimension(753, 600));
 
         menuTorneo.setText("Torneos");
 
@@ -127,6 +129,14 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         });
         menuJuegos.add(mnuJgosJornada);
 
+        mnuJgoMarcador.setText("Registro de Resultados");
+        mnuJgoMarcador.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                abrirRegistroResultados(evt);
+            }
+        });
+        menuJuegos.add(mnuJgoMarcador);
+
         jMenuBar1.add(menuJuegos);
 
         setJMenuBar(jMenuBar1);
@@ -139,7 +149,7 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 454, Short.MAX_VALUE)
+            .addGap(0, 479, Short.MAX_VALUE)
         );
 
         pack();
@@ -187,6 +197,10 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         jjv.show();
     }//GEN-LAST:event_abrirRegistroJornada
 
+    private void abrirRegistroResultados(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirRegistroResultados
+        // TODO add your handling code here:
+    }//GEN-LAST:event_abrirRegistroResultados
+
     /**
      * @param args the command line arguments
      */
@@ -230,6 +244,7 @@ public class LigaFutbolMain extends javax.swing.JFrame {
     private javax.swing.JMenu menuTorneo;
     private javax.swing.JMenuItem mnuEqConsulta;
     private javax.swing.JMenuItem mnuEqRegistro;
+    private javax.swing.JMenuItem mnuJgoMarcador;
     private javax.swing.JMenuItem mnuJgosJornada;
     private javax.swing.JMenuItem mnuJgosRol;
     private javax.swing.JMenuItem mnuJugConsulta;

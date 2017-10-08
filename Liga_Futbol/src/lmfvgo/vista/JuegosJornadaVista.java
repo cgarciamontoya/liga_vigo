@@ -21,6 +21,7 @@ public class JuegosJornadaVista extends FormBase {
     private static final long serialVersionUID = -4094741927045258235L;
 
     private final JuegosDAO juegosDAO;
+    private List<Juegos> juegos;
     /**
      * Creates new form JuegosJornadaVista
      */
@@ -45,6 +46,7 @@ public class JuegosJornadaVista extends FormBase {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblJuegos = new javax.swing.JTable();
 
+        setClosable(true);
         setTitle("REGISTRO POR JORNADA");
 
         jLabel1.setText("Fuerza");
@@ -144,10 +146,22 @@ public class JuegosJornadaVista extends FormBase {
             int dialogResult = JOptionPane.showConfirmDialog(null, "Desea abrir el detalle del juego?", "Advertencia", JOptionPane.YES_NO_OPTION);
             if (dialogResult == JOptionPane.YES_OPTION) {
                 DefaultTableModel model = (DefaultTableModel) tblJuegos.getModel();
-                /*JugadoresRegistroVista jrv = new JugadoresRegistroVista((Integer) model.getValueAt(tblJuegos.getSelectedRow(), 0));
-                this.getParent().add(jrv);
-                jrv.show();*/
-                this.dispose();
+                int idJuegoSel = (Integer) model.getValueAt(tblJuegos.getSelectedRow(), 0);
+                Juegos juegoSel = null;
+                for (Juegos j : juegos) {
+                    if (j.getIdJuego().equals(idJuegoSel)) {
+                        juegoSel = j;
+                        break;
+                    }
+                }
+                if (juegoSel != null){
+                    JuegoDetalleVista jdv = new JuegoDetalleVista(juegoSel);
+                    this.getParent().add(jdv);
+                    jdv.show();
+                    this.dispose();
+                } else {
+                    agregarMensajeAdvertencia("No se seleccionón ningún juego");
+                }
             }
         }
         
@@ -159,7 +173,7 @@ public class JuegosJornadaVista extends FormBase {
             agregarMensajeAdvertencia("La fuerza es requerida");
             return;
         }
-        List<Juegos> juegos = juegosDAO.consultaJuegosJornada(cboFuerza.getSelectedIndex(), (cboJornada.getSelectedIndex() + 1));
+        juegos = juegosDAO.consultaJuegosJornada(cboFuerza.getSelectedIndex(), (cboJornada.getSelectedIndex() + 1));
         limpiarTabla(tblJuegos);
         if (juegos == null || juegos.isEmpty()) {
             agregarMensajeError("No se encontraron juegos para la jornada");

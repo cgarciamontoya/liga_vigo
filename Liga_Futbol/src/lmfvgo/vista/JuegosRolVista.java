@@ -48,18 +48,19 @@ public class JuegosRolVista extends FormBase {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        cboFuerza = new javax.swing.JComboBox<String>();
+        cboFuerza = new javax.swing.JComboBox<>();
         btnGenerar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblRol = new javax.swing.JTable();
         btnLimpiar = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
 
+        setClosable(true);
         setTitle("Rol de Juegos");
 
         jLabel1.setText("Fuerza");
 
-        cboFuerza.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione", "Primera", "Segunda" }));
+        cboFuerza.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione", "Primera", "Segunda" }));
         cboFuerza.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cargarRol(evt);
