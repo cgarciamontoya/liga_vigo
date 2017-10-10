@@ -8,6 +8,9 @@ package lmfvgo.vista;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JComboBox;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import lmfvgo.db.JuegosDAO;
 import lmfvgo.db.JugadoresDAO;
@@ -24,6 +27,10 @@ public class JuegoDetalleVista extends FormBase {
     private final JuegosDAO juegosDAO;
     private final Juegos juego;
     private final JugadoresDAO jugadoresDAO;
+    private JComboBox cboAlineacion;
+    private JComboBox cboTA;
+    private JComboBox cboTR;
+    private JComboBox cboGoles;
     
     /**
      * Creates new form JuegoDetalleVista
@@ -35,7 +42,31 @@ public class JuegoDetalleVista extends FormBase {
         jugadoresDAO = new JugadoresDAO();
         this.juego = juego;
         btnCedula.setEnabled(false);
+        iniciarCombos();
+        cargarModelosTable(tblLocal);
+        cargarModelosTable(tblVisitante);
         cargarDatosJuego();
+    }
+    
+    private void iniciarCombos() {
+        cboAlineacion = new JComboBox();
+        cboAlineacion.addItem("No Jugó");
+        cboAlineacion.addItem("Inicia");
+        cboAlineacion.addItem("Cambio");
+        
+        cboTA = new JComboBox();
+        cboTA.addItem(0);
+        cboTA.addItem(1);
+        cboTA.addItem(2);
+        
+        cboTR = new JComboBox();
+        cboTR.addItem(0);
+        cboTR.addItem(1);
+        
+        cboGoles = new JComboBox();
+        for (int i = 0; i <= 10; i++) {
+            cboGoles.addItem(i);
+        }
     }
     
     private void cargarDatosJuego() {
@@ -62,7 +93,7 @@ public class JuegoDetalleVista extends FormBase {
         List<String> jLocal = jugadoresDAO.consultaJugadoresEquipo(juego.getLocal());
         
         for (String jl : jLocal) {
-            local.addRow(new Object[]{jl});
+            local.addRow(new Object[]{jl, "No Jugó", 0, 0, 0});
         }
         
         limpiarTabla(tblVisitante);
@@ -70,8 +101,15 @@ public class JuegoDetalleVista extends FormBase {
         List<String> jVisitante = jugadoresDAO.consultaJugadoresEquipo(juego.getVisitante());
         
         for (String jv : jVisitante) {
-            visitante.addRow(new Object[]{jv});
+            visitante.addRow(new Object[]{jv, "No Jugó", 0, 0, 0});
         }
+    }
+    
+    private void cargarModelosTable(JTable tabla) {
+        tabla.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(cboAlineacion));
+        tabla.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(cboTA));
+        tabla.getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(cboTR));
+        tabla.getColumnModel().getColumn(4).setCellEditor(new DefaultCellEditor(cboGoles));
     }
     
     /**
@@ -97,17 +135,14 @@ public class JuegoDetalleVista extends FormBase {
         btnCedula = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         txtHora = new javax.swing.JTextField();
+        btnGuardar = new javax.swing.JButton();
 
         setClosable(true);
+        setPreferredSize(new java.awt.Dimension(1150, 550));
 
         jLabel1.setText("Fecha:");
 
         txtFecha.setToolTipText("Formato: dd/MM/yyyy Ejemplo: 05/09/2017");
-        txtFecha.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFechaActionPerformed(evt);
-            }
-        });
 
         jLabel2.setText("Lugar:");
 
@@ -130,14 +165,14 @@ public class JuegoDetalleVista extends FormBase {
 
             },
             new String [] {
-                "Nombre"
+                "Nombre", "Alinea", "A", "R", "G"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false
+                false, true, true, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -150,7 +185,15 @@ public class JuegoDetalleVista extends FormBase {
         });
         jScrollPane1.setViewportView(tblLocal);
         if (tblLocal.getColumnModel().getColumnCount() > 0) {
-            tblLocal.getColumnModel().getColumn(0).setResizable(false);
+            tblLocal.getColumnModel().getColumn(0).setPreferredWidth(110);
+            tblLocal.getColumnModel().getColumn(1).setResizable(false);
+            tblLocal.getColumnModel().getColumn(1).setPreferredWidth(10);
+            tblLocal.getColumnModel().getColumn(2).setResizable(false);
+            tblLocal.getColumnModel().getColumn(2).setPreferredWidth(5);
+            tblLocal.getColumnModel().getColumn(3).setResizable(false);
+            tblLocal.getColumnModel().getColumn(3).setPreferredWidth(5);
+            tblLocal.getColumnModel().getColumn(4).setResizable(false);
+            tblLocal.getColumnModel().getColumn(4).setPreferredWidth(5);
         }
 
         tblVisitante.setModel(new javax.swing.table.DefaultTableModel(
@@ -158,14 +201,14 @@ public class JuegoDetalleVista extends FormBase {
 
             },
             new String [] {
-                "Nombre"
+                "Nombre", "Alinea", "A", "R", "G"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false
+                false, true, true, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -176,9 +219,18 @@ public class JuegoDetalleVista extends FormBase {
                 return canEdit [columnIndex];
             }
         });
+        tblVisitante.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(tblVisitante);
         if (tblVisitante.getColumnModel().getColumnCount() > 0) {
-            tblVisitante.getColumnModel().getColumn(0).setResizable(false);
+            tblVisitante.getColumnModel().getColumn(0).setPreferredWidth(110);
+            tblVisitante.getColumnModel().getColumn(1).setResizable(false);
+            tblVisitante.getColumnModel().getColumn(1).setPreferredWidth(10);
+            tblVisitante.getColumnModel().getColumn(2).setResizable(false);
+            tblVisitante.getColumnModel().getColumn(2).setPreferredWidth(5);
+            tblVisitante.getColumnModel().getColumn(3).setResizable(false);
+            tblVisitante.getColumnModel().getColumn(3).setPreferredWidth(5);
+            tblVisitante.getColumnModel().getColumn(4).setResizable(false);
+            tblVisitante.getColumnModel().getColumn(4).setPreferredWidth(5);
         }
 
         lblLocal.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -197,6 +249,13 @@ public class JuegoDetalleVista extends FormBase {
         jLabel3.setText("Hora");
 
         txtHora.setToolTipText("Formato: HH:mm Ejemplo: 10:00");
+
+        btnGuardar.setText("Guardar Estadisticas");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                guardarEstadisticas(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -218,24 +277,27 @@ public class JuegoDetalleVista extends FormBase {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(txtHora, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(txtLugar)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnCedula)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnActualizar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnLimpiar))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtLugar, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnCedula)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnActualizar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnLimpiar))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(4, 4, 4)
-                                .addComponent(lblLocal, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(14, 14, 14)
+                                .addComponent(lblLocal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 293, Short.MAX_VALUE)
-                            .addComponent(lblVisitante, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 504, Short.MAX_VALUE)
+                            .addComponent(lblVisitante, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, 0)
+                        .addComponent(btnGuardar)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -250,32 +312,25 @@ public class JuegoDetalleVista extends FormBase {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(txtLugar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtLugar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnLimpiar)
+                    .addComponent(btnActualizar)
+                    .addComponent(btnCedula))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnLimpiar)
-                            .addComponent(btnActualizar)
-                            .addComponent(btnCedula))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblVisitante)
-                            .addComponent(lblLocal))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblVisitante)
+                    .addComponent(lblLocal))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnGuardar)
+                .addGap(0, 0, 0))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void txtFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFechaActionPerformed
 
     private void limpiar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_limpiar
         txtFecha.setText(null);
@@ -344,10 +399,15 @@ public class JuegoDetalleVista extends FormBase {
         // TODO add your handling code here:
     }//GEN-LAST:event_generarCedula
 
+    private void guardarEstadisticas(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarEstadisticas
+        // TODO add your handling code here:
+    }//GEN-LAST:event_guardarEstadisticas
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnCedula;
+    private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

@@ -19,6 +19,7 @@ public class EstadisticasJugador implements Serializable {
     private Integer ta;
     private Integer tr;
     private String inicioCambioNj;
+    private Integer idEquipo;
 
     public EstadisticasJugador() {
     }
@@ -72,7 +73,14 @@ public class EstadisticasJugador implements Serializable {
         this.inicioCambioNj = inicioCambioNj;
     }
 
+    public Integer getIdEquipo() {
+        return idEquipo;
+    }
 
+    public void setIdEquipo(Integer idEquipo) {
+        this.idEquipo = idEquipo;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;
