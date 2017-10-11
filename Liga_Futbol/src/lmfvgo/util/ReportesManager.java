@@ -9,8 +9,12 @@ package lmfvgo.util;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import lmfvgo.excepciones.LMFVGOException;
+import lmfvgo.modelo.EstadisticasJugador;
+import lmfvgo.modelo.Juegos;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -21,7 +25,27 @@ import net.sf.jasperreports.engine.JasperPrint;
  * @author cgarcia
  */
 public class ReportesManager {
+    
+    private static final String URL_REPORTES = "C:\\lmfvgo\\";
+    private static final String REPORTE_CEDULA_JUEGO = "/lmfvgo/reportes/CedulaJuego.jasper";
 
+    public void cedulaJuego(Juegos juego, List<EstadisticasJugador> local, List<EstadisticasJugador> visitante) throws LMFVGOException {
+        Map<String, Object> parametros = new HashMap<>();
+        parametros.put("jornada", "Jornada " + juego.getJornada());
+        parametros.put("local", juego.getLocalNombre());
+        parametros.put("visitante", juego.getVisitanteNombre());
+        parametros.put("fecha", juego.getFecha());
+        parametros.put("hora", juego.getHora());
+        parametros.put("lugar", juego.getLugar());
+        parametros.put("listaLocal", local);
+        parametros.put("listaVisitante", visitante);
+        
+        String nombrePdf = URL_REPORTES + "J" + juego.getJornada() + "_" + juego.getLocalNombre() + "_VS_" + juego.getVisitanteNombre() + ".pdf";
+        exportar(REPORTE_CEDULA_JUEGO, parametros, nombrePdf);
+        abrirPdf(nombrePdf);
+        
+    }
+    
     private void abrirPdf(String nombrePdf) {
         try {
             Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + nombrePdf);
@@ -38,6 +62,7 @@ public class ReportesManager {
             archivo.createNewFile();
             JasperExportManager.exportReportToPdfFile(jp, nombrePdf);
         } catch (Exception ex) {
+            ex.printStackTrace();
             throw new LMFVGOException("No se pudo generar el reporte debido a: " + ex.getMessage());
         }
     }

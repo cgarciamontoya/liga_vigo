@@ -20,6 +20,9 @@ public class EstadisticasJugador implements Serializable {
     private Integer tr;
     private String inicioCambioNj;
     private Integer idEquipo;
+    private Integer idJugador;
+    private Integer idJuego;
+    private String nombreJugador;
 
     public EstadisticasJugador() {
     }
@@ -31,6 +34,22 @@ public class EstadisticasJugador implements Serializable {
     public EstadisticasJugador(Integer idEstadistica, String inicioCambioNj) {
         this.idEstadistica = idEstadistica;
         this.inicioCambioNj = inicioCambioNj;
+    }
+
+    public String getNombreJugador() {
+        return nombreJugador;
+    }
+
+    public void setNombreJugador(String nombreJugador) {
+        this.nombreJugador = nombreJugador;
+    }
+
+    public Integer getIdJuego() {
+        return idJuego;
+    }
+
+    public void setIdJuego(Integer idJuego) {
+        this.idJuego = idJuego;
     }
 
     public Integer getIdEstadistica() {
@@ -79,6 +98,14 @@ public class EstadisticasJugador implements Serializable {
 
     public void setIdEquipo(Integer idEquipo) {
         this.idEquipo = idEquipo;
+    }
+
+    public Integer getIdJugador() {
+        return idJugador;
+    }
+
+    public void setIdJugador(Integer idJugador) {
+        this.idJugador = idJugador;
     }
     
     @Override

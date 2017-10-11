@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CedulaJuego_subreport" pageWidth="286" pageHeight="752" columnWidth="286" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="f84a6a58-5530-4667-b561-50d2deff69b7">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="nombreJugador" class="java.lang.String"/>
+	<field name="inicioCambioNj" class="java.lang.String"/>
+	<field name="goles" class="java.lang.Integer"/>
+	<field name="ta" class="java.lang.Integer"/>
+	<field name="tr" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="196" height="20" uuid="8e92ea66-0fad-412f-99a1-49ce380bad35"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOMBRE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="266" y="0" width="20" height="20" uuid="fdc97712-cf96-4a91-8256-037af0cb7c30"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[G]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="246" y="0" width="20" height="20" uuid="84e1ef95-f1e7-49b7-9450-03f894a4243f"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="226" y="0" width="20" height="20" uuid="4767c12b-e429-4305-91e9-647ee439a748"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="196" y="0" width="30" height="20" uuid="ba85756c-0cf3-4314-9956-dcbe6693df08"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[NJ/I/C]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="196" height="20" uuid="ccfdba98-f57d-41b2-b469-648ca87d9993"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{nombreJugador}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="196" y="0" width="30" height="20" uuid="bb59db3d-2f7d-426d-b231-26023b6a003f"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{inicioCambioNj}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="226" y="0" width="20" height="20" uuid="ed4d7936-ed13-43af-a9c2-ea07918da4f9"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{ta}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="246" y="0" width="20" height="20" uuid="a00b5845-7a87-4090-b824-f1fb414b58c4"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{tr}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="266" y="0" width="20" height="20" uuid="cda8e869-3411-4c5a-8bb9-ac25bc457b42"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{goles}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="80">
+			<staticText>
+				<reportElement x="0" y="5" width="53" height="20" uuid="5da77668-f657-4c34-b490-b9d2f65c3b2e"/>
+				<text><![CDATA[Marcador:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="56" y="18" width="150" height="1" uuid="ef41fa9e-8fba-42bd-a7c2-7f8031c25fd3"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="25" width="286" height="20" uuid="b8dd704f-8550-41df-8e1d-6cc9e9067ece"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[CAPITAN]]></text>
+			</staticText>
+			<line>
+				<reportElement x="33" y="79" width="220" height="1" uuid="1af3ec14-d81e-47d5-9720-3cece9f7ffd2"/>
+			</line>
+		</band>
+	</columnFooter>
+</jasperReport>

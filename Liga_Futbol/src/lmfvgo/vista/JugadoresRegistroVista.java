@@ -295,7 +295,7 @@ public class JugadoresRegistroVista extends FormBase {
         txtMaterno.setText("");
         txtLugar.setText("");
         txtFechaNac.setText("");
-        txtFechaReg.setText("");
+        txtFechaReg.setText(sdf.format(fechaActual));
         txtFotografia.setText("");
         fotoBytes = null;
     }//GEN-LAST:event_limpiar

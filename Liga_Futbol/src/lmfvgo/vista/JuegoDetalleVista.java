@@ -7,15 +7,19 @@ package lmfvgo.vista;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import lmfvgo.db.EstadisticasJugadorDAO;
 import lmfvgo.db.JuegosDAO;
 import lmfvgo.db.JugadoresDAO;
 import lmfvgo.excepciones.LMFVGOException;
+import lmfvgo.modelo.EstadisticasJugador;
 import lmfvgo.modelo.Juegos;
+import lmfvgo.util.ReportesManager;
 
 /**
  *
@@ -25,8 +29,10 @@ public class JuegoDetalleVista extends FormBase {
     private static final long serialVersionUID = -1163107632122936758L;
 
     private final JuegosDAO juegosDAO;
-    private final Juegos juego;
     private final JugadoresDAO jugadoresDAO;
+    private final EstadisticasJugadorDAO estadisticasJugadorDAO;
+    private final ReportesManager reportesManager;
+    private final Juegos juego;
     private JComboBox cboAlineacion;
     private JComboBox cboTA;
     private JComboBox cboTR;
@@ -38,8 +44,12 @@ public class JuegoDetalleVista extends FormBase {
      */
     public JuegoDetalleVista(Juegos juego) {
         initComponents();
+        
         juegosDAO = new JuegosDAO();
         jugadoresDAO = new JugadoresDAO();
+        estadisticasJugadorDAO = new EstadisticasJugadorDAO();
+        reportesManager = new ReportesManager();
+        
         this.juego = juego;
         btnCedula.setEnabled(false);
         iniciarCombos();
@@ -50,9 +60,9 @@ public class JuegoDetalleVista extends FormBase {
     
     private void iniciarCombos() {
         cboAlineacion = new JComboBox();
-        cboAlineacion.addItem("No Jugó");
-        cboAlineacion.addItem("Inicia");
-        cboAlineacion.addItem("Cambio");
+        cboAlineacion.addItem("NJ");
+        cboAlineacion.addItem("I");
+        cboAlineacion.addItem("C");
         
         cboTA = new JComboBox();
         cboTA.addItem(0);
@@ -88,28 +98,47 @@ public class JuegoDetalleVista extends FormBase {
             btnActualizar.setEnabled(false);
         }
         
-        limpiarTabla(tblLocal);
-        DefaultTableModel local = (DefaultTableModel) tblLocal.getModel();
-        List<String> jLocal = jugadoresDAO.consultaJugadoresEquipo(juego.getLocal());
+        cargarTablaEstadisticas(juego.getIdJuego(), juego.getLocal(), tblLocal);
         
-        for (String jl : jLocal) {
-            local.addRow(new Object[]{jl, "No Jugó", 0, 0, 0});
+        cargarTablaEstadisticas(juego.getIdJuego(), juego.getVisitante(), tblVisitante);
+    }
+    
+    private void cargarTablaEstadisticas(Integer idJuego, Integer idEquipo, JTable tabla) {
+        limpiarTabla(tabla);
+        
+        List<EstadisticasJugador> estj = estadisticasJugadorDAO.consultarEstadisticasJuego(idEquipo, idJuego);
+        
+        if (estj == null) {
+            estj = new ArrayList<>();
         }
+        if (estj.isEmpty()) {
+            List<String> jLocal = jugadoresDAO.consultaJugadoresEquipo(idEquipo);
+            for (String j: jLocal) {
+                EstadisticasJugador ej = new EstadisticasJugador();
+                ej.setIdJugador(Integer.parseInt(j.split(" - ")[0]));
+                ej.setNombreJugador(j);
+                ej.setIdEquipo(idEquipo);
+                ej.setIdJuego(idJuego);
+                estj.add(ej);
+            }
+        }
+        DefaultTableModel local = (DefaultTableModel) tabla.getModel();
         
-        limpiarTabla(tblVisitante);
-        DefaultTableModel visitante = (DefaultTableModel) tblVisitante.getModel();
-        List<String> jVisitante = jugadoresDAO.consultaJugadoresEquipo(juego.getVisitante());
-        
-        for (String jv : jVisitante) {
-            visitante.addRow(new Object[]{jv, "No Jugó", 0, 0, 0});
+        for (EstadisticasJugador ej : estj) {
+            local.addRow(new Object[]{(ej.getIdEstadistica() != null && ej.getIdEstadistica() > 0 ? ej.getIdEstadistica() : null),
+                                        ej.getNombreJugador(), 
+                                        ej.getInicioCambioNj() == null || ej.getInicioCambioNj().isEmpty() ? "NJ" : ej.getInicioCambioNj(), 
+                                        ej.getTa() == null ? 0 : ej.getTa(), 
+                                        ej.getTr() == null ? 0 : ej.getTr(), 
+                                        ej.getGoles() == null ? 0 : ej.getGoles()});
         }
     }
     
     private void cargarModelosTable(JTable tabla) {
-        tabla.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(cboAlineacion));
-        tabla.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(cboTA));
-        tabla.getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(cboTR));
-        tabla.getColumnModel().getColumn(4).setCellEditor(new DefaultCellEditor(cboGoles));
+        tabla.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(cboAlineacion));
+        tabla.getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(cboTA));
+        tabla.getColumnModel().getColumn(4).setCellEditor(new DefaultCellEditor(cboTR));
+        tabla.getColumnModel().getColumn(5).setCellEditor(new DefaultCellEditor(cboGoles));
     }
     
     /**
@@ -165,14 +194,14 @@ public class JuegoDetalleVista extends FormBase {
 
             },
             new String [] {
-                "Nombre", "Alinea", "A", "R", "G"
+                "ID-E", "Nombre", "Alinea", "A", "R", "G"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, true, true, true
+                false, false, true, true, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -185,15 +214,17 @@ public class JuegoDetalleVista extends FormBase {
         });
         jScrollPane1.setViewportView(tblLocal);
         if (tblLocal.getColumnModel().getColumnCount() > 0) {
-            tblLocal.getColumnModel().getColumn(0).setPreferredWidth(110);
-            tblLocal.getColumnModel().getColumn(1).setResizable(false);
-            tblLocal.getColumnModel().getColumn(1).setPreferredWidth(10);
+            tblLocal.getColumnModel().getColumn(0).setResizable(false);
+            tblLocal.getColumnModel().getColumn(0).setPreferredWidth(5);
+            tblLocal.getColumnModel().getColumn(1).setPreferredWidth(105);
             tblLocal.getColumnModel().getColumn(2).setResizable(false);
-            tblLocal.getColumnModel().getColumn(2).setPreferredWidth(5);
+            tblLocal.getColumnModel().getColumn(2).setPreferredWidth(10);
             tblLocal.getColumnModel().getColumn(3).setResizable(false);
             tblLocal.getColumnModel().getColumn(3).setPreferredWidth(5);
             tblLocal.getColumnModel().getColumn(4).setResizable(false);
             tblLocal.getColumnModel().getColumn(4).setPreferredWidth(5);
+            tblLocal.getColumnModel().getColumn(5).setResizable(false);
+            tblLocal.getColumnModel().getColumn(5).setPreferredWidth(5);
         }
 
         tblVisitante.setModel(new javax.swing.table.DefaultTableModel(
@@ -201,14 +232,14 @@ public class JuegoDetalleVista extends FormBase {
 
             },
             new String [] {
-                "Nombre", "Alinea", "A", "R", "G"
+                "ID-E", "Nombre", "Alinea", "A", "R", "G"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, true, true, true
+                false, false, true, true, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -222,15 +253,17 @@ public class JuegoDetalleVista extends FormBase {
         tblVisitante.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(tblVisitante);
         if (tblVisitante.getColumnModel().getColumnCount() > 0) {
-            tblVisitante.getColumnModel().getColumn(0).setPreferredWidth(110);
-            tblVisitante.getColumnModel().getColumn(1).setResizable(false);
-            tblVisitante.getColumnModel().getColumn(1).setPreferredWidth(10);
+            tblVisitante.getColumnModel().getColumn(0).setResizable(false);
+            tblVisitante.getColumnModel().getColumn(0).setPreferredWidth(5);
+            tblVisitante.getColumnModel().getColumn(1).setPreferredWidth(105);
             tblVisitante.getColumnModel().getColumn(2).setResizable(false);
-            tblVisitante.getColumnModel().getColumn(2).setPreferredWidth(5);
+            tblVisitante.getColumnModel().getColumn(2).setPreferredWidth(10);
             tblVisitante.getColumnModel().getColumn(3).setResizable(false);
             tblVisitante.getColumnModel().getColumn(3).setPreferredWidth(5);
             tblVisitante.getColumnModel().getColumn(4).setResizable(false);
             tblVisitante.getColumnModel().getColumn(4).setPreferredWidth(5);
+            tblVisitante.getColumnModel().getColumn(5).setResizable(false);
+            tblVisitante.getColumnModel().getColumn(5).setPreferredWidth(5);
         }
 
         lblLocal.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -279,25 +312,25 @@ public class JuegoDetalleVista extends FormBase {
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(txtLugar, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 436, Short.MAX_VALUE)
                                 .addComponent(btnCedula)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnActualizar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnLimpiar))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(4, 4, 4)
-                                .addComponent(lblLocal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(lblLocal, javax.swing.GroupLayout.PREFERRED_SIZE, 496, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 540, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 504, Short.MAX_VALUE)
-                            .addComponent(lblVisitante, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, 0)
-                        .addComponent(btnGuardar)))
+                            .addComponent(lblVisitante, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 540, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(btnGuardar, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -396,13 +429,75 @@ public class JuegoDetalleVista extends FormBase {
         return true;
     }
     private void generarCedula(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generarCedula
-        // TODO add your handling code here:
+        List<EstadisticasJugador> listaLocal = obtenerEstadisticasTabla(tblLocal, juego.getLocal(), juego.getIdJuego(), true);
+        List<EstadisticasJugador> listaVisitante = obtenerEstadisticasTabla(tblVisitante, juego.getVisitante(), juego.getIdJuego(), true);
+        
+        if (listaLocal == null || listaLocal.isEmpty() ||
+                listaVisitante == null || listaVisitante.isEmpty()) {
+            agregarMensajeError("No se pueden generar la cédula de juego ya que uno de los equipos no cuenta con jugadores activos");
+            return;
+        }
+        try {
+            reportesManager.cedulaJuego(juego, listaLocal, listaVisitante);
+        } catch (LMFVGOException ex) {
+            agregarMensajeError(ex.getMessage());
+        }
     }//GEN-LAST:event_generarCedula
 
     private void guardarEstadisticas(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarEstadisticas
-        // TODO add your handling code here:
+        List<EstadisticasJugador> estadisticasLocal = obtenerEstadisticasTabla(tblLocal, juego.getLocal(), juego.getIdJuego(), false);
+        List<EstadisticasJugador> estadisticasVisitante = obtenerEstadisticasTabla(tblVisitante, juego.getVisitante(), juego.getIdJuego(), false);
+        
+        if (estadisticasLocal == null || estadisticasLocal.isEmpty() ||
+                estadisticasVisitante == null || estadisticasVisitante.isEmpty()) {
+            agregarMensajeError("No se pueden guardar los registros debido a que un equipo no tiene jugadores activos");
+            return;
+        }
+        
+        try {
+            if (estadisticasLocal.get(0).getIdEstadistica()!= null &&
+                    estadisticasLocal.get(0).getIdEstadistica()> 0) {
+                estadisticasJugadorDAO.actualizarEstadisticasJuego(estadisticasLocal);
+            } else {
+                estadisticasJugadorDAO.guardarEstadisticasJuego(estadisticasLocal);
+            }
+            if (estadisticasVisitante.get(0).getIdEstadistica() != null &&
+                    estadisticasVisitante.get(0).getIdEstadistica() > 0) {
+                estadisticasJugadorDAO.actualizarEstadisticasJuego(estadisticasVisitante);
+            } else {
+                estadisticasJugadorDAO.guardarEstadisticasJuego(estadisticasVisitante);
+            }
+            agregarMensajeExito("Se guardaron correctamente los registos");
+        } catch (LMFVGOException ex) {
+            agregarMensajeError(ex.getMessage());
+        }
     }//GEN-LAST:event_guardarEstadisticas
 
+    private List<EstadisticasJugador> obtenerEstadisticasTabla(JTable tabla, Integer idEquipo, Integer idJuego, boolean expCedRep) {
+        DefaultTableModel model = (DefaultTableModel) tabla.getModel();
+        
+        if (model.getRowCount() >= 8) {
+            List<EstadisticasJugador> ejl = new ArrayList<>();
+            for (int i = 0; i < model.getRowCount(); i++) {
+                EstadisticasJugador ej = new EstadisticasJugador();
+                ej.setIdEstadistica((Integer) model.getValueAt(i, 0));
+                String[] dj = ((String) model.getValueAt(i, 1)).split(" - ");
+                ej.setIdJugador(Integer.parseInt(dj[0]));
+                ej.setNombreJugador(dj[1]);
+                ej.setIdEquipo(idEquipo);
+                ej.setIdJuego(idJuego);
+                if (!expCedRep) {
+                    ej.setInicioCambioNj((String) model.getValueAt(i, 2));
+                    ej.setTa((Integer) model.getValueAt(i, 3));
+                    ej.setTr((Integer) model.getValueAt(i, 4));
+                    ej.setGoles((Integer) model.getValueAt(i, 5));
+                }
+                ejl.add(ej);
+            }
+            return ejl;
+        }
+        return null;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
