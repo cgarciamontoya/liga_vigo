@@ -10,7 +10,7 @@
 	<parameter name="fecha" class="java.util.Date"/>
 	<parameter name="hora" class="java.lang.String"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["C:\\Users\\USUARIO\\Documents\\cgarcia\\Personal\\Liga_vigo\\Liga_Futbol\\src\\lmfvgo\\reportes\\"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["\\lmfvgo\\reportes\\"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="listaLocal" class="java.util.List"/>
 	<parameter name="listaVisitante" class="java.util.List"/>

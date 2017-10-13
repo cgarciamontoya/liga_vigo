@@ -8,15 +8,19 @@ package lmfvgo.vista;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import lmfvgo.db.EstadisticasEquipoDAO;
 import lmfvgo.db.EstadisticasJugadorDAO;
 import lmfvgo.db.JuegosDAO;
 import lmfvgo.db.JugadoresDAO;
 import lmfvgo.excepciones.LMFVGOException;
+import lmfvgo.modelo.EstadisticasEquipo;
 import lmfvgo.modelo.EstadisticasJugador;
 import lmfvgo.modelo.Juegos;
 import lmfvgo.util.ReportesManager;
@@ -27,16 +31,21 @@ import lmfvgo.util.ReportesManager;
  */
 public class JuegoDetalleVista extends FormBase {
     private static final long serialVersionUID = -1163107632122936758L;
+    private static final String PARAM_LISTA = "paramLista";
+    private static final String PARAM_EST = "paramEstEq";
 
     private final JuegosDAO juegosDAO;
     private final JugadoresDAO jugadoresDAO;
     private final EstadisticasJugadorDAO estadisticasJugadorDAO;
+    private final EstadisticasEquipoDAO estadisticasEquipoDAO;
     private final ReportesManager reportesManager;
     private final Juegos juego;
     private JComboBox cboAlineacion;
     private JComboBox cboTA;
     private JComboBox cboTR;
     private JComboBox cboGoles;
+    private EstadisticasEquipo estadisticaLocal;
+    private EstadisticasEquipo estadisticaVisitante;
     
     /**
      * Creates new form JuegoDetalleVista
@@ -48,6 +57,7 @@ public class JuegoDetalleVista extends FormBase {
         juegosDAO = new JuegosDAO();
         jugadoresDAO = new JugadoresDAO();
         estadisticasJugadorDAO = new EstadisticasJugadorDAO();
+        estadisticasEquipoDAO = new EstadisticasEquipoDAO();
         reportesManager = new ReportesManager();
         
         this.juego = juego;
@@ -55,6 +65,10 @@ public class JuegoDetalleVista extends FormBase {
         iniciarCombos();
         cargarModelosTable(tblLocal);
         cargarModelosTable(tblVisitante);
+        
+        estadisticaLocal = estadisticasEquipoDAO.consultaEstadisticaEquipo(juego.getIdJuego(), juego.getLocal());
+        estadisticaVisitante = estadisticasEquipoDAO.consultaEstadisticaEquipo(juego.getIdJuego(), juego.getVisitante());
+        
         cargarDatosJuego();
     }
     
@@ -81,8 +95,12 @@ public class JuegoDetalleVista extends FormBase {
     
     private void cargarDatosJuego() {
         setTitle("Jornada " + juego.getJornada() + ": " + juego.getLocalNombre() + " vs " + juego.getVisitanteNombre());
-        lblLocal.setText(juego.getLocalNombre());
-        lblVisitante.setText(juego.getVisitanteNombre());
+        lblLocal.setText(juego.getLocalNombre() + 
+                (estadisticaLocal != null && estadisticaLocal.getIdEstadistica() != null && estadisticaLocal.getIdEstadistica() > 0 ? 
+                        (" - " + estadisticaLocal.getGolesFavor()) : ""));
+        lblVisitante.setText(juego.getVisitanteNombre() + 
+                (estadisticaVisitante != null && estadisticaVisitante.getIdEstadistica() != null && estadisticaVisitante.getIdEstadistica() > 0 ?
+                        (" - " + estadisticaVisitante.getGolesFavor()) : ""));
         
         if (juego.getFecha() != null && juego.getHora() != null && !juego.getHora().isEmpty()
                 && juego.getLugar() != null && !juego.getLugar().isEmpty()) {
@@ -429,24 +447,27 @@ public class JuegoDetalleVista extends FormBase {
         return true;
     }
     private void generarCedula(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generarCedula
-        List<EstadisticasJugador> listaLocal = obtenerEstadisticasTabla(tblLocal, juego.getLocal(), juego.getIdJuego(), true);
-        List<EstadisticasJugador> listaVisitante = obtenerEstadisticasTabla(tblVisitante, juego.getVisitante(), juego.getIdJuego(), true);
+        Map<String, Object> listaLocal = obtenerEstadisticasTabla(tblLocal, juego.getLocal(), juego.getIdJuego(), true, estadisticaLocal);
+        Map<String, Object> listaVisitante = obtenerEstadisticasTabla(tblVisitante, juego.getVisitante(), juego.getIdJuego(), true, estadisticaVisitante);
         
-        if (listaLocal == null || listaLocal.isEmpty() ||
-                listaVisitante == null || listaVisitante.isEmpty()) {
+        if (listaLocal == null || listaLocal.isEmpty() || listaLocal.get(PARAM_LISTA) == null ||
+                listaVisitante == null || listaVisitante.isEmpty() || listaVisitante.get(PARAM_LISTA) == null) {
             agregarMensajeError("No se pueden generar la cédula de juego ya que uno de los equipos no cuenta con jugadores activos");
             return;
         }
         try {
-            reportesManager.cedulaJuego(juego, listaLocal, listaVisitante);
+            reportesManager.cedulaJuego(juego, (List<EstadisticasJugador>) listaLocal.get(PARAM_LISTA), 
+                    (List<EstadisticasJugador>) listaVisitante.get(PARAM_LISTA));
         } catch (LMFVGOException ex) {
             agregarMensajeError(ex.getMessage());
         }
     }//GEN-LAST:event_generarCedula
 
     private void guardarEstadisticas(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarEstadisticas
-        List<EstadisticasJugador> estadisticasLocal = obtenerEstadisticasTabla(tblLocal, juego.getLocal(), juego.getIdJuego(), false);
-        List<EstadisticasJugador> estadisticasVisitante = obtenerEstadisticasTabla(tblVisitante, juego.getVisitante(), juego.getIdJuego(), false);
+        Map<String, Object> estadisticasLocal = obtenerEstadisticasTabla(tblLocal, juego.getLocal(), 
+                juego.getIdJuego(), false, estadisticaLocal);
+        Map<String, Object> estadisticasVisitante = obtenerEstadisticasTabla(tblVisitante, juego.getVisitante(), 
+                juego.getIdJuego(), false, estadisticaVisitante);
         
         if (estadisticasLocal == null || estadisticasLocal.isEmpty() ||
                 estadisticasVisitante == null || estadisticasVisitante.isEmpty()) {
@@ -455,17 +476,41 @@ public class JuegoDetalleVista extends FormBase {
         }
         
         try {
-            if (estadisticasLocal.get(0).getIdEstadistica()!= null &&
-                    estadisticasLocal.get(0).getIdEstadistica()> 0) {
-                estadisticasJugadorDAO.actualizarEstadisticasJuego(estadisticasLocal);
+            List<EstadisticasJugador> ejl = (List<EstadisticasJugador>) estadisticasLocal.get(PARAM_LISTA);
+            List<EstadisticasJugador> ejv = (List<EstadisticasJugador>) estadisticasVisitante.get(PARAM_LISTA);
+            if (ejl.get(0).getIdEstadistica()!= null &&
+                    ejl.get(0).getIdEstadistica()> 0) {
+                estadisticasJugadorDAO.actualizarEstadisticasJuego(ejl);
             } else {
-                estadisticasJugadorDAO.guardarEstadisticasJuego(estadisticasLocal);
+                estadisticasJugadorDAO.guardarEstadisticasJuego(ejl);
             }
-            if (estadisticasVisitante.get(0).getIdEstadistica() != null &&
-                    estadisticasVisitante.get(0).getIdEstadistica() > 0) {
-                estadisticasJugadorDAO.actualizarEstadisticasJuego(estadisticasVisitante);
+            if (ejv.get(0).getIdEstadistica() != null &&
+                    ejv.get(0).getIdEstadistica() > 0) {
+                estadisticasJugadorDAO.actualizarEstadisticasJuego(ejv);
             } else {
-                estadisticasJugadorDAO.guardarEstadisticasJuego(estadisticasVisitante);
+                estadisticasJugadorDAO.guardarEstadisticasJuego(ejv);
+            }
+            estadisticaLocal.setGolesContra(estadisticaVisitante.getGolesFavor());
+            estadisticaVisitante.setGolesContra(estadisticaLocal.getGolesFavor());
+            if (estadisticaLocal.getGolesFavor() == estadisticaVisitante.getGolesFavor()) {
+                estadisticaLocal.setPuntos(1);
+                estadisticaVisitante.setPuntos(1);
+            } else if (estadisticaLocal.getGolesFavor() > estadisticaVisitante.getGolesFavor()) {
+                estadisticaLocal.setPuntos(3);
+                estadisticaVisitante.setPuntos(0);
+            } else {
+                estadisticaVisitante.setPuntos(3);
+                estadisticaLocal.setPuntos(0);
+            }
+            if (estadisticaLocal.getIdEstadistica() == null || estadisticaLocal.getIdEstadistica() == 0) {
+                estadisticasEquipoDAO.guardarEstadisticas(estadisticaLocal);
+            } else {
+                estadisticasEquipoDAO.actualizarEstadisticas(estadisticaLocal);
+            }
+            if (estadisticaVisitante.getIdEstadistica() == null || estadisticaVisitante.getIdEstadistica() == 0) {
+                estadisticasEquipoDAO.guardarEstadisticas(estadisticaVisitante);
+            } else {
+                estadisticasEquipoDAO.actualizarEstadisticas(estadisticaVisitante);
             }
             agregarMensajeExito("Se guardaron correctamente los registos");
         } catch (LMFVGOException ex) {
@@ -473,10 +518,19 @@ public class JuegoDetalleVista extends FormBase {
         }
     }//GEN-LAST:event_guardarEstadisticas
 
-    private List<EstadisticasJugador> obtenerEstadisticasTabla(JTable tabla, Integer idEquipo, Integer idJuego, boolean expCedRep) {
+    private Map<String, Object> obtenerEstadisticasTabla(JTable tabla, Integer idEquipo, Integer idJuego, boolean expCedRep, EstadisticasEquipo ee) {
+        Map<String, Object> mapa = new HashMap<>();
+        
         DefaultTableModel model = (DefaultTableModel) tabla.getModel();
         
         if (model.getRowCount() >= 8) {
+            if (ee == null) {
+                ee = new EstadisticasEquipo();
+            }
+            int goles = 0;
+            
+            ee.setIdEquipo(idEquipo);
+            ee.setIdJuego(idJuego);
             List<EstadisticasJugador> ejl = new ArrayList<>();
             for (int i = 0; i < model.getRowCount(); i++) {
                 EstadisticasJugador ej = new EstadisticasJugador();
@@ -491,10 +545,14 @@ public class JuegoDetalleVista extends FormBase {
                     ej.setTa((Integer) model.getValueAt(i, 3));
                     ej.setTr((Integer) model.getValueAt(i, 4));
                     ej.setGoles((Integer) model.getValueAt(i, 5));
+                    goles += ej.getGoles();
                 }
                 ejl.add(ej);
             }
-            return ejl;
+            ee.setGolesFavor(goles);
+            mapa.put(PARAM_LISTA, ejl);
+            mapa.put(PARAM_EST, ee);
+            return mapa;
         }
         return null;
     }

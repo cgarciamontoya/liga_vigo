@@ -15,6 +15,8 @@ import java.io.Serializable;
 public class EstadisticasEquipo implements Serializable {
     private static final long serialVersionUID = 4129361300181992670L;
     private Integer idEstadistica;
+    private Integer idEquipo;
+    private Integer idJuego;
     private int golesFavor;
     private int golesContra;
     private int puntos;
@@ -64,10 +66,23 @@ public class EstadisticasEquipo implements Serializable {
     public void setPuntos(int puntos) {
         this.puntos = puntos;
     }
-    
-    
 
+    public Integer getIdEquipo() {
+        return idEquipo;
+    }
 
+    public void setIdEquipo(Integer idEquipo) {
+        this.idEquipo = idEquipo;
+    }
+
+    public Integer getIdJuego() {
+        return idJuego;
+    }
+
+    public void setIdJuego(Integer idJuego) {
+        this.idJuego = idJuego;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;
