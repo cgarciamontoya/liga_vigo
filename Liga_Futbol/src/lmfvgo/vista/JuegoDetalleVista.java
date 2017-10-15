@@ -69,6 +69,9 @@ public class JuegoDetalleVista extends FormBase {
         estadisticaLocal = estadisticasEquipoDAO.consultaEstadisticaEquipo(juego.getIdJuego(), juego.getLocal());
         estadisticaVisitante = estadisticasEquipoDAO.consultaEstadisticaEquipo(juego.getIdJuego(), juego.getVisitante());
         
+        btnGenerarEsta.setVisible(estadisticaLocal != null && estadisticaLocal.getIdEstadistica() != null && estadisticaLocal.getIdEstadistica() > 0 &&
+                estadisticaVisitante != null && estadisticaVisitante.getIdEstadistica() != null && estadisticaVisitante.getIdEstadistica() > 0);
+        
         cargarDatosJuego();
     }
     
@@ -183,6 +186,7 @@ public class JuegoDetalleVista extends FormBase {
         jLabel3 = new javax.swing.JLabel();
         txtHora = new javax.swing.JTextField();
         btnGuardar = new javax.swing.JButton();
+        btnGenerarEsta = new javax.swing.JButton();
 
         setClosable(true);
         setPreferredSize(new java.awt.Dimension(1150, 550));
@@ -308,6 +312,13 @@ public class JuegoDetalleVista extends FormBase {
             }
         });
 
+        btnGenerarEsta.setText("Reporte");
+        btnGenerarEsta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                generarReporte(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -348,7 +359,11 @@ public class JuegoDetalleVista extends FormBase {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 540, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addComponent(btnGuardar, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnGenerarEsta)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnGuardar)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -376,7 +391,9 @@ public class JuegoDetalleVista extends FormBase {
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnGuardar)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnGuardar)
+                    .addComponent(btnGenerarEsta))
                 .addGap(0, 0, 0))
         );
 
@@ -513,10 +530,31 @@ public class JuegoDetalleVista extends FormBase {
                 estadisticasEquipoDAO.actualizarEstadisticas(estadisticaVisitante);
             }
             agregarMensajeExito("Se guardaron correctamente los registos");
+            btnGenerarEsta.setVisible(true);
         } catch (LMFVGOException ex) {
             agregarMensajeError(ex.getMessage());
         }
     }//GEN-LAST:event_guardarEstadisticas
+
+    private void generarReporte(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generarReporte
+        Map<String, Object> listaLocal = obtenerEstadisticasTabla(tblLocal, juego.getLocal(), juego.getIdJuego(), false, estadisticaLocal);
+        Map<String, Object> listaVisitante = obtenerEstadisticasTabla(tblVisitante, juego.getVisitante(), juego.getIdJuego(), false, estadisticaVisitante);
+        
+        if (listaLocal == null || listaLocal.isEmpty() || listaLocal.get(PARAM_LISTA) == null ||
+                listaVisitante == null || listaVisitante.isEmpty() || listaVisitante.get(PARAM_LISTA) == null) {
+            agregarMensajeError("No se pueden generar el reporte de juego ya que uno de los equipos no cuenta con jugadores activos");
+            return;
+        }
+        try {
+            EstadisticasEquipo estEqLocal = (EstadisticasEquipo) listaLocal.get(PARAM_EST);
+            EstadisticasEquipo estEqVisitante = (EstadisticasEquipo) listaVisitante.get(PARAM_EST);
+            juego.setMarcador(String.valueOf(estEqLocal.getGolesFavor()) + " - " + String.valueOf(estEqVisitante.getGolesFavor()));
+            reportesManager.cedulaJuego(juego, (List<EstadisticasJugador>) listaLocal.get(PARAM_LISTA), 
+                    (List<EstadisticasJugador>) listaVisitante.get(PARAM_LISTA));
+        } catch (LMFVGOException ex) {
+            agregarMensajeError(ex.getMessage());
+        }
+    }//GEN-LAST:event_generarReporte
 
     private Map<String, Object> obtenerEstadisticasTabla(JTable tabla, Integer idEquipo, Integer idJuego, boolean expCedRep, EstadisticasEquipo ee) {
         Map<String, Object> mapa = new HashMap<>();
@@ -560,6 +598,7 @@ public class JuegoDetalleVista extends FormBase {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnCedula;
+    private javax.swing.JButton btnGenerarEsta;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JLabel jLabel1;

@@ -154,6 +154,11 @@ public class JuegosJornadaVista extends FormBase {
                         break;
                     }
                 }
+                if (juegoSel.getLocalNombre().equalsIgnoreCase("descansa") ||
+                        juegoSel.getVisitanteNombre().equalsIgnoreCase("descansa")) {
+                    agregarMensajeError("No se puede abrir el detalle debido a que el equipo DESCANSA");
+                    return;
+                }
                 if (juegoSel != null){
                     JuegoDetalleVista jdv = new JuegoDetalleVista(juegoSel);
                     this.getParent().add(jdv);

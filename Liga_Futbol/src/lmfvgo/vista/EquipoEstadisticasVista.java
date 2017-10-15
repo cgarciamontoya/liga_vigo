@@ -5,17 +5,26 @@
  */
 package lmfvgo.vista;
 
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+import lmfvgo.db.EstadisticasEquipoDAO;
+import lmfvgo.modelo.EstadisticasEquipo;
+import lmfvgo.modelo.EstadisticasJugador;
+
 /**
  *
  * @author USUARIO
  */
-public class EquipoEstadisticasVista extends javax.swing.JInternalFrame {
+public class EquipoEstadisticasVista extends FormBase {
 
+    private final EstadisticasEquipoDAO estadisticasEquipoDAO;
     /**
      * Creates new form EquipoEstadisticasVista
      */
     public EquipoEstadisticasVista() {
         initComponents();
+        estadisticasEquipoDAO = new EstadisticasEquipoDAO();
+        btnGenerarReporte.setEnabled(false);
     }
 
     /**
@@ -60,22 +69,32 @@ public class EquipoEstadisticasVista extends javax.swing.JInternalFrame {
         cboFuerza.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione", "Primera", "Segunda" }));
 
         btnConsultar.setText("Consulta");
+        btnConsultar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                consultaEstadisticas(evt);
+            }
+        });
 
         btnLimpiar.setText("Limpiar");
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                limpiar(evt);
+            }
+        });
 
         tblEstadisticas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "ID", "Nombre", "Juegos", "Goles Favor", "Goles Contra", "Puntos"
+                "Posición", "Nombre", "Juegos", "Goles Favor", "Goles Contra", "Dif", "Puntos"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, true, false
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -91,7 +110,7 @@ public class EquipoEstadisticasVista extends javax.swing.JInternalFrame {
         btnGenerarReporte.setText("Generar Reporte");
         btnGenerarReporte.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGenerarReporteActionPerformed(evt);
+                generarReporte(evt);
             }
         });
 
@@ -103,7 +122,7 @@ public class EquipoEstadisticasVista extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "ID", "Nombre", "Goles"
+                "Posición", "Nombre", "Goles"
             }
         ) {
             Class[] types = new Class [] {
@@ -164,15 +183,52 @@ public class EquipoEstadisticasVista extends javax.swing.JInternalFrame {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnGenerarReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarReporteActionPerformed
+    private void generarReporte(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generarReporte
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnGenerarReporteActionPerformed
+    }//GEN-LAST:event_generarReporte
+
+    private void consultaEstadisticas(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultaEstadisticas
+        limpiarTabla(tblEstadisticas);
+        limpiarTabla(tblGoleo);
+        if (cboFuerza.getSelectedIndex() == 0) {
+            agregarMensajeAdvertencia("Debe seleccionar una opción del campo Fuerza");
+            return;
+        }
+        
+        List<EstadisticasEquipo> estadisticas = estadisticasEquipoDAO.consultaEstadisticasFuerza(cboFuerza.getSelectedIndex());
+        if (estadisticas == null || estadisticas.isEmpty()) {
+            agregarMensajeError("No se encuentran disponibles las estadisticas");
+            return;
+        }
+        
+        DefaultTableModel dtm = (DefaultTableModel) tblEstadisticas.getModel();
+        for (EstadisticasEquipo ee : estadisticas) {
+            dtm.addRow(new Object[]{ee.getPosicion(), ee.getEquipoNombre(), 
+                ee.getPartidosJugados(), ee.getGolesFavor(), ee.getGolesContra(), ee.getDifGoles(), ee.getPuntos()});
+        }
+        
+        List<EstadisticasJugador> estJug = estadisticasEquipoDAO.consultaGoleo(cboFuerza.getSelectedIndex());
+        if (estJug != null && !estJug.isEmpty()) {
+            DefaultTableModel ejm = (DefaultTableModel) tblGoleo.getModel();
+            for (EstadisticasJugador ej : estJug) {
+                ejm.addRow(new Object[]{ej.getPosicion(), ej.getNombreJugador(), ej.getGoles()});
+            }
+        }
+        btnGenerarReporte.setEnabled(true);
+    }//GEN-LAST:event_consultaEstadisticas
+
+    private void limpiar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_limpiar
+        limpiarTabla(tblEstadisticas);
+        limpiarTabla(tblGoleo);
+        cboFuerza.setSelectedIndex(0);
+        btnGenerarReporte.setEnabled(false);
+    }//GEN-LAST:event_limpiar
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

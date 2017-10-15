@@ -3,6 +3,7 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<parameter name="marcador" class="java.lang.String"/>
 	<field name="nombreJugador" class="java.lang.String"/>
 	<field name="inicioCambioNj" class="java.lang.String"/>
 	<field name="goles" class="java.lang.Integer"/>
@@ -160,6 +161,11 @@
 			<line>
 				<reportElement x="33" y="79" width="220" height="1" uuid="1af3ec14-d81e-47d5-9720-3cece9f7ffd2"/>
 			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="56" y="4" width="140" height="20" uuid="9ca92171-f4cf-40e1-9349-6ea5985614e0"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$P{marcador}]]></textFieldExpression>
+			</textField>
 		</band>
 	</columnFooter>
 </jasperReport>

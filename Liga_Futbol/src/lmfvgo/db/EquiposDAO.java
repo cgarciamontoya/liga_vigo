@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 import lmfvgo.excepciones.LMFVGOException;
 import lmfvgo.modelo.Equipos;
+import lmfvgo.util.ConstantesUtil;
 
 /**
  *
@@ -48,11 +49,12 @@ public class EquiposDAO extends BaseDAO {
     
     public void altaEquipoDescansa(int fuerza) throws LMFVGOException {
         sb = new StringBuilder();
-        sb.append("insert into equipos(id_equipo, nombre, fuerza, fecha_registro) values (99, 'DESCANSA', ?, ?)");
+        sb.append("insert into equipos(id_equipo, nombre, fuerza, fecha_registro) values (?, 'DESCANSA', ?, ?)");
         try {
             PreparedStatement ps = getConnection().prepareStatement(sb.toString());
-            ps.setInt(1, fuerza);
-            ps.setDate(2, new java.sql.Date(new Date().getTime()));
+            ps.setInt(1, fuerza == 1 ? ConstantesUtil.ID_DESCANSA_PRIMERA : ConstantesUtil.ID_DESCANSA_SEGUNDA);
+            ps.setInt(2, fuerza);
+            ps.setDate(3, new java.sql.Date(new Date().getTime()));
             
             ps.execute();
         } catch (SQLException ex) {
@@ -76,7 +78,7 @@ public class EquiposDAO extends BaseDAO {
         try {
             sb = new StringBuilder();
             sb.append("select id_equipo, nombre, fuerza, fecha_registro, fecha_baja, motivo_baja ")
-                    .append("from equipos where id_equipo < 99 and fecha_baja is null ");
+                    .append("from equipos where id_equipo < 998 and fecha_baja is null ");
             if (nombre != null && !nombre.trim().isEmpty()) {
                 sb.append("and nombre like '").append(nombre.trim().toUpperCase()).append("%' ");
             }

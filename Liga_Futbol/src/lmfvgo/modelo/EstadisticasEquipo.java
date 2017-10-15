@@ -20,6 +20,10 @@ public class EstadisticasEquipo implements Serializable {
     private int golesFavor;
     private int golesContra;
     private int puntos;
+    private String equipoNombre;
+    private int partidosJugados;
+    private int difGoles;
+    private int posicion;
 
     public EstadisticasEquipo() {
     }
@@ -81,6 +85,38 @@ public class EstadisticasEquipo implements Serializable {
 
     public void setIdJuego(Integer idJuego) {
         this.idJuego = idJuego;
+    }
+
+    public String getEquipoNombre() {
+        return equipoNombre;
+    }
+
+    public void setEquipoNombre(String equipoNombre) {
+        this.equipoNombre = equipoNombre;
+    }
+
+    public int getPartidosJugados() {
+        return partidosJugados;
+    }
+
+    public void setPartidosJugados(int partidosJugados) {
+        this.partidosJugados = partidosJugados;
+    }
+
+    public int getDifGoles() {
+        return difGoles;
+    }
+
+    public void setDifGoles(int difGoles) {
+        this.difGoles = difGoles;
+    }
+
+    public int getPosicion() {
+        return posicion;
+    }
+
+    public void setPosicion(int posicion) {
+        this.posicion = posicion;
     }
     
     @Override

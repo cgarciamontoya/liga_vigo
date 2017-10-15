@@ -16,6 +16,7 @@ import lmfvgo.db.TorneoDAO;
 import lmfvgo.excepciones.LMFVGOException;
 import lmfvgo.modelo.Equipos;
 import lmfvgo.modelo.Juegos;
+import lmfvgo.util.ConstantesUtil;
 import lmfvgo.util.GeneradorRolJuegos;
 
 /**
@@ -156,19 +157,21 @@ public class JuegosRolVista extends FormBase {
     }// </editor-fold>//GEN-END:initComponents
 
     private void generarRol(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generarRol
-        if (cboFuerza.getSelectedIndex() == 0) {
+        int idFuerza = cboFuerza.getSelectedIndex();
+        if (idFuerza == 0) {
             agregarMensajeAdvertencia("Debe seleccionar la fuerza");
             return;
         }
-        List<Equipos> equipos = equiposDAO.consultarEquipoRol(cboFuerza.getSelectedIndex());
+        List<Equipos> equipos = equiposDAO.consultarEquipoRol(idFuerza);
         if (equipos == null || equipos.isEmpty()) {
             agregarMensajeError("No existen equipos registrados");
             return;
         }
         if ((equipos.size() % 2) > 0) {
-            Equipos descansa = new Equipos(99, "DESCANSA", cboFuerza.getSelectedIndex(), new Date());
+            Equipos descansa = new Equipos(idFuerza == 1 ? ConstantesUtil.ID_DESCANSA_PRIMERA : ConstantesUtil.ID_DESCANSA_SEGUNDA, 
+                    "DESCANSA", idFuerza, new Date());
             try {
-                equiposDAO.altaEquipoDescansa(cboFuerza.getSelectedIndex());
+                equiposDAO.altaEquipoDescansa(idFuerza);
             } catch(LMFVGOException ex) {
                 agregarMensajeError("No fue posible generar el rol de juegos");
                 return;

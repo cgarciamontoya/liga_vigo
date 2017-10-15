@@ -23,6 +23,8 @@ public class EstadisticasJugador implements Serializable {
     private Integer idJugador;
     private Integer idJuego;
     private String nombreJugador;
+    private String nombreEquipo;
+    private int posicion;
 
     public EstadisticasJugador() {
     }
@@ -107,6 +109,14 @@ public class EstadisticasJugador implements Serializable {
     public void setIdJugador(Integer idJugador) {
         this.idJugador = idJugador;
     }
+
+    public String getNombreEquipo() {
+        return nombreEquipo;
+    }
+
+    public void setNombreEquipo(String nombreEquipo) {
+        this.nombreEquipo = nombreEquipo;
+    }
     
     @Override
     public int hashCode() {
@@ -115,6 +125,14 @@ public class EstadisticasJugador implements Serializable {
         return hash;
     }
 
+    public int getPosicion() {
+        return posicion;
+    }
+
+    public void setPosicion(int posicion) {
+        this.posicion = posicion;
+    }
+    
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set

@@ -14,6 +14,8 @@
 	</parameter>
 	<parameter name="listaLocal" class="java.util.List"/>
 	<parameter name="listaVisitante" class="java.util.List"/>
+	<parameter name="marcadorLocal" class="java.lang.String"/>
+	<parameter name="marcadorVisitante" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -93,11 +95,17 @@ VILLA GONZALEZ ORTEGA]]></text>
 		<band height="40" splitType="Stretch">
 			<subreport>
 				<reportElement x="0" y="0" width="286" height="40" uuid="e45d9349-9bbb-47a6-877b-d405c644eee7"/>
+				<subreportParameter name="marcador">
+					<subreportParameterExpression><![CDATA[$P{marcadorLocal}]]></subreportParameterExpression>
+				</subreportParameter>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listaLocal})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "CedulaJuego_subreport.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement x="286" y="0" width="286" height="40" uuid="5ced6def-af1e-4960-9571-bf9a7b9ef2c5"/>
+				<subreportParameter name="marcador">
+					<subreportParameterExpression><![CDATA[$P{marcadorVisitante}]]></subreportParameterExpression>
+				</subreportParameter>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listaVisitante})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "CedulaJuego_subreport.jasper"]]></subreportExpression>
 			</subreport>

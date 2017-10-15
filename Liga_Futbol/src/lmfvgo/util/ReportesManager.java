@@ -39,6 +39,11 @@ public class ReportesManager {
         parametros.put("lugar", juego.getLugar());
         parametros.put("listaLocal", local);
         parametros.put("listaVisitante", visitante);
+        if (juego.getMarcador() != null) {
+            String[] marcador = juego.getMarcador().split(" - ");
+            parametros.put("marcadorLocal", marcador[0]);
+            parametros.put("marcadorVisitante", marcador[1]);
+        }
         
         String nombrePdf = URL_REPORTES + "J" + juego.getJornada() + "_" + juego.getLocalNombre() + "_VS_" + juego.getVisitanteNombre() + ".pdf";
         exportar(REPORTE_CEDULA_JUEGO, parametros, nombrePdf);
