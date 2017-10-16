@@ -8,8 +8,10 @@ package lmfvgo.vista;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import lmfvgo.db.EstadisticasEquipoDAO;
+import lmfvgo.excepciones.LMFVGOException;
 import lmfvgo.modelo.EstadisticasEquipo;
 import lmfvgo.modelo.EstadisticasJugador;
+import lmfvgo.util.ReportesManager;
 
 /**
  *
@@ -18,12 +20,17 @@ import lmfvgo.modelo.EstadisticasJugador;
 public class EquipoEstadisticasVista extends FormBase {
 
     private final EstadisticasEquipoDAO estadisticasEquipoDAO;
+    private final ReportesManager reportesManager;
+    
+    List<EstadisticasEquipo> estadisticas = null;
+    List<EstadisticasJugador> estJug = null;
     /**
      * Creates new form EquipoEstadisticasVista
      */
     public EquipoEstadisticasVista() {
         initComponents();
         estadisticasEquipoDAO = new EstadisticasEquipoDAO();
+        reportesManager = new ReportesManager();
         btnGenerarReporte.setEnabled(false);
     }
 
@@ -122,14 +129,14 @@ public class EquipoEstadisticasVista extends FormBase {
 
             },
             new String [] {
-                "Posición", "Nombre", "Goles"
+                "Posición", "Nombre", "Equipo", "Goles"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -149,7 +156,7 @@ public class EquipoEstadisticasVista extends FormBase {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 715, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -160,12 +167,12 @@ public class EquipoEstadisticasVista extends FormBase {
                         .addComponent(btnLimpiar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnGenerarReporte))
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(126, 126, 126)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 137, Short.MAX_VALUE)))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(96, 96, 96)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 524, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -190,7 +197,12 @@ public class EquipoEstadisticasVista extends FormBase {
     }// </editor-fold>//GEN-END:initComponents
 
     private void generarReporte(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generarReporte
-        // TODO add your handling code here:
+        try {
+            reportesManager.tablaEstadisticas(cboFuerza.getSelectedIndex(), estadisticas, estJug);
+        } catch (LMFVGOException ex) {
+            agregarMensajeError(ex.getMessage());
+        }
+        
     }//GEN-LAST:event_generarReporte
 
     private void consultaEstadisticas(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultaEstadisticas
@@ -201,7 +213,7 @@ public class EquipoEstadisticasVista extends FormBase {
             return;
         }
         
-        List<EstadisticasEquipo> estadisticas = estadisticasEquipoDAO.consultaEstadisticasFuerza(cboFuerza.getSelectedIndex());
+        estadisticas = estadisticasEquipoDAO.consultaEstadisticasFuerza(cboFuerza.getSelectedIndex());
         if (estadisticas == null || estadisticas.isEmpty()) {
             agregarMensajeError("No se encuentran disponibles las estadisticas");
             return;
@@ -213,11 +225,11 @@ public class EquipoEstadisticasVista extends FormBase {
                 ee.getPartidosJugados(), ee.getGolesFavor(), ee.getGolesContra(), ee.getDifGoles(), ee.getPuntos()});
         }
         
-        List<EstadisticasJugador> estJug = estadisticasEquipoDAO.consultaGoleo(cboFuerza.getSelectedIndex());
+        estJug = estadisticasEquipoDAO.consultaGoleo(cboFuerza.getSelectedIndex());
         if (estJug != null && !estJug.isEmpty()) {
             DefaultTableModel ejm = (DefaultTableModel) tblGoleo.getModel();
             for (EstadisticasJugador ej : estJug) {
-                ejm.addRow(new Object[]{ej.getPosicion(), ej.getNombreJugador(), ej.getGoles()});
+                ejm.addRow(new Object[]{ej.getPosicion(), ej.getNombreJugador(), ej.getNombreEquipo(), ej.getGoles()});
             }
         }
         btnGenerarReporte.setEnabled(true);

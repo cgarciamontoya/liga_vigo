@@ -13,12 +13,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lmfvgo.excepciones.LMFVGOException;
+import lmfvgo.modelo.EstadisticasEquipo;
 import lmfvgo.modelo.EstadisticasJugador;
 import lmfvgo.modelo.Juegos;
+import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 /**
  * Descripcion:
@@ -28,9 +31,12 @@ public class ReportesManager {
     
     private static final String URL_REPORTES = "C:\\lmfvgo\\";
     private static final String REPORTE_CEDULA_JUEGO = "/lmfvgo/reportes/CedulaJuego.jasper";
+    private static final String REPORTE_TABLA_GENERAL = "/lmfvgo/reportes/TablaEstadisticas.jasper";
 
-    public void cedulaJuego(Juegos juego, List<EstadisticasJugador> local, List<EstadisticasJugador> visitante) throws LMFVGOException {
-        Map<String, Object> parametros = new HashMap<>();
+    public void cedulaJuego(Juegos juego, List<EstadisticasJugador> local, List<EstadisticasJugador> visitante, Map<String, Object> parametros) throws LMFVGOException {
+        if (parametros == null) {
+            parametros = new HashMap<>();
+        }
         parametros.put("jornada", "Jornada " + juego.getJornada());
         parametros.put("local", juego.getLocalNombre());
         parametros.put("visitante", juego.getVisitanteNombre());
@@ -39,16 +45,22 @@ public class ReportesManager {
         parametros.put("lugar", juego.getLugar());
         parametros.put("listaLocal", local);
         parametros.put("listaVisitante", visitante);
-        if (juego.getMarcador() != null) {
-            String[] marcador = juego.getMarcador().split(" - ");
-            parametros.put("marcadorLocal", marcador[0]);
-            parametros.put("marcadorVisitante", marcador[1]);
-        }
         
         String nombrePdf = URL_REPORTES + "J" + juego.getJornada() + "_" + juego.getLocalNombre() + "_VS_" + juego.getVisitanteNombre() + ".pdf";
         exportar(REPORTE_CEDULA_JUEGO, parametros, nombrePdf);
         abrirPdf(nombrePdf);
         
+    }
+    
+    public void tablaEstadisticas(int fuerza, List<EstadisticasEquipo> ee, List<EstadisticasJugador> goleo) throws LMFVGOException {
+        Map<String, Object> parametros = new HashMap<>();
+        parametros.put("fuerza", fuerza == 1 ? "Primera Fuerza" : "Segunda Fuerza");
+        parametros.put("listaTabla", ee);
+        parametros.put("listaGoleo", goleo);
+        
+        String nombrePdf = URL_REPORTES + "Tabla_" + (fuerza == 1 ? "Primera" : "Segunda") + ".pdf";
+        exportar(REPORTE_TABLA_GENERAL, parametros, nombrePdf);
+        abrirPdf(nombrePdf);
     }
     
     private void abrirPdf(String nombrePdf) {

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="TablaEstadisticas" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="603d7879-5c8b-40eb-a31e-2d9acec6ef0a">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["lmfvgo/reportes/"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fuerza" class="java.lang.String"/>
+	<parameter name="listaGoleo" class="java.util.List"/>
+	<parameter name="listaTabla" class="java.util.List"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="60" splitType="Stretch">
+			<staticText>
+				<reportElement x="148" y="0" width="284" height="32" uuid="34b2fe4e-90c9-4516-b9f2-63541968cdd3"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LIGA MUNICIPAL DE FUTBOL
+VILLA GONZALEZ ORTEGA]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="148" y="40" width="284" height="20" uuid="6bba6c69-b0a5-4232-9aaf-541505888cdb"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fuerza}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="5"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="85">
+			<subreport isUsingCache="false" runToBottom="false">
+				<reportElement positionType="Float" x="61" y="45" width="450" height="40" uuid="bda7edf2-f844-4672-a98a-26b7be8c861e"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listaGoleo})]]></dataSourceExpression>
+				<subreportExpression><![CDATA["lmfvgo/reportes/Goleo_subreport.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport isUsingCache="false">
+				<reportElement x="0" y="0" width="572" height="40" uuid="42f3eab1-40d6-4dd8-94c6-4f36c00c518f"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listaTabla})]]></dataSourceExpression>
+				<subreportExpression><![CDATA["lmfvgo/reportes/Tabla_subreport.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

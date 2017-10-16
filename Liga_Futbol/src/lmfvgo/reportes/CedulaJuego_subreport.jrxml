@@ -15,7 +15,7 @@
 	<columnHeader>
 		<band height="20" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="196" height="20" uuid="8e92ea66-0fad-412f-99a1-49ce380bad35"/>
+				<reportElement x="0" y="0" width="176" height="20" uuid="8e92ea66-0fad-412f-99a1-49ce380bad35"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -84,12 +84,24 @@
 				</textElement>
 				<text><![CDATA[NJ/I/C]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="176" y="0" width="20" height="20" uuid="d055c9b6-30dc-41f8-a1a8-49e6a70414ae"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[#]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="196" height="20" uuid="ccfdba98-f57d-41b2-b469-648ca87d9993"/>
+				<reportElement x="0" y="0" width="176" height="20" uuid="ccfdba98-f57d-41b2-b469-648ca87d9993"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -142,6 +154,17 @@
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{goles}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="176" y="0" width="20" height="20" uuid="24ad6b80-3d82-4f02-ad0a-3e9d89832225"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<text><![CDATA[]]></text>
+			</staticText>
 		</band>
 	</detail>
 	<columnFooter>

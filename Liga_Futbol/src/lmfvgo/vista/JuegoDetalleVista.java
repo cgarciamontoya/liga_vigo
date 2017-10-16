@@ -474,7 +474,7 @@ public class JuegoDetalleVista extends FormBase {
         }
         try {
             reportesManager.cedulaJuego(juego, (List<EstadisticasJugador>) listaLocal.get(PARAM_LISTA), 
-                    (List<EstadisticasJugador>) listaVisitante.get(PARAM_LISTA));
+                    (List<EstadisticasJugador>) listaVisitante.get(PARAM_LISTA), null);
         } catch (LMFVGOException ex) {
             agregarMensajeError(ex.getMessage());
         }
@@ -548,9 +548,11 @@ public class JuegoDetalleVista extends FormBase {
         try {
             EstadisticasEquipo estEqLocal = (EstadisticasEquipo) listaLocal.get(PARAM_EST);
             EstadisticasEquipo estEqVisitante = (EstadisticasEquipo) listaVisitante.get(PARAM_EST);
-            juego.setMarcador(String.valueOf(estEqLocal.getGolesFavor()) + " - " + String.valueOf(estEqVisitante.getGolesFavor()));
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("marcadorLocal", String.valueOf(estEqLocal.getGolesFavor()));
+            parametros.put("marcadorVisitante", String.valueOf(estEqVisitante.getGolesFavor()));
             reportesManager.cedulaJuego(juego, (List<EstadisticasJugador>) listaLocal.get(PARAM_LISTA), 
-                    (List<EstadisticasJugador>) listaVisitante.get(PARAM_LISTA));
+                    (List<EstadisticasJugador>) listaVisitante.get(PARAM_LISTA), parametros);
         } catch (LMFVGOException ex) {
             agregarMensajeError(ex.getMessage());
         }
