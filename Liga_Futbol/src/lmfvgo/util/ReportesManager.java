@@ -16,12 +16,11 @@ import lmfvgo.excepciones.LMFVGOException;
 import lmfvgo.modelo.EstadisticasEquipo;
 import lmfvgo.modelo.EstadisticasJugador;
 import lmfvgo.modelo.Juegos;
-import net.sf.jasperreports.engine.JRDataSource;
+import lmfvgo.reportes.vo.CredencialVO;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 /**
  * Descripcion:
@@ -32,6 +31,17 @@ public class ReportesManager {
     private static final String URL_REPORTES = "C:\\lmfvgo\\";
     private static final String REPORTE_CEDULA_JUEGO = "/lmfvgo/reportes/CedulaJuego.jasper";
     private static final String REPORTE_TABLA_GENERAL = "/lmfvgo/reportes/TablaEstadisticas.jasper";
+    private static final String REPORTE_CREDENCIALES = "/lmfvgo/reportes/Credenciales.jasper";
+    
+    public void credenciales(List<CredencialVO> lista1, List<CredencialVO> lista2) throws LMFVGOException {
+        Map<String, Object> parametros = new HashMap<>();
+        parametros.put("lista1", lista1);
+        parametros.put("lista2", lista2);
+        
+        String nombrePdf = URL_REPORTES + "Credenciales.pdf";
+        exportar(REPORTE_CREDENCIALES, parametros, nombrePdf);
+        abrirPdf(nombrePdf);
+    }
 
     public void cedulaJuego(Juegos juego, List<EstadisticasJugador> local, List<EstadisticasJugador> visitante, Map<String, Object> parametros) throws LMFVGOException {
         if (parametros == null) {

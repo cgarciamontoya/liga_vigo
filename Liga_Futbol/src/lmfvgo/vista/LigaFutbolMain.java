@@ -51,6 +51,9 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         menuJuegos = new javax.swing.JMenu();
         mnuJgosRol = new javax.swing.JMenuItem();
         mnuJgosJornada = new javax.swing.JMenuItem();
+        menuCredenciales = new javax.swing.JMenu();
+        mnuCredJug = new javax.swing.JMenuItem();
+        mnuCredEq = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Liga Municipal de Futbol de Villa González Ortega");
@@ -140,6 +143,27 @@ public class LigaFutbolMain extends javax.swing.JFrame {
 
         jMenuBar1.add(menuJuegos);
 
+        menuCredenciales.setText("Credenciales");
+
+        mnuCredJug.setText("Por Jugador");
+        mnuCredJug.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                abrirCredJugador(evt);
+            }
+        });
+        menuCredenciales.add(mnuCredJug);
+
+        mnuCredEq.setText("Por Equipo");
+        mnuCredEq.setToolTipText("");
+        mnuCredEq.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                abrirCredEquipo(evt);
+            }
+        });
+        menuCredenciales.add(mnuCredEq);
+
+        jMenuBar1.add(menuCredenciales);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -204,6 +228,14 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         eev.show();
     }//GEN-LAST:event_abrirEstadisticasEquipo
 
+    private void abrirCredJugador(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirCredJugador
+        // TODO add your handling code here:
+    }//GEN-LAST:event_abrirCredJugador
+
+    private void abrirCredEquipo(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirCredEquipo
+        // TODO add your handling code here:
+    }//GEN-LAST:event_abrirCredEquipo
+
     /**
      * @param args the command line arguments
      */
@@ -241,10 +273,13 @@ public class LigaFutbolMain extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenu menuCredenciales;
     private javax.swing.JMenu menuEquipos;
     private javax.swing.JMenu menuJuegos;
     private javax.swing.JMenu menuJugadores;
     private javax.swing.JMenu menuTorneo;
+    private javax.swing.JMenuItem mnuCredEq;
+    private javax.swing.JMenuItem mnuCredJug;
     private javax.swing.JMenuItem mnuEqConsulta;
     private javax.swing.JMenuItem mnuEqRegistro;
     private javax.swing.JMenuItem mnuEquipoEstadisticas;

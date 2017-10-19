@@ -6,6 +6,7 @@
 
 package lmfvgo.db;
 
+import java.io.ByteArrayInputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lmfvgo.excepciones.LMFVGOException;
 import lmfvgo.modelo.Jugadores;
+import lmfvgo.reportes.vo.CredencialVO;
 
 /**
  * Descripcion:
@@ -179,6 +181,70 @@ public class JugadoresDAO extends BaseDAO {
                 jug.add(rs.getInt("id_jugador") + " - " + rs.getString("nombre") + " " + rs.getString("paterno") + " " + rs.getString("materno"));
             }
             return jug;
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
+    
+    public List<String> consultaJugadoresAltaTodos() {
+        try {
+            sb = new StringBuilder();
+            sb.append("select j.id_jugador, concat(j.nombre, ' ', j.paterno, ' ', j.materno) nombre, ")
+                    .append("e.nombre equipo_nombre, e.fuerza ")
+                    .append("from jugadores j inner join rel_equipo_jugadores r on r.id_jugador = j.id_jugador ")
+                    .append("inner join equipos e on r.id_equipo = e.id_equipo ")
+                    .append("order by equipo_nombre, nombre");
+            ResultSet rs = getConnection().prepareStatement(sb.toString()).executeQuery();
+            List<String> jug = new ArrayList<>();
+            while (rs.next()) {
+                jug.add(rs.getInt("id_jugador") + " - " + rs.getString("equipo_nombre") + "_" + rs.getString("nombre"));
+            }
+            return jug;
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
+    
+    public List<CredencialVO> consultaCredenciales(List<Integer> ids, Integer idEquipo) {
+        try {
+            int i = 0;
+            PreparedStatement ps = null;
+            sb = new StringBuilder();
+            sb.append("select j.id_jugador, concat(j.nombre, ' ', j.paterno, ' ', j.materno) jugador_nombre, j.imagen, ")
+                .append("e.nombre equipo_nombre, e.fuerza ")
+                .append("from jugadores j left join rel_equipo_jugadores rel on rel.id_jugador = j.id_jugador ")
+                .append("inner join equipos e on e.id_equipo = rel.id_equipo ");
+            if (idEquipo != null && idEquipo > 0) {
+                sb.append("where e.id_equipo = ? order by jugador_nombre");
+                
+                ps = getConnection().prepareStatement(sb.toString());
+                ps.setInt(1, idEquipo);
+            } else {
+                sb.append("where j.id_jugador in (");
+                for (i = 0; i < ids.size(); i++) {
+                    sb.append("?, ");
+                }
+                sb.replace((sb.length() - 2), sb.length(), ")");
+                ps = getConnection().prepareStatement(sb.toString());
+                i = 1;
+                for (Integer idJug : ids) {
+                    ps.setInt(i, idJug);
+                    i++;
+                }
+            }
+            ResultSet rs = ps.executeQuery();
+            List<CredencialVO> credenciales = new ArrayList<>();
+            while (rs.next()) {
+                CredencialVO c = new CredencialVO();
+                c.setFolio(rs.getInt("id_jugador"));
+                c.setNombre(rs.getString("jugador_nombre"));
+                c.setFoto(new ByteArrayInputStream(rs.getBytes("imagen")));
+                c.setEquipo(rs.getString("equipo_nombre"));
+                c.setFuerza(rs.getInt("fuerza") == 1 ? "Primera" : "Segunda");
+                //c.setNumero(rs.getInt("numero");
+                credenciales.add(c);
+            }
+            return credenciales;
         } catch (SQLException ex) {
             return null;
         }
