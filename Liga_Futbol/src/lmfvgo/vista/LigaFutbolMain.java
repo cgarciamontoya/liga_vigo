@@ -229,11 +229,15 @@ public class LigaFutbolMain extends javax.swing.JFrame {
     }//GEN-LAST:event_abrirEstadisticasEquipo
 
     private void abrirCredJugador(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirCredJugador
-        // TODO add your handling code here:
+        CredencialesJugadorVista cjv = new CredencialesJugadorVista();
+        this.add(cjv);
+        cjv.show();
     }//GEN-LAST:event_abrirCredJugador
 
     private void abrirCredEquipo(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirCredEquipo
-        // TODO add your handling code here:
+        CredencialesEquipoVista cev = new CredencialesEquipoVista();
+        this.add(cev);
+        cev.show();
     }//GEN-LAST:event_abrirCredEquipo
 
     /**

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Credenciales_subreport" language="groovy" pageWidth="243" pageHeight="300" columnWidth="243" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="aa69fbc8-8e71-45ab-b2eb-7b94ade2312b">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Credenciales_subreport" pageWidth="243" pageHeight="300" columnWidth="243" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="aa69fbc8-8e71-45ab-b2eb-7b94ade2312b">
 	<property name="ireport.zoom" value="2.1435888100000016"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -14,21 +14,12 @@
 	</background>
 	<detail>
 		<band height="140" splitType="Stretch">
-			<rectangle>
-				<reportElement x="0" y="0" width="243" height="139" uuid="db6b8cc9-0e00-439e-976f-b4acd5615a2c"/>
-			</rectangle>
-			<image>
-				<reportElement x="0" y="0" width="82" height="88" uuid="fff4337e-9cbd-4030-95b1-7c4b88fef48c"/>
+			<image isUsingCache="false">
+				<reportElement x="1" y="1" width="82" height="88" uuid="fff4337e-9cbd-4030-95b1-7c4b88fef48c">
+					<printWhenExpression><![CDATA[new Boolean($F{foto} != null)]]></printWhenExpression>
+				</reportElement>
 				<imageExpression><![CDATA[$F{foto}]]></imageExpression>
 			</image>
-			<staticText>
-				<reportElement x="82" y="0" width="161" height="23" uuid="261d0d8f-dd40-4911-9ac1-e8f81b182bbf"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[LIGA MUNICIPAL DE FUTBOL
-VILLA GONZALEZ ORTEGA]]></text>
-			</staticText>
 			<staticText>
 				<reportElement x="85" y="23" width="45" height="13" uuid="19e2cc4d-aec9-43af-9590-40499c941bd4"/>
 				<textElement verticalAlignment="Middle">
@@ -37,14 +28,14 @@ VILLA GONZALEZ ORTEGA]]></text>
 				<text><![CDATA[Nombre:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="85" y="36" width="158" height="13" uuid="410a2975-3f78-4d81-8a83-0bf0be06d338"/>
+				<reportElement mode="Opaque" x="85" y="36" width="157" height="13" backcolor="#99FFFF" uuid="410a2975-3f78-4d81-8a83-0bf0be06d338"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="22" y="88" width="60" height="13" uuid="6dafb0b4-11a2-47f9-bddc-0e00f3bc0a76"/>
+				<reportElement mode="Opaque" x="22" y="88" width="60" height="13" backcolor="#99FFFF" uuid="6dafb0b4-11a2-47f9-bddc-0e00f3bc0a76"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
@@ -57,43 +48,43 @@ VILLA GONZALEZ ORTEGA]]></text>
 				</textElement>
 				<text><![CDATA[Equipo:]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="85" y="62" width="158" height="13" uuid="75ff989a-ae53-46ee-85b4-9cce3f4adba8"/>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="85" y="62" width="157" height="13" backcolor="#99FFFF" uuid="75ff989a-ae53-46ee-85b4-9cce3f4adba8"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{equipo}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="85" y="75" width="45" height="13" uuid="061f3dda-c3f0-4924-9eb9-c65810af8de8"/>
+				<reportElement x="85" y="75" width="35" height="13" uuid="061f3dda-c3f0-4924-9eb9-c65810af8de8"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Número:]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="85" y="88" width="45" height="13" uuid="496c3df1-96f5-43b3-ab3b-afab06065f53"/>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="85" y="88" width="62" height="13" backcolor="#99FFFF" uuid="496c3df1-96f5-43b3-ab3b-afab06065f53"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{numero}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="147" y="75" width="45" height="13" uuid="30215017-ce23-4b42-98bf-7365d42803a2"/>
+				<reportElement x="147" y="75" width="29" height="13" uuid="30215017-ce23-4b42-98bf-7365d42803a2"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Fuerza:]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="147" y="88" width="96" height="13" uuid="ebc7fb58-e3a1-41f9-9dc6-19b1535df741"/>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="147" y="88" width="95" height="13" backcolor="#99FFFF" uuid="ebc7fb58-e3a1-41f9-9dc6-19b1535df741"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{fuerza}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="88" width="22" height="13" uuid="71f3fa83-daf3-4915-ab4c-6479b6ea18cb"/>
+				<reportElement x="1" y="88" width="22" height="13" uuid="71f3fa83-daf3-4915-ab4c-6479b6ea18cb"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
@@ -119,6 +110,17 @@ VILLA GONZALEZ ORTEGA]]></text>
 				</textElement>
 				<text><![CDATA[SECRETARIO]]></text>
 			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="82" y="1" width="160" height="23" forecolor="#000000" backcolor="#00CCCC" uuid="261d0d8f-dd40-4911-9ac1-e8f81b182bbf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LIGA MUNICIPAL DE FUTBOL
+VILLA GONZALEZ ORTEGA]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement mode="Transparent" x="0" y="0" width="243" height="139" uuid="db6b8cc9-0e00-439e-976f-b4acd5615a2c"/>
+			</rectangle>
 		</band>
 	</detail>
 </jasperReport>

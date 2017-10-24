@@ -19,7 +19,9 @@
 				<subreportExpression><![CDATA["lmfvgo/reportes/Credenciales_subreport.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement x="329" y="0" width="243" height="140" uuid="0e5ed70b-7147-4dca-bd97-95eb79b05fbf"/>
+				<reportElement x="329" y="0" width="243" height="140" uuid="0e5ed70b-7147-4dca-bd97-95eb79b05fbf">
+					<printWhenExpression><![CDATA[new Boolean($P{lista2} != null && !$P{lista2}.isEmpty())]]></printWhenExpression>
+				</reportElement>
 				<subreportParameter name="lista">
 					<subreportParameterExpression><![CDATA[$P{lista2}]]></subreportParameterExpression>
 				</subreportParameter>

@@ -6,7 +6,12 @@
 
 package lmfvgo.vista;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.DefaultListModel;
 import lmfvgo.db.JugadoresDAO;
+import lmfvgo.excepciones.LMFVGOException;
+import lmfvgo.reportes.vo.CredencialVO;
 import lmfvgo.util.ReportesManager;
 
 /**
@@ -14,6 +19,7 @@ import lmfvgo.util.ReportesManager;
  * @author cgarcia
  */
 public class CredencialesJugadorVista extends FormBase {
+    private static final long serialVersionUID = 5848702952420491646L;
 
     private final JugadoresDAO jugadoresDAO;
     private final ReportesManager reportesManager;
@@ -28,7 +34,14 @@ public class CredencialesJugadorVista extends FormBase {
     }
     
     private void inicializarJugadores() {
-        
+        List<String> jugadores = jugadoresDAO.consultaJugadoresAltaTodos();
+        lstJugadores.setModel(new DefaultListModel());
+        DefaultListModel model = new DefaultListModel();
+        model.removeAllElements();
+        for (String jug : jugadores) {
+            model.addElement(jug);
+        }
+        lstJugadores.setModel(model);
     }
 
     /** This method is called from within the constructor to
@@ -41,12 +54,12 @@ public class CredencialesJugadorVista extends FormBase {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstJugadores = new javax.swing.JList<>();
+        lstJugadores = new javax.swing.JList<String>();
         jLabel1 = new javax.swing.JLabel();
         btnAgregar = new javax.swing.JButton();
         btnQuitarJugador = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        lstCred = new javax.swing.JList<>();
+        lstCred = new javax.swing.JList<String>();
         jLabel2 = new javax.swing.JLabel();
         btnGenerar = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
@@ -103,23 +116,27 @@ public class CredencialesJugadorVista extends FormBase {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnAgregar)
-                    .addComponent(btnQuitarJugador))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnLimpiar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnGenerar)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE))
+                        .addGap(14, 14, 14)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnAgregar)
+                                    .addComponent(btnQuitarJugador))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnLimpiar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnGenerar)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -129,41 +146,94 @@ public class CredencialesJugadorVista extends FormBase {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGenerar)
                     .addComponent(btnLimpiar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
-                            .addComponent(jScrollPane2))
-                        .addContainerGap())
+                        .addGap(0, 9, Short.MAX_VALUE)
+                        .addComponent(jLabel1)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane1)
+                                .addContainerGap())
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(jScrollPane2)
+                                .addContainerGap())))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 118, Short.MAX_VALUE)
                         .addComponent(btnAgregar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnQuitarJugador)
-                        .addGap(130, 130, 130))))
+                        .addGap(135, 135, 135))))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void agregarJugadores(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarJugadores
-        // TODO add your handling code here:
+        if (lstJugadores.getSelectedValue() != null && !lstJugadores.getSelectedValue().isEmpty()) {
+                String seleccionado = lstJugadores.getSelectedValue();
+                ((DefaultListModel) lstJugadores.getModel()).removeElementAt(lstJugadores.getSelectedIndex());
+
+                if (lstCred.getModel() == null || lstCred.getModel().getSize() == 0) {
+                    lstCred.setModel(new DefaultListModel());
+                }
+                ((DefaultListModel) lstCred.getModel()).addElement(seleccionado);
+            } else {
+                agregarMensajeAdvertencia("Debe seleccionar un jugador");
+            }
     }//GEN-LAST:event_agregarJugadores
 
     private void quitarJugadores(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitarJugadores
-        // TODO add your handling code here:
+        if (lstCred.getSelectedValue() != null && !lstCred.getSelectedValue().isEmpty()) {
+            String seleccionado = lstCred.getSelectedValue();
+            ((DefaultListModel) lstCred.getModel()).removeElementAt(lstCred.getSelectedIndex());
+
+            if (lstJugadores.getModel() == null || lstJugadores.getModel().getSize() == 0) {
+                lstJugadores.setModel(new DefaultListModel());
+            }
+            ((DefaultListModel) lstJugadores.getModel()).addElement(seleccionado);
+        } else {
+            agregarMensajeAdvertencia("Debe seleccionar un jugador");
+        }
     }//GEN-LAST:event_quitarJugadores
 
     private void generarCredenciales(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generarCredenciales
-        // TODO add your handling code here:
+        try {
+            if (lstCred.getModel().getSize() == 0) {
+                agregarMensajeAdvertencia("No se seleccionaron registros para generar las credenciales");
+                return;
+            }
+            
+            int conteo = lstCred.getModel().getSize() / 2;
+            if ((lstCred.getModel().getSize() % 2) > 0) {
+                conteo += 1;
+            }
+            List<Integer> idsLista1 = getIdsLista(0, conteo);
+            List<Integer> idsLista2 = getIdsLista(conteo, lstCred.getModel().getSize());
+            
+            List<CredencialVO> creds1 = jugadoresDAO.consultaCredenciales(idsLista1, null);
+            List<CredencialVO> creds2 = jugadoresDAO.consultaCredenciales(idsLista2, null);
+            
+            reportesManager.credenciales(creds1, creds2);
+        } catch (LMFVGOException ex) {
+            agregarMensajeError(ex.getMessage());
+        }
     }//GEN-LAST:event_generarCredenciales
 
+    private List<Integer> getIdsLista(int idxInicio, int idxFinal) {
+        List<Integer> lista = new ArrayList<>();
+        for (int i = idxInicio; i < idxFinal; i++) {
+                String elemento = (String) lstCred.getModel().getElementAt(i);
+                lista.add(Integer.parseInt(elemento.split(" - ")[0]));
+        }
+        return lista;
+    }
     private void limpiar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_limpiar
-        // TODO add your handling code here:
+        inicializarJugadores();
     }//GEN-LAST:event_limpiar
 
 

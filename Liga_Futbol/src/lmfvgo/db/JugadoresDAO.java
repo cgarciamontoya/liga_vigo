@@ -238,7 +238,10 @@ public class JugadoresDAO extends BaseDAO {
                 CredencialVO c = new CredencialVO();
                 c.setFolio(rs.getInt("id_jugador"));
                 c.setNombre(rs.getString("jugador_nombre"));
-                c.setFoto(new ByteArrayInputStream(rs.getBytes("imagen")));
+                byte[] foto = rs.getBytes("imagen");
+                if (foto != null && foto.length > 0) {
+                    c.setFoto(new ByteArrayInputStream(foto));
+                }
                 c.setEquipo(rs.getString("equipo_nombre"));
                 c.setFuerza(rs.getInt("fuerza") == 1 ? "Primera" : "Segunda");
                 //c.setNumero(rs.getInt("numero");
