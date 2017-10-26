@@ -8,12 +8,14 @@ package lmfvgo.db;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import lmfvgo.excepciones.LMFVGOException;
 import lmfvgo.modelo.Equipos;
+import lmfvgo.reportes.vo.CedulaVO;
 import lmfvgo.util.ConstantesUtil;
 
 /**
@@ -139,16 +141,21 @@ public class EquiposDAO extends BaseDAO {
         }
     }
     
-    public void guardarJugadoresEquipo(int idEquipo, List<Integer> idsJugadores) throws LMFVGOException {
+    public void guardarJugadoresEquipo(int idEquipo, List<CedulaVO> idsJugadores) throws LMFVGOException {
         try {
             sb = new StringBuilder();
-            sb.append("insert into rel_equipo_jugadores (id_equipo, id_jugador, id_torneo) values (?,?,?)");
+            sb.append("insert into rel_equipo_jugadores (id_equipo, id_jugador, id_torneo, numero) values (?,?,?,?)");
             Integer idTorneo = getIdTorneoActivo();
             PreparedStatement ps = getConnection().prepareStatement(sb.toString());
-            for (Integer idJug: idsJugadores) {
+            for (CedulaVO idJug: idsJugadores) {
                 ps.setInt(1, idEquipo);
-                ps.setInt(2, idJug);
+                ps.setInt(2, idJug.getIdJugador());
                 ps.setInt(3, idTorneo);
+                if (idJug.getNumero() != null && idJug.getNumero() > 0) {
+                    ps.setInt(4, idJug.getNumero());
+                } else {
+                    ps.setNull(4, Types.INTEGER);
+                }
                 ps.addBatch();
             }
             ps.executeBatch();

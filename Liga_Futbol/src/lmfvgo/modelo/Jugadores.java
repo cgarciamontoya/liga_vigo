@@ -28,6 +28,7 @@ public class Jugadores implements Serializable {
     private int equipo;
     private String equipoNombre;
     private int fuerza;
+    private Integer numero;
 
     public Jugadores() {
     }
@@ -134,7 +135,14 @@ public class Jugadores implements Serializable {
         this.fuerza = fuerza;
     }
 
-    
+    public Integer getNumero() {
+        return numero;
+    }
+
+    public void setNumero(Integer numero) {
+        this.numero = numero;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;

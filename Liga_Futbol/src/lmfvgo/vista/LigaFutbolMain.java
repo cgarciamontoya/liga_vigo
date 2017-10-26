@@ -5,15 +5,16 @@
  */
 package lmfvgo.vista;
 
-import java.util.Map;
 import javax.swing.JOptionPane;
 import lmfvgo.db.TorneoDAO;
+import lmfvgo.modelo.Torneo;
 
 /**
  *
  * @author cgarcia
  */
 public class LigaFutbolMain extends javax.swing.JFrame {
+    private static final long serialVersionUID = -8859322752060669243L;
 
     private final TorneoDAO torneoDAO;
     /**
@@ -22,8 +23,8 @@ public class LigaFutbolMain extends javax.swing.JFrame {
     public LigaFutbolMain() {
         initComponents();
         torneoDAO = new TorneoDAO();
-        Map<String, Object> mapa = torneoDAO.torneoActivo();
-        if (mapa == null) {
+        Torneo torneo = torneoDAO.torneoActivo();
+        if (torneo == null) {
             JOptionPane.showMessageDialog(this, "NO EXISTE TORNEO ACTIVO", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
     }
@@ -58,10 +59,11 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Liga Municipal de Futbol de Villa González Ortega");
         setPreferredSize(new java.awt.Dimension(1200, 700));
+        setResizable(false);
 
         menuTorneo.setText("Torneos");
 
-        mnuTorneoNuevo.setText("Nuevo");
+        mnuTorneoNuevo.setText("Registro/Consulta");
         mnuTorneoNuevo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuTorneoNuevoActionPerformed(evt);
@@ -70,6 +72,11 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         menuTorneo.add(mnuTorneoNuevo);
 
         mnuTorneoCerrar.setText("Cerrar");
+        mnuTorneoCerrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                abrirCierreTorneo(evt);
+            }
+        });
         menuTorneo.add(mnuTorneoCerrar);
 
         jMenuBar1.add(menuTorneo);
@@ -239,6 +246,12 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         this.add(cev);
         cev.show();
     }//GEN-LAST:event_abrirCredEquipo
+
+    private void abrirCierreTorneo(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirCierreTorneo
+        TorneoCierreVista tcv = new TorneoCierreVista();
+        this.add(tcv);
+        tcv.show();
+    }//GEN-LAST:event_abrirCierreTorneo
 
     /**
      * @param args the command line arguments

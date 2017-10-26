@@ -16,6 +16,7 @@ import lmfvgo.db.TorneoDAO;
 import lmfvgo.excepciones.LMFVGOException;
 import lmfvgo.modelo.Equipos;
 import lmfvgo.modelo.Juegos;
+import lmfvgo.modelo.Torneo;
 import lmfvgo.util.ConstantesUtil;
 import lmfvgo.util.GeneradorRolJuegos;
 
@@ -179,19 +180,19 @@ public class JuegosRolVista extends FormBase {
             equipos.add(descansa);
             
         }
-        Map<String, Object> torneo = torneoDAO.torneoActivo();
+        Torneo torneo = torneoDAO.torneoActivo();
         switch (equipos.size()) {
             case 10 :
-                rol = GeneradorRolJuegos.generarRol10(equipos, (Integer) torneo.get(TorneoDAO.ID_TORNEO));
+                rol = GeneradorRolJuegos.generarRol10(equipos, torneo.getIdTorneo());
                 break;
             case 12 :
-                rol = GeneradorRolJuegos.generarRol12(equipos, (Integer) torneo.get(TorneoDAO.ID_TORNEO));
+                rol = GeneradorRolJuegos.generarRol12(equipos, torneo.getIdTorneo());
                 break;
             case 14 :
-                rol = GeneradorRolJuegos.generarRol14(equipos, (Integer) torneo.get(TorneoDAO.ID_TORNEO));
+                rol = GeneradorRolJuegos.generarRol14(equipos, torneo.getIdTorneo());
                 break;
             case 16 :
-                rol = GeneradorRolJuegos.generarRol16(equipos, (Integer) torneo.get(TorneoDAO.ID_TORNEO));
+                rol = GeneradorRolJuegos.generarRol16(equipos, torneo.getIdTorneo());
                 break;
             default :
                 agregarMensajeError("No se puede generar el rol para un torneo de menos de 10 equipos o mayor de 16");

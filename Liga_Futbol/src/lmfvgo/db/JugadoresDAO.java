@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lmfvgo.excepciones.LMFVGOException;
 import lmfvgo.modelo.Jugadores;
+import lmfvgo.reportes.vo.CedulaVO;
 import lmfvgo.reportes.vo.CredencialVO;
 
 /**
@@ -80,7 +81,7 @@ public class JugadoresDAO extends BaseDAO {
     public List<Jugadores> consultarJugadores(Jugadores filtros) {
         sb = new StringBuilder();
         sb.append("select j.id_jugador, j.nombre, j.paterno, j.materno, j.lugar_procedencia, ")
-                .append("e.nombre equipo_nombre, e.fuerza ")
+                .append("e.nombre equipo_nombre, e.fuerza, rel.numero ")
                 .append("from jugadores j left join rel_equipo_jugadores rel on rel.id_jugador = j.id_jugador ")
                 .append("left join equipos e on e.id_equipo = rel.id_equipo ");
         if (filtros.getNombre() != null && !filtros.getNombre().trim().isEmpty()) {
@@ -115,6 +116,7 @@ public class JugadoresDAO extends BaseDAO {
                 j.setLugarProcedencia(rs.getString("lugar_procedencia"));
                 j.setEquipoNombre(rs.getString("equipo_nombre"));
                 j.setFuerza(rs.getInt("fuerza"));
+                j.setNumero(rs.getObject("numero") != null ? rs.getInt("numero") : null);
                 resultado.add(j);
             }
             return resultado;
@@ -211,7 +213,7 @@ public class JugadoresDAO extends BaseDAO {
             PreparedStatement ps = null;
             sb = new StringBuilder();
             sb.append("select j.id_jugador, concat(j.nombre, ' ', j.paterno, ' ', j.materno) jugador_nombre, j.imagen, ")
-                .append("e.nombre equipo_nombre, e.fuerza ")
+                .append("e.nombre equipo_nombre, e.fuerza, rel.numero ")
                 .append("from jugadores j left join rel_equipo_jugadores rel on rel.id_jugador = j.id_jugador ")
                 .append("inner join equipos e on e.id_equipo = rel.id_equipo ");
             if (idEquipo != null && idEquipo > 0) {
@@ -244,7 +246,35 @@ public class JugadoresDAO extends BaseDAO {
                 }
                 c.setEquipo(rs.getString("equipo_nombre"));
                 c.setFuerza(rs.getInt("fuerza") == 1 ? "Primera" : "Segunda");
-                //c.setNumero(rs.getInt("numero");
+                c.setNumero(rs.getInt("numero"));
+                credenciales.add(c);
+            }
+            return credenciales;
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
+    
+    public List<CedulaVO> consultaCedula(Integer idEquipo) {
+        try {
+            int i = 0;
+            PreparedStatement ps = null;
+            sb = new StringBuilder();
+            sb.append("select concat(j.nombre, ' ', j.paterno, ' ', j.materno) jugador_nombre, j.imagen, ")
+                .append("e.nombre equipo_nombre, e.fuerza, rel.numero ")
+                .append("from jugadores j left join rel_equipo_jugadores rel on rel.id_jugador = j.id_jugador ")
+                .append("inner join equipos e on e.id_equipo = rel.id_equipo ");
+                sb.append("where e.id_equipo = ? order by jugador_nombre");
+                
+                ps = getConnection().prepareStatement(sb.toString());
+                ps.setInt(1, idEquipo);
+            ResultSet rs = ps.executeQuery();
+            List<CedulaVO> credenciales = new ArrayList<>();
+            while (rs.next()) {
+                CedulaVO c = new CedulaVO();
+                c.setNombre(rs.getString("jugador_nombre"));
+                c.setEquipo(rs.getString("equipo_nombre"));
+                c.setNumero(rs.getInt("numero"));
                 credenciales.add(c);
             }
             return credenciales;

@@ -9,9 +9,7 @@ package lmfvgo.db;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.sql.Types;
 import lmfvgo.excepciones.LMFVGOException;
 import lmfvgo.modelo.Torneo;
 
@@ -28,12 +26,37 @@ public class TorneoDAO extends BaseDAO {
         super();
     }
 
-    public void guardarTorneo(String nombre, Date fechaInicio) throws LMFVGOException {
+    public void guardarTorneo(Torneo torneo) throws LMFVGOException {
         try {
-            PreparedStatement ps = getConnection().prepareStatement("insert into torneo(nombre, fecha_inicio) values (?,?)");
-            ps.setString(1, nombre.trim().toUpperCase());
-            ps.setDate(2, new java.sql.Date(fechaInicio.getTime()));
-            
+            PreparedStatement ps = getConnection().prepareStatement("insert into torneo(nombre, fecha_inicio, presidente, secretario, tesorero) values (?,?,?,?,?)");
+            ps.setString(1, torneo.getNombre().trim().toUpperCase());
+            ps.setDate(2, new java.sql.Date(torneo.getFechaInicio().getTime()));
+            ps.setString(3, torneo.getPresidente().toUpperCase());
+            ps.setString(4, torneo.getSecretario().toUpperCase());
+            if (torneo.getTesorero() != null && !torneo.getTesorero().isEmpty()) {
+                ps.setString(5, torneo.getTesorero().toUpperCase());
+            } else {
+                ps.setNull(5, Types.VARCHAR);
+            }
+            ps.execute();
+        } catch (SQLException ex) {
+            throw new LMFVGOException("Ocurrio un error al guardar el torneo");
+        }
+    }
+    
+    public void actualizarTorneo(Torneo torneo) throws LMFVGOException {
+        try {
+            PreparedStatement ps = getConnection().prepareStatement("update torneo set nombre = ?, fecha_inicio = ?, presidente = ?, secretario = ?, tesorero = ? where id_torneo = ?");
+            ps.setString(1, torneo.getNombre().trim().toUpperCase());
+            ps.setDate(2, new java.sql.Date(torneo.getFechaInicio().getTime()));
+            ps.setString(3, torneo.getPresidente().toUpperCase());
+            ps.setString(4, torneo.getSecretario().toUpperCase());
+            if (torneo.getTesorero() != null && !torneo.getTesorero().isEmpty()) {
+                ps.setString(5, torneo.getTesorero().toUpperCase());
+            } else {
+                ps.setNull(5, Types.VARCHAR);
+            }
+            ps.setInt(6, torneo.getIdTorneo());
             ps.execute();
         } catch (SQLException ex) {
             throw new LMFVGOException("Ocurrio un error al guardar el torneo");
@@ -41,17 +64,37 @@ public class TorneoDAO extends BaseDAO {
     }
     
     public void cerrarTorneo(Torneo torneo) throws LMFVGOException {
-        
+        StringBuilder sb = new StringBuilder();
+        sb.append("update torneo set fecha_fin = ?, campeon_primera = ?, subcampeon_primera = ?, campeon_segunda = ?, ")
+                .append("subcampeon_segunda = ?, goleador_primera = ?, goleador_segunda = ? ")
+                .append("where id_torneo = ?");
+        try {
+            PreparedStatement ps = getConnection().prepareStatement(sb.toString());
+            ps.setDate(1, new java.sql.Date(torneo.getFechaFin().getTime()));
+            ps.setInt(2, torneo.getCampeonPrimera());
+            ps.setInt(3, torneo.getSubcampeonPrimera());
+            ps.setInt(4, torneo.getCampeonSegunda());
+            ps.setInt(5, torneo.getSubcampeonSegunda());
+            ps.setInt(6, torneo.getGoleadorPrimera());
+            ps.setInt(7, torneo.getGoleadorSegunda());
+            ps.setInt(8, torneo.getIdTorneo());
+        } catch (SQLException ex) {
+            throw new LMFVGOException(ex.getMessage());
+        }
     }
     
-    public Map<String,Object> torneoActivo() {
+    public Torneo torneoActivo() {
         try {
-            ResultSet rs = getConnection().prepareStatement("select id_torneo, nombre from torneo where fecha_fin is null").executeQuery();
+            ResultSet rs = getConnection().prepareStatement("select id_torneo, nombre, fecha_inicio, presidente, secretario, tesorero from torneo where fecha_fin is null").executeQuery();
             rs.next();
-            Map<String, Object> mapa = new HashMap<>();
-            mapa.put(ID_TORNEO, rs.getInt("id_torneo"));
-            mapa.put(NOMBRE_TORNEO, rs.getString("nombre"));
-            return mapa;
+            Torneo torneo = new Torneo();
+            torneo.setIdTorneo(rs.getInt("id_torneo"));
+            torneo.setNombre(rs.getString("nombre"));
+            torneo.setFechaInicio(rs.getDate("fecha_inicio"));
+            torneo.setPresidente(rs.getString("presidente"));
+            torneo.setSecretario(rs.getString("secretario"));
+            torneo.setTesorero(rs.getString("tesorero"));
+            return torneo;
         } catch (SQLException ex) {
             return null;
         }

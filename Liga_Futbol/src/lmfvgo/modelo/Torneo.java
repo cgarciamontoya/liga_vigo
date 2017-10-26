@@ -23,7 +23,28 @@ public class Torneo implements Serializable {
     private Integer campeonSegunda;
     private Integer subcampeonPrimera;
     private Integer subcampeonSegunda;
+    private String presidente;
+    private String secretario;
+    private String tesorero;
+    private Integer goleadorPrimera;
+    private Integer goleadorSegunda;
 
+    public Integer getGoleadorPrimera() {
+        return goleadorPrimera;
+    }
+
+    public void setGoleadorPrimera(Integer goleadorPrimera) {
+        this.goleadorPrimera = goleadorPrimera;
+    }
+
+    public Integer getGoleadorSegunda() {
+        return goleadorSegunda;
+    }
+
+    public void setGoleadorSegunda(Integer goleadorSegunda) {
+        this.goleadorSegunda = goleadorSegunda;
+    }
+    
     public Integer getIdTorneo() {
         return idTorneo;
     }
@@ -87,5 +108,30 @@ public class Torneo implements Serializable {
     public void setSubcampeonSegunda(Integer subcampeonSegunda) {
         this.subcampeonSegunda = subcampeonSegunda;
     }
+
+    public String getPresidente() {
+        return presidente;
+    }
+
+    public void setPresidente(String presidente) {
+        this.presidente = presidente;
+    }
+
+    public String getSecretario() {
+        return secretario;
+    }
+
+    public void setSecretario(String secretario) {
+        this.secretario = secretario;
+    }
+
+    public String getTesorero() {
+        return tesorero;
+    }
+
+    public void setTesorero(String tesorero) {
+        this.tesorero = tesorero;
+    }
+
     
 }

@@ -5,6 +5,7 @@
  */
 package lmfvgo.vista;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -13,8 +14,11 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import lmfvgo.db.EquiposDAO;
+import lmfvgo.db.JugadoresDAO;
 import lmfvgo.excepciones.LMFVGOException;
 import lmfvgo.modelo.Equipos;
+import lmfvgo.reportes.vo.CedulaVO;
+import lmfvgo.util.ReportesManager;
 
 /**
  *
@@ -23,8 +27,10 @@ import lmfvgo.modelo.Equipos;
 public class EquipoRegistroVista extends FormBase {
     
     private final EquiposDAO equiposDAO;
+    private final JugadoresDAO jugadoresDAO;
     private final Map<String, Integer> catFuerza;
     private Integer equipoSeleccionado;
+    private final ReportesManager reportesManager;
 
     /**
      * Creates new form EquipoRegistroVista
@@ -33,7 +39,10 @@ public class EquipoRegistroVista extends FormBase {
         initComponents();
         lblActualizando.setVisible(false);
         btnEliminar.setVisible(false);
+        btnCedula.setVisible(false);
         equiposDAO = new EquiposDAO();
+        jugadoresDAO = new JugadoresDAO();
+        reportesManager = new ReportesManager();
         catFuerza = new HashMap<>();
         catFuerza.put("SELECCIONE", 0);
         catFuerza.put("PRIMERA", 1);
@@ -52,7 +61,7 @@ public class EquipoRegistroVista extends FormBase {
         jLabel1 = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        cboFuerza = new javax.swing.JComboBox<>();
+        cboFuerza = new javax.swing.JComboBox<String>();
         btnLimpiar = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
@@ -61,6 +70,7 @@ public class EquipoRegistroVista extends FormBase {
         tblResultado = new javax.swing.JTable();
         btnEliminar = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
+        btnCedula = new javax.swing.JButton();
 
         setClosable(true);
         setTitle("REGISTRO DE EQUIPOS");
@@ -69,7 +79,7 @@ public class EquipoRegistroVista extends FormBase {
 
         jLabel2.setText("FUERZA:");
 
-        cboFuerza.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SELECCIONE", "PRIMERA", "SEGUNDA" }));
+        cboFuerza.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "SELECCIONE", "PRIMERA", "SEGUNDA" }));
         cboFuerza.setPreferredSize(new java.awt.Dimension(100, 20));
 
         btnLimpiar.setText("Limpiar");
@@ -146,6 +156,13 @@ public class EquipoRegistroVista extends FormBase {
             }
         });
 
+        btnCedula.setText("Cédula");
+        btnCedula.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                generarCedula(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -167,6 +184,8 @@ public class EquipoRegistroVista extends FormBase {
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnCedula)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnEliminar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnGuardar)
@@ -198,7 +217,8 @@ public class EquipoRegistroVista extends FormBase {
                     .addComponent(btnLimpiar)
                     .addComponent(btnBuscar)
                     .addComponent(btnGuardar)
-                    .addComponent(btnEliminar))
+                    .addComponent(btnEliminar)
+                    .addComponent(btnCedula))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblActualizando)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -217,6 +237,7 @@ public class EquipoRegistroVista extends FormBase {
         limpiarTabla(tblResultado);
         lblActualizando.setVisible(false);
         btnEliminar.setVisible(false);
+        btnCedula.setVisible(false);
     }//GEN-LAST:event_limpiar
 
     private void buscar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscar
@@ -270,6 +291,7 @@ public class EquipoRegistroVista extends FormBase {
                 cboFuerza.setSelectedItem((String) modelo.getValueAt(tblResultado.getSelectedRow(), 2));
                 lblActualizando.setVisible(true);
                 btnEliminar.setVisible(true);
+                btnCedula.setVisible(true);
             }
         }
     }//GEN-LAST:event_editarEquipo
@@ -296,9 +318,23 @@ public class EquipoRegistroVista extends FormBase {
         this.dispose();
     }//GEN-LAST:event_cerrar
 
+    private void generarCedula(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generarCedula
+        List<CedulaVO> cedula = jugadoresDAO.consultaCedula(equipoSeleccionado);
+        if (cedula == null) {
+            cedula = new ArrayList<>();
+        }
+        try {
+            reportesManager.cedulaEquipo(cedula, txtNombre.getText());
+        } catch (LMFVGOException ex) {
+            agregarMensajeError(ex.getMessage());
+        }
+        
+    }//GEN-LAST:event_generarCedula
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnCedula;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnLimpiar;

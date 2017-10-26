@@ -9,6 +9,7 @@ package lmfvgo.util;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ import lmfvgo.excepciones.LMFVGOException;
 import lmfvgo.modelo.EstadisticasEquipo;
 import lmfvgo.modelo.EstadisticasJugador;
 import lmfvgo.modelo.Juegos;
+import lmfvgo.reportes.vo.CedulaVO;
 import lmfvgo.reportes.vo.CredencialVO;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -32,6 +34,31 @@ public class ReportesManager {
     private static final String REPORTE_CEDULA_JUEGO = "/lmfvgo/reportes/CedulaJuego.jasper";
     private static final String REPORTE_TABLA_GENERAL = "/lmfvgo/reportes/TablaEstadisticas.jasper";
     private static final String REPORTE_CREDENCIALES = "/lmfvgo/reportes/Credenciales.jasper";
+    private static final String REPORTE_CEDULA = "/lmfvgo/reportes/CedulaEquipo.jasper";
+    
+    public void cedulaEquipo(List<CedulaVO> lista, String equipo) throws LMFVGOException {
+        if (lista.size() < 24) {
+            for (int i = lista.size(); i < 24; i++) {
+                lista.add(new CedulaVO(equipo));
+            }
+        }
+        List<CedulaVO> lista1 = new ArrayList<>();
+        for (int i = 0; i < 12; i++) {
+            lista1.add(lista.get(i));
+        }
+        List<CedulaVO> lista2 = new ArrayList<>();
+        for (int i = 12; i < 24; i++) {
+            lista2.add(lista.get(i));
+        }
+        
+        Map<String, Object> parametros = new HashMap<>();
+        parametros.put("lista1", lista1);
+        parametros.put("lista2", lista2);
+        
+        String nombrePdf = URL_REPORTES + "Cedula_" + equipo + ".pdf";
+        exportar(REPORTE_CEDULA, parametros, nombrePdf);
+        abrirPdf(nombrePdf);
+    }
     
     public void credenciales(List<CredencialVO> lista1, List<CredencialVO> lista2) throws LMFVGOException {
         Map<String, Object> parametros = new HashMap<>();
