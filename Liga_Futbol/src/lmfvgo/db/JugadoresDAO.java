@@ -153,11 +153,14 @@ public class JugadoresDAO extends BaseDAO {
     
     public List<String> consultaJugadoresLibre() {
         try {
+            int idTorneo = getIdTorneoActivo();
             sb = new StringBuilder();
             sb.append("select j.id_jugador, j.nombre, j.paterno, j.materno ")
                     .append("from jugadores j ")
                     .append("where j.id_jugador not in ")
-                    .append("(select distinct(id_jugador) from rel_equipo_jugadores) ")
+                    .append("(select distinct(id_jugador) from rel_equipo_jugadores where id_torneo = ")
+                    .append(idTorneo)
+                    .append(") ")
                     .append("order by nombre, paterno, materno");
             ResultSet rs = getConnection().prepareStatement(sb.toString()).executeQuery();
             List<String> jug = new ArrayList<>();

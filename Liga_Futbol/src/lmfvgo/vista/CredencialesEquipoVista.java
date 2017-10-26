@@ -126,28 +126,32 @@ public class CredencialesEquipoVista extends FormBase {
     }// </editor-fold>//GEN-END:initComponents
 
     private void generarCredenciales(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generarCredenciales
-        if (cboEquipos.getSelectedIndex() <= 0) {
-            agregarMensajeAdvertencia("Debe seleccionar el equipo");
+        if (cboFuerza.getSelectedIndex() <= 0) {
+            agregarMensajeAdvertencia("Debe seleccionar la fuerza");
             return;
         }
         int idEquipo =Integer.parseInt(cboEquipos.getSelectedItem().toString().split(" - ")[0]);
-        List<CredencialVO> creds = jugadoresDAO.consultaCredenciales(null, idEquipo);
-        if (creds == null || creds.isEmpty()) {
-            agregarMensajeError("No se encontraron jugadores registrados en el equipo");
-            return;
-        }
-        int conteo = creds.size() / 2;
-        if ((creds.size() % 2) > 0) {
-            conteo += 1;
-        }
-        
-        List<CredencialVO> lista1 = getLista(0, conteo, creds);
-        List<CredencialVO> lista2 = getLista(conteo, creds.size(), creds);
-        
-        try {
-            reportesManager.credenciales(lista1, lista2);
-        } catch (LMFVGOException ex) {
-            agregarMensajeError(ex.getMessage());
+        if (idEquipo > 0) {
+            List<CredencialVO> creds = jugadoresDAO.consultaCredenciales(null, idEquipo);
+            if (creds == null || creds.isEmpty()) {
+                agregarMensajeError("No se encontraron jugadores registrados en el equipo");
+                return;
+            }
+            int conteo = creds.size() / 2;
+            if ((creds.size() % 2) > 0) {
+                conteo += 1;
+            }
+
+            List<CredencialVO> lista1 = getLista(0, conteo, creds);
+            List<CredencialVO> lista2 = getLista(conteo, creds.size(), creds);
+
+            try {
+                reportesManager.credenciales(lista1, lista2);
+            } catch (LMFVGOException ex) {
+                agregarMensajeError(ex.getMessage());
+            }
+        } else {
+            agregarMensajeAdvertencia("Debe seleccionar el equipo");
         }
     }//GEN-LAST:event_generarCredenciales
 
@@ -167,7 +171,6 @@ public class CredencialesEquipoVista extends FormBase {
     private void cargarEquipos(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargarEquipos
         cboEquipos.removeAllItems();
         if (cboFuerza.getSelectedIndex() == 0) {
-            agregarMensajeAdvertencia("Debe seleccionar la fuerza");
             return;
         }
         List<Equipos> equipos = equiposDAO.consultarEquipo(null, cboFuerza.getSelectedIndex());

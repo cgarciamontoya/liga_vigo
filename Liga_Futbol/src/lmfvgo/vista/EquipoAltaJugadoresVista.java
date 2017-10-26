@@ -37,12 +37,7 @@ public class EquipoAltaJugadoresVista extends FormBase {
         jugadoresDAO = new JugadoresDAO();
 
         inicializarJugadores();
-        List<Equipos> equipos = equiposDAO.consultarEquipo(null, 0);
-        DefaultComboBoxModel modelo = (DefaultComboBoxModel) cboEquipos.getModel();
-        modelo.addElement("0 - Seleccione");
-        for (Equipos eq : equipos) {
-            modelo.addElement(eq.getIdEquipo() + " - " + eq.getNombre());
-        }
+        
     }
 
     private void inicializarJugadores() {
@@ -74,6 +69,8 @@ public class EquipoAltaJugadoresVista extends FormBase {
         btnGuardar = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblJugEq = new javax.swing.JTable();
+        jLabel3 = new javax.swing.JLabel();
+        cboFuerza = new javax.swing.JComboBox();
 
         setClosable(true);
         setTitle("ALTA DE JUGADORES EN EQUIPOS");
@@ -84,7 +81,7 @@ public class EquipoAltaJugadoresVista extends FormBase {
         lstJugadores.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(lstJugadores);
 
-        jLabel2.setText("Equipo");
+        jLabel2.setText("Fuerza");
 
         cboEquipos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -138,6 +135,15 @@ public class EquipoAltaJugadoresVista extends FormBase {
         });
         jScrollPane3.setViewportView(tblJugEq);
 
+        jLabel3.setText("Equipo");
+
+        cboFuerza.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione", "Primera", "Segunda" }));
+        cboFuerza.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                actualizarEquipos(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -160,10 +166,14 @@ public class EquipoAltaJugadoresVista extends FormBase {
                         .addComponent(btnGuardar))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2)
-                                .addGap(11, 11, 11)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cboFuerza, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(cboEquipos, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 529, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
@@ -182,16 +192,18 @@ public class EquipoAltaJugadoresVista extends FormBase {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(cboEquipos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2)
-                            .addComponent(jLabel1))
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel3)
+                            .addComponent(cboFuerza, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(20, 20, 20)
                                 .addComponent(jScrollPane1))
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 15, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 17, Short.MAX_VALUE)
                 .addComponent(btnGuardar)
-                .addGap(0, 5, Short.MAX_VALUE))
+                .addGap(0, 7, Short.MAX_VALUE))
         );
 
         pack();
@@ -215,14 +227,16 @@ public class EquipoAltaJugadoresVista extends FormBase {
 
     private void actualizarJugadores(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarJugadores
         limpiarTabla(tblJugEq);
-        Jugadores filtro = new Jugadores();
-        filtro.setEquipo(Integer.parseInt(cboEquipos.getSelectedItem().toString().split(" - ")[0].trim()));
-        if (filtro.getEquipo() > 0) {
-            List<Jugadores> jgs = jugadoresDAO.consultarJugadores(filtro);
-            if (jgs != null && !jgs.isEmpty()) {
-                DefaultTableModel modelo = (DefaultTableModel) tblJugEq.getModel();
-                for (Jugadores j : jgs) {
-                    modelo.addRow(new Object[]{j.getIdJugador(), (j.getNombre() + " " + j.getPaterno() + " " + j.getMaterno()), j.getNumero()});
+        if (cboEquipos.getSelectedIndex() > 0) {
+            Jugadores filtro = new Jugadores();
+            filtro.setEquipo(Integer.parseInt(cboEquipos.getSelectedItem().toString().split(" - ")[0].trim()));
+            if (filtro.getEquipo() > 0) {
+                List<Jugadores> jgs = jugadoresDAO.consultarJugadores(filtro);
+                if (jgs != null && !jgs.isEmpty()) {
+                    DefaultTableModel modelo = (DefaultTableModel) tblJugEq.getModel();
+                    for (Jugadores j : jgs) {
+                        modelo.addRow(new Object[]{j.getIdJugador(), (j.getNombre() + " " + j.getPaterno() + " " + j.getMaterno()), j.getNumero()});
+                    }
                 }
             }
         }
@@ -276,14 +290,28 @@ public class EquipoAltaJugadoresVista extends FormBase {
         }
     }//GEN-LAST:event_guardar
 
+    private void actualizarEquipos(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarEquipos
+        cboEquipos.removeAllItems();
+        if (cboFuerza.getSelectedIndex() > 0) {
+            List<Equipos> equipos = equiposDAO.consultarEquipo(null, cboFuerza.getSelectedIndex());
+            DefaultComboBoxModel modelo = (DefaultComboBoxModel) cboEquipos.getModel();
+            modelo.addElement("0 - Seleccione");
+            for (Equipos eq : equipos) {
+                modelo.addElement(eq.getIdEquipo() + " - " + eq.getNombre());
+            }
+        }
+    }//GEN-LAST:event_actualizarEquipos
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnQuitar;
     private javax.swing.JComboBox<String> cboEquipos;
+    private javax.swing.JComboBox cboFuerza;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JList<String> lstJugadores;

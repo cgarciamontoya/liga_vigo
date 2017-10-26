@@ -346,6 +346,9 @@ public class JugadoresRegistroVista extends FormBase {
 
     private void abrirCamara(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirCamara
         final Webcam webcam = Webcam.getDefault();
+        if (webcam.isOpen()) {
+            webcam.close();
+        }
         webcam.setViewSize(WebcamResolution.VGA.getSize());
         final JFrame window = new JFrame("CAPTURA");
         WebcamPanel panel = new WebcamPanel(webcam);
@@ -368,7 +371,7 @@ public class JugadoresRegistroVista extends FormBase {
         window.add(boton, BorderLayout.NORTH);
         window.add(panel, BorderLayout.CENTER);
         window.setResizable(true);
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         window.pack();
         window.setVisible(true);
     }//GEN-LAST:event_abrirCamara
