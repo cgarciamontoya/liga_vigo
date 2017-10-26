@@ -9,6 +9,8 @@
 	<field name="numero" class="java.lang.Integer"/>
 	<field name="folio" class="java.lang.Integer"/>
 	<field name="foto" class="java.io.InputStream"/>
+	<field name="presidente" class="java.lang.String"/>
+	<field name="secretario" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -121,6 +123,20 @@ VILLA GONZALEZ ORTEGA]]></text>
 			<rectangle>
 				<reportElement mode="Transparent" x="0" y="0" width="243" height="139" uuid="db6b8cc9-0e00-439e-976f-b4acd5615a2c"/>
 			</rectangle>
+			<textField>
+				<reportElement x="16" y="105" width="100" height="20" uuid="aebacc11-b1b5-4984-bc35-f5b189d4aef7"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="6" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{presidente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="128" y="105" width="100" height="20" uuid="d3d6434e-f331-49a4-8079-dcd22fec1c98"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="6" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{secretario}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>

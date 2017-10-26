@@ -14,6 +14,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import lmfvgo.modelo.Torneo;
 
 public class BaseDAO {
 
@@ -46,6 +47,23 @@ public class BaseDAO {
             ResultSet rs = getConnection().prepareStatement("select id_torneo from torneo where fecha_fin is null").executeQuery();
             rs.next();
             return rs.getInt("id_torneo");
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
+    
+    public Torneo torneoActivo() {
+        try {
+            ResultSet rs = getConnection().prepareStatement("select id_torneo, nombre, fecha_inicio, presidente, secretario, tesorero from torneo where fecha_fin is null").executeQuery();
+            rs.next();
+            Torneo torneo = new Torneo();
+            torneo.setIdTorneo(rs.getInt("id_torneo"));
+            torneo.setNombre(rs.getString("nombre"));
+            torneo.setFechaInicio(rs.getDate("fecha_inicio"));
+            torneo.setPresidente(rs.getString("presidente"));
+            torneo.setSecretario(rs.getString("secretario"));
+            torneo.setTesorero(rs.getString("tesorero"));
+            return torneo;
         } catch (SQLException ex) {
             return null;
         }

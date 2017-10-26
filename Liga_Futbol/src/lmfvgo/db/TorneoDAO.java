@@ -7,7 +7,6 @@
 package lmfvgo.db;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import lmfvgo.excepciones.LMFVGOException;
@@ -80,23 +79,6 @@ public class TorneoDAO extends BaseDAO {
             ps.setInt(8, torneo.getIdTorneo());
         } catch (SQLException ex) {
             throw new LMFVGOException(ex.getMessage());
-        }
-    }
-    
-    public Torneo torneoActivo() {
-        try {
-            ResultSet rs = getConnection().prepareStatement("select id_torneo, nombre, fecha_inicio, presidente, secretario, tesorero from torneo where fecha_fin is null").executeQuery();
-            rs.next();
-            Torneo torneo = new Torneo();
-            torneo.setIdTorneo(rs.getInt("id_torneo"));
-            torneo.setNombre(rs.getString("nombre"));
-            torneo.setFechaInicio(rs.getDate("fecha_inicio"));
-            torneo.setPresidente(rs.getString("presidente"));
-            torneo.setSecretario(rs.getString("secretario"));
-            torneo.setTesorero(rs.getString("tesorero"));
-            return torneo;
-        } catch (SQLException ex) {
-            return null;
         }
     }
     

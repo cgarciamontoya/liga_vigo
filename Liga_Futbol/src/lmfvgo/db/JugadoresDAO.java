@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lmfvgo.excepciones.LMFVGOException;
 import lmfvgo.modelo.Jugadores;
+import lmfvgo.modelo.Torneo;
 import lmfvgo.reportes.vo.CedulaVO;
 import lmfvgo.reportes.vo.CredencialVO;
 
@@ -211,6 +212,7 @@ public class JugadoresDAO extends BaseDAO {
         try {
             int i = 0;
             PreparedStatement ps = null;
+            Torneo torneo = torneoActivo();
             sb = new StringBuilder();
             sb.append("select j.id_jugador, concat(j.nombre, ' ', j.paterno, ' ', j.materno) jugador_nombre, j.imagen, ")
                 .append("e.nombre equipo_nombre, e.fuerza, rel.numero ")
@@ -247,6 +249,8 @@ public class JugadoresDAO extends BaseDAO {
                 c.setEquipo(rs.getString("equipo_nombre"));
                 c.setFuerza(rs.getInt("fuerza") == 1 ? "Primera" : "Segunda");
                 c.setNumero(rs.getInt("numero"));
+                c.setPresidente(torneo.getPresidente());
+                c.setSecretario(torneo.getSecretario());
                 credenciales.add(c);
             }
             return credenciales;
