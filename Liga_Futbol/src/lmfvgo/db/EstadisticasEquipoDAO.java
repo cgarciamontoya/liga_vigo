@@ -93,7 +93,7 @@ public class EstadisticasEquipoDAO extends BaseDAO {
                 .append("sum(ee.puntos) pts, count(ee.id_juego) jj ")
                 .append("from estadisticas_equipo ee ")
                 .append("inner join equipos eq on eq.id_equipo = ee.id_equipo ")
-                .append("where eq.fuerza = ? ")
+                .append("where eq.fuerza = ? and eq.nombre not in ('DESCANSA') ")
                 .append("group by id_equipo ")
                 .append("order by pts desc, dif desc, gf desc, gc desc ");
         try {

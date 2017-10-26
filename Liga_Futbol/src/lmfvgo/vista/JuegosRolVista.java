@@ -169,15 +169,7 @@ public class JuegosRolVista extends FormBase {
             return;
         }
         if ((equipos.size() % 2) > 0) {
-            Equipos descansa = new Equipos(idFuerza == 1 ? ConstantesUtil.ID_DESCANSA_PRIMERA : ConstantesUtil.ID_DESCANSA_SEGUNDA, 
-                    "DESCANSA", idFuerza, new Date());
-            try {
-                equiposDAO.altaEquipoDescansa(idFuerza);
-            } catch(LMFVGOException ex) {
-                agregarMensajeError("No fue posible generar el rol de juegos");
-                return;
-            }
-            equipos.add(descansa);
+            equipos.add(equiposDAO.getEquipoDescansa(idFuerza));
             
         }
         Torneo torneo = torneoDAO.torneoActivo();
@@ -208,8 +200,23 @@ public class JuegosRolVista extends FormBase {
         for (Integer jornada : rol.keySet()) {
             List<Juegos> juegos = rol.get(jornada);
             modelo.addRow(new Object[]{("Jornada " + jornada), ""});
-            for (Juegos juego : juegos) {
-                modelo.addRow(new Object[]{juego.getLocalNombre(), juego.getVisitanteNombre()});
+            int jgoDesc = -1;
+            for (int i = 0; i < juegos.size(); i++) {
+                Juegos juego = juegos.get(i);
+                if (!juego.getLocalNombre().equalsIgnoreCase("DESCANSA") &&
+                        !juego.getVisitanteNombre().equalsIgnoreCase("DESCANSA")) {
+                    modelo.addRow(new Object[]{juego.getLocalNombre(), juego.getVisitanteNombre()});
+                } else {
+                    jgoDesc = i;
+                }
+            }
+            if (jgoDesc >= 0) {
+                Juegos juego = juegos.get(jgoDesc);
+                if (juego.getLocalNombre().equalsIgnoreCase("DESCANSA")) {
+                    modelo.addRow(new Object[]{juego.getLocalNombre(), juego.getVisitanteNombre()});
+                } else {
+                    modelo.addRow(new Object[]{juego.getVisitanteNombre(), juego.getLocalNombre()});
+                }
             }
         }
     }

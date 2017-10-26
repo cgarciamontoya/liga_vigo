@@ -170,7 +170,7 @@ public class CredencialesEquipoVista extends FormBase {
             agregarMensajeAdvertencia("Debe seleccionar la fuerza");
             return;
         }
-        List<Equipos> equipos = equiposDAO.consultarEquipo(null, cboEquipos.getSelectedIndex());
+        List<Equipos> equipos = equiposDAO.consultarEquipo(null, cboFuerza.getSelectedIndex());
         if (equipos == null || equipos.isEmpty()) {
             agregarMensajeError("No se encontraron equipos");
             return;

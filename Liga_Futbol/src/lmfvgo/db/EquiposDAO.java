@@ -51,16 +51,25 @@ public class EquiposDAO extends BaseDAO {
     
     public void altaEquipoDescansa(int fuerza) throws LMFVGOException {
         sb = new StringBuilder();
-        sb.append("insert into equipos(id_equipo, nombre, fuerza, fecha_registro) values (?, 'DESCANSA', ?, ?)");
+        sb.append("insert into equipos(nombre, fuerza, fecha_registro) values ('DESCANSA', ?, ?)");
         try {
             PreparedStatement ps = getConnection().prepareStatement(sb.toString());
-            ps.setInt(1, fuerza == 1 ? ConstantesUtil.ID_DESCANSA_PRIMERA : ConstantesUtil.ID_DESCANSA_SEGUNDA);
-            ps.setInt(2, fuerza);
-            ps.setDate(3, new java.sql.Date(new Date().getTime()));
+            ps.setInt(1, fuerza);
+            ps.setDate(2, new java.sql.Date(new Date().getTime()));
             
             ps.execute();
         } catch (SQLException ex) {
             throw new LMFVGOException(ex.getMessage());
+        }
+    }
+    
+    public Equipos getEquipoDescansa(int fuerza) {
+        try {
+            ResultSet rs = getConnection().prepareStatement("select id_equipo, nombre from equipos where fuerza = " + fuerza).executeQuery();
+            rs.next();
+            return new Equipos(rs.getInt("id_equipo"), rs.getString("nombre"), fuerza, null);
+        } catch (SQLException ex) {
+            return null;
         }
     }
     
@@ -80,7 +89,7 @@ public class EquiposDAO extends BaseDAO {
         try {
             sb = new StringBuilder();
             sb.append("select id_equipo, nombre, fuerza, fecha_registro, fecha_baja, motivo_baja ")
-                    .append("from equipos where id_equipo < 998 and fecha_baja is null ");
+                    .append("from equipos where nombre not in ('DESCANSA') and fecha_baja is null ");
             if (nombre != null && !nombre.trim().isEmpty()) {
                 sb.append("and nombre like '").append(nombre.trim().toUpperCase()).append("%' ");
             }
@@ -110,7 +119,7 @@ public class EquiposDAO extends BaseDAO {
         try {
             sb = new StringBuilder();
             sb.append("select id_equipo, nombre, fuerza, fecha_registro, fecha_baja, motivo_baja ")
-                    .append("from equipos where fecha_baja is null ");
+                    .append("from equipos where nombre not in ('DESCANSA') and fecha_baja is null ");
             if (fuerza > 0) {
                 sb.append("and fuerza = ").append(fuerza).append(" ");
             }

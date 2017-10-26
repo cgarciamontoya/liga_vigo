@@ -185,8 +185,23 @@ public class JuegosJornadaVista extends FormBase {
             return;
         }
         DefaultTableModel model = (DefaultTableModel) tblJuegos.getModel();
-        for (Juegos j :  juegos) {
-            model.addRow(new Object[]{j.getIdJuego(), j.getLocalNombre(), j.getVisitanteNombre()});
+        int jgoDes = -1;
+        for (int i = 0; i < juegos.size(); i++) {
+            Juegos j = juegos.get(i);
+            if (!j.getLocalNombre().equalsIgnoreCase("DESCANSA") &&
+                    !j.getVisitanteNombre().equalsIgnoreCase("DESCANSA")) {
+                model.addRow(new Object[]{j.getIdJuego(), j.getLocalNombre(), j.getVisitanteNombre()});
+            } else {
+                jgoDes = i;
+            }
+        }
+        if (jgoDes >= 0) {
+            Juegos j = juegos.get(jgoDes);
+            if (j.getLocalNombre().equalsIgnoreCase("DESCANSA")) {
+                model.addRow(new Object[]{j.getIdJuego(), j.getLocalNombre(), j.getVisitanteNombre()});
+            } else {
+                model.addRow(new Object[]{j.getIdJuego(), j.getVisitanteNombre(), j.getLocalNombre()});
+            }
         }
     }//GEN-LAST:event_abrirJornada
 

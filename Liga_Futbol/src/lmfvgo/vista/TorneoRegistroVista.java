@@ -8,8 +8,10 @@ package lmfvgo.vista;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import lmfvgo.db.EquiposDAO;
 import lmfvgo.db.TorneoDAO;
 import lmfvgo.excepciones.LMFVGOException;
+import lmfvgo.modelo.Equipos;
 import lmfvgo.modelo.Torneo;
 
 /**
@@ -20,11 +22,13 @@ public class TorneoRegistroVista extends FormBase {
     private static final long serialVersionUID = 996561005637736248L;
 
     private final TorneoDAO torneoDAO;
-    Torneo torneo;
+    private final EquiposDAO equiposDAO;
+    private Torneo torneo;
     /** Creates new form TorneoRegistroVista */
     public TorneoRegistroVista() {
         initComponents();
         torneoDAO = new TorneoDAO();
+        equiposDAO = new EquiposDAO();
         txtFechaInicio.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
         torneo = torneoDAO.torneoActivo();
         if (torneo == null) {
@@ -184,10 +188,19 @@ public class TorneoRegistroVista extends FormBase {
         try {
                 if (torneo.getIdTorneo() != null && torneo.getIdTorneo() > 0) {
                     torneoDAO.actualizarTorneo(torneo);
+                    agregarMensajeExito("El torneo fue actualizado correctamente");
                 } else {
                     torneoDAO.guardarTorneo(torneo);
+                    Equipos e1 = equiposDAO.getEquipoDescansa(1);
+                    if (e1 == null || e1.getIdEquipo() == null || e1.getIdEquipo() == 0) {
+                        equiposDAO.altaEquipoDescansa(1);
+                    }
+                    Equipos e2 = equiposDAO.getEquipoDescansa(2);
+                    if (e2 == null || e2.getIdEquipo() == null || e2.getIdEquipo() == 0) {
+                        equiposDAO.altaEquipoDescansa(2);
+                    }
+                    agregarMensajeExito("El torneo fue registrado correctamente");
                 }
-                agregarMensajeExito("El torneo fue registrado correctamente");
         } catch (LMFVGOException ex){
             agregarMensajeError(ex.getMessage());
         }
