@@ -42,6 +42,7 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         menuTorneo = new javax.swing.JMenu();
         mnuTorneoNuevo = new javax.swing.JMenuItem();
         mnuTorneoCerrar = new javax.swing.JMenuItem();
+        mnuTorneoReglas = new javax.swing.JMenuItem();
         menuEquipos = new javax.swing.JMenu();
         mnuEqRegistro = new javax.swing.JMenuItem();
         mnuEqConsulta = new javax.swing.JMenuItem();
@@ -78,6 +79,14 @@ public class LigaFutbolMain extends javax.swing.JFrame {
             }
         });
         menuTorneo.add(mnuTorneoCerrar);
+
+        mnuTorneoReglas.setText("Reglamento");
+        mnuTorneoReglas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                abrirReglamento(evt);
+            }
+        });
+        menuTorneo.add(mnuTorneoReglas);
 
         jMenuBar1.add(menuTorneo);
 
@@ -253,6 +262,12 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         tcv.show();
     }//GEN-LAST:event_abrirCierreTorneo
 
+    private void abrirReglamento(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirReglamento
+        TorneoReglamentoVista trv = new TorneoReglamentoVista();
+        this.add(trv);
+        trv.show();
+    }//GEN-LAST:event_abrirReglamento
+
     /**
      * @param args the command line arguments
      */
@@ -306,5 +321,6 @@ public class LigaFutbolMain extends javax.swing.JFrame {
     private javax.swing.JMenuItem mnuJugRegistro;
     private javax.swing.JMenuItem mnuTorneoCerrar;
     private javax.swing.JMenuItem mnuTorneoNuevo;
+    private javax.swing.JMenuItem mnuTorneoReglas;
     // End of variables declaration//GEN-END:variables
 }
