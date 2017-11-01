@@ -50,6 +50,7 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         menuJugadores = new javax.swing.JMenu();
         mnuJugConsulta = new javax.swing.JMenuItem();
         mnuJugRegistro = new javax.swing.JMenuItem();
+        mnuJugSanciones = new javax.swing.JMenuItem();
         menuJuegos = new javax.swing.JMenu();
         mnuJgosRol = new javax.swing.JMenuItem();
         mnuJgosJornada = new javax.swing.JMenuItem();
@@ -135,6 +136,14 @@ public class LigaFutbolMain extends javax.swing.JFrame {
             }
         });
         menuJugadores.add(mnuJugRegistro);
+
+        mnuJugSanciones.setText("Sanciones");
+        mnuJugSanciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuJugSancionesActionPerformed(evt);
+            }
+        });
+        menuJugadores.add(mnuJugSanciones);
 
         jMenuBar1.add(menuJugadores);
 
@@ -268,6 +277,12 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         trv.show();
     }//GEN-LAST:event_abrirReglamento
 
+    private void mnuJugSancionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuJugSancionesActionPerformed
+        JugadoresSancionesVista jsv = new JugadoresSancionesVista();
+        this.add(jsv);
+        jsv.show();
+    }//GEN-LAST:event_mnuJugSancionesActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -319,6 +334,7 @@ public class LigaFutbolMain extends javax.swing.JFrame {
     private javax.swing.JMenuItem mnuJgosRol;
     private javax.swing.JMenuItem mnuJugConsulta;
     private javax.swing.JMenuItem mnuJugRegistro;
+    private javax.swing.JMenuItem mnuJugSanciones;
     private javax.swing.JMenuItem mnuTorneoCerrar;
     private javax.swing.JMenuItem mnuTorneoNuevo;
     private javax.swing.JMenuItem mnuTorneoReglas;
