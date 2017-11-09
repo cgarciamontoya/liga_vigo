@@ -31,7 +31,7 @@ public class JuegosDAO extends BaseDAO {
     public void guardarRol(Map<Integer, List<Juegos>> rol, Integer fuerza) throws LMFVGOException {
         try {
             sb = new StringBuilder();
-            sb.append("insert into juegos (jornada, local, visitante, id_torneo, fuerza) values (?,?,?,?, ?)");
+            sb.append("insert into juegos (jornada, local, visitante, id_torneo, fuerza, cerrado) values (?,?,?,?,?,0)");
             Integer idTorneo = getIdTorneoActivo();
             PreparedStatement ps = getConnection().prepareStatement(sb.toString());
             for (Integer jor : rol.keySet()) {
@@ -54,7 +54,7 @@ public class JuegosDAO extends BaseDAO {
         try {
             sb = new StringBuilder();
             sb.append("select j.id_juego, j.jornada, j.local, j.visitante, j.lugar, j.resultado, j.id_torneo, j.fecha, j.fuerza, j.marcador, ")
-                    .append("l.nombre local_nombre, v.nombre visitante_nombre ")
+                    .append("l.nombre local_nombre, v.nombre visitante_nombre, j.cerrado ")
                     .append("from juegos j inner join equipos l on l.id_equipo = j.local ")
                     .append("inner join equipos v on v.id_equipo = j.visitante ")
                     .append("where j.fuerza = ? order by id_juego");
@@ -78,6 +78,7 @@ public class JuegosDAO extends BaseDAO {
                     j.setFecha(rs.getDate("fecha"));
                     j.setFuerza(rs.getInt("fuerza"));
                     j.setMarcador(rs.getString("marcador"));
+                    j.setCerrado(rs.getInt("cerrado") == 1);
                     if (rol.get(j.getJornada()) == null) {
                         rol.put(j.getJornada(), new ArrayList<Juegos>());
                     }
@@ -108,7 +109,9 @@ public class JuegosDAO extends BaseDAO {
         try {
             sb = new StringBuilder();
             sb.append("select j.id_juego, j.jornada, j.local, j.visitante, j.lugar, j.resultado, j.id_torneo, j.fecha, j.fuerza, j.marcador, ")
-                    .append("j.hora, l.nombre local_nombre, v.nombre visitante_nombre ")
+                    .append("j.hora, l.nombre local_nombre, v.nombre visitante_nombre, j.cerrado, ")
+                    .append("(select sum(goles_favor) from estadisticas_equipo where id_juego = j.id_juego and id_equipo = j.local) golesLocal, ")
+                    .append("(select sum(goles_favor) from estadisticas_equipo where id_juego = j.id_juego and id_equipo = j.visitante) golesVisita ")
                     .append("from juegos j inner join equipos l on l.id_equipo = j.local ")
                     .append("inner join equipos v on v.id_equipo = j.visitante ")
                     .append("where j.jornada = ? and j.fuerza = ? order by id_juego");
@@ -132,6 +135,9 @@ public class JuegosDAO extends BaseDAO {
                     j.setFuerza(rs.getInt("fuerza"));
                     j.setMarcador(rs.getString("marcador"));
                     j.setHora(rs.getString("hora"));
+                    j.setCerrado(rs.getInt("cerrado") == 1);
+                    j.setGolesLocal(rs.getObject("golesLocal") != null ? rs.getInt("golesLocal") : null);
+                    j.setGolesVisita(rs.getObject("golesVisita") != null ? rs.getInt("golesVisita") : null);
                     juegos.add(j);
             }
             return juegos;
@@ -165,6 +171,18 @@ public class JuegosDAO extends BaseDAO {
             ps.execute();
         } catch (SQLException ex) {
             throw new LMFVGOException(ex.getMessage());
+        }
+    }
+    
+    public void cerrarJornada(int jornada) throws LMFVGOException {
+        try {
+            PreparedStatement ps = getConnection().prepareStatement("update juegos set cerrado = 1 where jornada = ? and id_torneo = ?");
+            ps.setInt(1, jornada);
+            ps.setInt(2, getIdTorneoActivo());
+            
+            ps.execute();
+        } catch (SQLException ex) {
+            throw new LMFVGOException("No fue posible cerrar la jornada debido a: " + ex.getMessage());
         }
     }
 }

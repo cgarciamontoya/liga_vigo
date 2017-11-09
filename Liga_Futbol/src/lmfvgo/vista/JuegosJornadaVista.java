@@ -72,14 +72,14 @@ public class JuegosJornadaVista extends FormBase {
 
             },
             new String [] {
-                "ID", "Local", "Visitante"
+                "ID", "Local", "G Local", "G Visita", "Visitante"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, true, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -99,7 +99,7 @@ public class JuegosJornadaVista extends FormBase {
         if (tblJuegos.getColumnModel().getColumnCount() > 0) {
             tblJuegos.getColumnModel().getColumn(0).setPreferredWidth(50);
             tblJuegos.getColumnModel().getColumn(1).setPreferredWidth(150);
-            tblJuegos.getColumnModel().getColumn(2).setPreferredWidth(150);
+            tblJuegos.getColumnModel().getColumn(4).setPreferredWidth(150);
         }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -190,7 +190,10 @@ public class JuegosJornadaVista extends FormBase {
             Juegos j = juegos.get(i);
             if (!j.getLocalNombre().equalsIgnoreCase("DESCANSA") &&
                     !j.getVisitanteNombre().equalsIgnoreCase("DESCANSA")) {
-                model.addRow(new Object[]{j.getIdJuego(), j.getLocalNombre(), j.getVisitanteNombre()});
+                model.addRow(new Object[]{j.getIdJuego(), j.getLocalNombre(), 
+                    j.getGolesLocal() != null ? j.getGolesLocal() : null,
+                    j.getGolesVisita() != null ? j.getGolesVisita() : null,
+                    j.getVisitanteNombre()});
             } else {
                 jgoDes = i;
             }
@@ -198,9 +201,9 @@ public class JuegosJornadaVista extends FormBase {
         if (jgoDes >= 0) {
             Juegos j = juegos.get(jgoDes);
             if (j.getLocalNombre().equalsIgnoreCase("DESCANSA")) {
-                model.addRow(new Object[]{j.getIdJuego(), j.getLocalNombre(), j.getVisitanteNombre()});
+                model.addRow(new Object[]{j.getIdJuego(), j.getLocalNombre(), null, null, j.getVisitanteNombre()});
             } else {
-                model.addRow(new Object[]{j.getIdJuego(), j.getVisitanteNombre(), j.getLocalNombre()});
+                model.addRow(new Object[]{j.getIdJuego(), j.getVisitanteNombre(), null, null, j.getLocalNombre()});
             }
         }
     }//GEN-LAST:event_abrirJornada

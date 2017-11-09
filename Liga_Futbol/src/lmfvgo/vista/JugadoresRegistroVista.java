@@ -62,7 +62,7 @@ public class JugadoresRegistroVista extends FormBase {
             txtFechaNac.setText(sdf.format(jbd.getFechaNacimiento()));
             txtFechaReg.setText(sdf.format(jbd.getFechaRegistro()));
             txtFechaReg.setEnabled(false);
-            if (jbd.getImagen().length > 0) {
+            if (jbd.getImagen() != null && jbd.getImagen().length > 0) {
                 BufferedImage img = scaleImage(120, 65, jbd.getImagen());
                 lblFoto.setIcon(new ImageIcon((Image) img));
             }

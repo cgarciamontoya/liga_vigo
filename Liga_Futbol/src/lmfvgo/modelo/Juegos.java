@@ -29,6 +29,9 @@ public class Juegos implements Serializable {
     private Integer fuerza;
     private String marcador;
     private String hora;
+    private boolean cerrado;
+    private Integer golesLocal;
+    private Integer golesVisita;
 
     public Integer getIdJuego() {
         return idJuego;
@@ -133,4 +136,30 @@ public class Juegos implements Serializable {
     public void setHora(String hora) {
         this.hora = hora;
     }
+
+    public boolean isCerrado() {
+        return cerrado;
+    }
+
+    public void setCerrado(boolean cerrado) {
+        this.cerrado = cerrado;
+    }
+
+    public Integer getGolesLocal() {
+        return golesLocal;
+    }
+
+    public void setGolesLocal(Integer golesLocal) {
+        this.golesLocal = golesLocal;
+    }
+
+    public Integer getGolesVisita() {
+        return golesVisita;
+    }
+
+    public void setGolesVisita(Integer golesVisita) {
+        this.golesVisita = golesVisita;
+    }
+    
+    
 }

@@ -13,6 +13,7 @@ import javax.swing.table.DefaultTableModel;
 import lmfvgo.db.ReglamentoDAO;
 import lmfvgo.excepciones.LMFVGOException;
 import lmfvgo.modelo.Reglamento;
+import lmfvgo.util.ReportesManager;
 
 /**
  *
@@ -21,11 +22,13 @@ import lmfvgo.modelo.Reglamento;
 public class TorneoReglamentoVista extends FormBase {
 
     private final ReglamentoDAO reglamentoDAO;
+    private final ReportesManager reportesManager;
     private boolean editar;
     /** Creates new form TorneoReglamentoVista */
     public TorneoReglamentoVista() {
         initComponents();
         reglamentoDAO = new ReglamentoDAO();
+        reportesManager = new ReportesManager();
         editar = false;
         lblEditar.setVisible(false);
         List<Reglamento> reglas = reglamentoDAO.consultaPorFiltros(new Reglamento());
@@ -58,6 +61,7 @@ public class TorneoReglamentoVista extends FormBase {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblResultado = new javax.swing.JTable();
         btnBuscar = new javax.swing.JButton();
+        btnReporte = new javax.swing.JButton();
 
         setClosable(true);
         setTitle("REGLAMENTO");
@@ -128,6 +132,13 @@ public class TorneoReglamentoVista extends FormBase {
             }
         });
 
+        btnReporte.setText("PDF");
+        btnReporte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reporte(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -159,6 +170,8 @@ public class TorneoReglamentoVista extends FormBase {
                                 .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnReporte)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnGuardar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnBuscar)
@@ -188,7 +201,8 @@ public class TorneoReglamentoVista extends FormBase {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLimpiar)
                     .addComponent(btnGuardar)
-                    .addComponent(btnBuscar))
+                    .addComponent(btnBuscar)
+                    .addComponent(btnReporte))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 416, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -310,6 +324,19 @@ public class TorneoReglamentoVista extends FormBase {
         }
     }//GEN-LAST:event_buscar
 
+    private void reporte(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reporte
+        List<Reglamento> reglas = reglamentoDAO.consultaPorFiltros(new Reglamento());
+        if (reglas != null && !reglas.isEmpty()) {
+            try {
+                reportesManager.reglamento(reglas);
+            } catch (LMFVGOException ex) {
+                agregarMensajeError(ex.getMessage());
+            }
+        } else {
+            agregarMensajeError("No existe el reglamento");
+        }
+    }//GEN-LAST:event_reporte
+
     private void llenarResultado(List<Reglamento> reglas) {
         DefaultTableModel modelo = (DefaultTableModel) tblResultado.getModel();
             for (Reglamento rg : reglas) {
@@ -323,6 +350,7 @@ public class TorneoReglamentoVista extends FormBase {
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnLimpiar;
+    private javax.swing.JButton btnReporte;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
