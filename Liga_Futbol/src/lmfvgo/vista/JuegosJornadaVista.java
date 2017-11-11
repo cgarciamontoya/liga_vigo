@@ -45,6 +45,7 @@ public class JuegosJornadaVista extends FormBase {
         btnAbrir = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblJuegos = new javax.swing.JTable();
+        btnCerrarJornada = new javax.swing.JButton();
 
         setClosable(true);
         setTitle("REGISTRO POR JORNADA");
@@ -102,6 +103,13 @@ public class JuegosJornadaVista extends FormBase {
             tblJuegos.getColumnModel().getColumn(4).setPreferredWidth(150);
         }
 
+        btnCerrarJornada.setText("Cerrar Jornada");
+        btnCerrarJornada.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cerrarJornada(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -120,7 +128,8 @@ public class JuegosJornadaVista extends FormBase {
                         .addComponent(cboJornada, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnAbrir)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnCerrarJornada)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -132,7 +141,8 @@ public class JuegosJornadaVista extends FormBase {
                     .addComponent(cboFuerza, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
                     .addComponent(cboJornada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAbrir))
+                    .addComponent(btnAbrir)
+                    .addComponent(btnCerrarJornada))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -218,9 +228,34 @@ public class JuegosJornadaVista extends FormBase {
         }
     }//GEN-LAST:event_cargarJornadas
 
+    private void cerrarJornada(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cerrarJornada
+        int dialogResult = JOptionPane.showConfirmDialog(null, "Desea cerrar la jornada?", "Advertencia", JOptionPane.YES_NO_OPTION);
+        if (dialogResult == JOptionPane.YES_OPTION) {
+            int resJgos = 0;
+            boolean descansa = false;
+            DefaultTableModel modelo = (DefaultTableModel) tblJuegos.getModel();
+            for (int i = 0; i < tblJuegos.getRowCount(); i++) {
+                if (modelo.getValueAt(i, 2) != null) {
+                    resJgos++;
+                }
+                if (modelo.getValueAt(i, 1).toString().equalsIgnoreCase("descansa") ||
+                        modelo.getValueAt(i, 4).toString().equalsIgnoreCase("descansa")) {
+                    descansa = true;
+                }
+            }
+            if (descansa) {
+                resJgos += 1;
+            }
+            if (resJgos < (tblJuegos.getRowCount() + 1)) {
+                agregarMensajeAdvertencia("Para cerrar la jornada es necesario ingresar los datos de todos los partidos");
+            }
+        }
+    }//GEN-LAST:event_cerrarJornada
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAbrir;
+    private javax.swing.JButton btnCerrarJornada;
     private javax.swing.JComboBox cboFuerza;
     private javax.swing.JComboBox cboJornada;
     private javax.swing.JLabel jLabel1;

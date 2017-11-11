@@ -37,7 +37,8 @@
                       <Component id="cboJornada" min="-2" pref="50" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="btnAbrir" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="btnCerrarJornada" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -54,6 +55,7 @@
                   <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="cboJornada" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnAbrir" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnCerrarJornada" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jScrollPane1" min="-2" pref="282" max="-2" attributes="0"/>
@@ -159,5 +161,13 @@
         </Component>
       </SubComponents>
     </Container>
+    <Component class="javax.swing.JButton" name="btnCerrarJornada">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Cerrar Jornada"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cerrarJornada"/>
+      </Events>
+    </Component>
   </SubComponents>
 </Form>
