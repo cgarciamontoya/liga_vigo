@@ -61,9 +61,9 @@ public class EquipoAltaJugadoresVista extends FormBase {
 
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstJugadores = new javax.swing.JList<String>();
+        lstJugadores = new javax.swing.JList<>();
         jLabel2 = new javax.swing.JLabel();
-        cboEquipos = new javax.swing.JComboBox<String>();
+        cboEquipos = new javax.swing.JComboBox<>();
         btnAgregar = new javax.swing.JButton();
         btnQuitar = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
@@ -119,7 +119,7 @@ public class EquipoAltaJugadoresVista extends FormBase {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, true
@@ -263,13 +263,13 @@ public class EquipoAltaJugadoresVista extends FormBase {
         if (modelo.getRowCount() > 0) {
             String eqSel = cboEquipos.getSelectedItem().toString().split(" - ")[0];
             Integer idEquipo = Integer.parseInt(eqSel.trim());
-            Map<Integer, Integer> numeros = new HashMap<>();
+            Map<String, String> numeros = new HashMap<>();
             List<CedulaVO> idsJugs = new ArrayList<>();
             for (int i = 0; i < modelo.getRowCount(); i++) {
                 CedulaVO c = new CedulaVO();
                 c.setIdJugador(Integer.parseInt(modelo.getValueAt(i, 0).toString()));
                 if (modelo.getValueAt(i, 2) != null) {
-                    c.setNumero(Integer.parseInt(modelo.getValueAt(i, 2).toString()));
+                    c.setNumero(modelo.getValueAt(i, 2).toString());
                     if (numeros.containsKey(c.getNumero())) {
                         agregarMensajeAdvertencia("El número " + c.getNumero() + " se encuentra duplicado");
                         return;

@@ -6,7 +6,7 @@
 	<field name="nombre" class="java.lang.String"/>
 	<field name="equipo" class="java.lang.String"/>
 	<field name="fuerza" class="java.lang.String"/>
-	<field name="numero" class="java.lang.Integer"/>
+	<field name="numero" class="java.lang.String"/>
 	<field name="folio" class="java.lang.Integer"/>
 	<field name="foto" class="java.io.InputStream"/>
 	<field name="presidente" class="java.lang.String"/>
@@ -27,7 +27,7 @@
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Nombre:]]></text>
+				<text><![CDATA[Acredita a:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement mode="Opaque" x="85" y="36" width="157" height="13" backcolor="#99FFFF" uuid="410a2975-3f78-4d81-8a83-0bf0be06d338"/>
@@ -44,11 +44,11 @@
 				<textFieldExpression><![CDATA[$F{folio}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="85" y="49" width="45" height="13" uuid="06db1e82-c071-4f5d-92ca-e224dca0de9d"/>
+				<reportElement x="85" y="49" width="143" height="13" uuid="06db1e82-c071-4f5d-92ca-e224dca0de9d"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Equipo:]]></text>
+				<text><![CDATA[Como miembro activo del equipo:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
 				<reportElement mode="Opaque" x="85" y="62" width="157" height="13" backcolor="#99FFFF" uuid="75ff989a-ae53-46ee-85b4-9cce3f4adba8"/>
@@ -115,9 +115,10 @@
 			<staticText>
 				<reportElement mode="Opaque" x="82" y="1" width="160" height="23" forecolor="#000000" backcolor="#00CCCC" uuid="261d0d8f-dd40-4911-9ac1-e8f81b182bbf"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font size="6" isBold="true"/>
 				</textElement>
 				<text><![CDATA[LIGA MUNICIPAL DE FUTBOL
+"HACIENDA EL CARRO"
 VILLA GONZALEZ ORTEGA]]></text>
 			</staticText>
 			<rectangle>

@@ -9,6 +9,7 @@
 	<field name="goles" class="java.lang.Integer"/>
 	<field name="ta" class="java.lang.Integer"/>
 	<field name="tr" class="java.lang.Integer"/>
+	<field name="numero" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -165,6 +166,11 @@
 				</box>
 				<text><![CDATA[]]></text>
 			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="176" y="0" width="20" height="20" uuid="6d873011-51de-4ab9-98b9-66d7c1373f45"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{numero}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<columnFooter>

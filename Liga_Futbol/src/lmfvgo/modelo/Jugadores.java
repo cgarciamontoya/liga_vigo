@@ -28,7 +28,7 @@ public class Jugadores implements Serializable {
     private int equipo;
     private String equipoNombre;
     private int fuerza;
-    private Integer numero;
+    private String numero;
 
     public Jugadores() {
     }
@@ -135,11 +135,11 @@ public class Jugadores implements Serializable {
         this.fuerza = fuerza;
     }
 
-    public Integer getNumero() {
+    public String getNumero() {
         return numero;
     }
 
-    public void setNumero(Integer numero) {
+    public void setNumero(String numero) {
         this.numero = numero;
     }
 

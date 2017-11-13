@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import lmfvgo.db.JuegosDAO;
+import lmfvgo.excepciones.LMFVGOException;
 import lmfvgo.modelo.Juegos;
 
 /**
@@ -246,7 +247,13 @@ public class JuegosJornadaVista extends FormBase {
             if (descansa) {
                 resJgos += 1;
             }
-            if (resJgos < (tblJuegos.getRowCount() + 1)) {
+            if (resJgos == (tblJuegos.getRowCount() + 1)) {
+                try {
+                    juegosDAO.cerrarJornada(Integer.parseInt(cboJornada.getSelectedItem().toString()));
+                } catch (LMFVGOException ex) {
+                    agregarMensajeError(ex.getMessage());
+                }
+            } else {
                 agregarMensajeAdvertencia("Para cerrar la jornada es necesario ingresar los datos de todos los partidos");
             }
         }

@@ -13,22 +13,35 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="60" splitType="Stretch">
+		<band height="70" splitType="Stretch">
 			<staticText>
-				<reportElement x="148" y="0" width="284" height="32" uuid="34b2fe4e-90c9-4516-b9f2-63541968cdd3"/>
+				<reportElement x="148" y="0" width="284" height="18" uuid="34b2fe4e-90c9-4516-b9f2-63541968cdd3"/>
 				<textElement textAlignment="Center">
-					<font size="12" isBold="true"/>
+					<font size="12" isBold="true" isItalic="false"/>
 				</textElement>
-				<text><![CDATA[LIGA MUNICIPAL DE FUTBOL
-VILLA GONZALEZ ORTEGA]]></text>
+				<text><![CDATA[LIGA MUNICIPAL DE FUTBOL]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="148" y="40" width="284" height="20" uuid="6bba6c69-b0a5-4232-9aaf-541505888cdb"/>
-				<textElement textAlignment="Center">
+				<reportElement x="148" y="50" width="284" height="20" uuid="6bba6c69-b0a5-4232-9aaf-541505888cdb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{fuerza}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="148" y="18" width="284" height="18" uuid="ec630b9e-b793-466c-8ffc-29145a2821d8"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA["HACIENDA EL CARRO"]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="148" y="36" width="284" height="18" uuid="d9f2c1c4-3763-4ae3-83c9-ca85419fca53"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[VILLA GONZALEZ ORTEGA]]></text>
+			</staticText>
 		</band>
 	</title>
 	<pageHeader>

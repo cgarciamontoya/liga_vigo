@@ -59,7 +59,7 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         mnuCredEq = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Liga Municipal de Futbol de Villa González Ortega");
+        setTitle("Liga Municipal de Futbol \"Hacienda El Carro\" Villa González Ortega");
         setPreferredSize(new java.awt.Dimension(1200, 700));
         setResizable(false);
 

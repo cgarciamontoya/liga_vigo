@@ -24,7 +24,7 @@ public class CedulaVO implements Serializable {
     
     private String nombre;
     private String equipo;
-    private Integer numero;
+    private String numero;
     private String equipoAnterior;
     private Integer idJugador;
 
@@ -44,11 +44,11 @@ public class CedulaVO implements Serializable {
         this.equipo = equipo;
     }
 
-    public Integer getNumero() {
+    public String getNumero() {
         return numero;
     }
 
-    public void setNumero(Integer numero) {
+    public void setNumero(String numero) {
         this.numero = numero;
     }
 

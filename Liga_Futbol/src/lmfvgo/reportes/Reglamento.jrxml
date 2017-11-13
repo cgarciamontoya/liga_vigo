@@ -11,21 +11,34 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="60" splitType="Stretch">
+		<band height="78" splitType="Stretch">
 			<staticText>
-				<reportElement x="148" y="0" width="284" height="32" uuid="34b2fe4e-90c9-4516-b9f2-63541968cdd3"/>
-				<textElement textAlignment="Center">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[LIGA MUNICIPAL DE FUTBOL
-VILLA GONZALEZ ORTEGA]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="148" y="40" width="284" height="20" uuid="8bcd693e-d5c9-45cb-862b-14ff0a861eaf"/>
+				<reportElement x="148" y="57" width="284" height="20" uuid="8bcd693e-d5c9-45cb-862b-14ff0a861eaf"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[REGLAMENTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="148" y="18" width="284" height="18" uuid="363403cc-aa59-41c3-a582-a2206fdaa136"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA["HACIENDA EL CARRO"]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="148" y="36" width="284" height="18" uuid="4e79a586-708c-4271-aa69-def80be4656f"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[VILLA GONZALEZ ORTEGA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="148" y="0" width="284" height="18" uuid="cf5186b3-9fb2-4e2f-b082-431d64d146bd"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[LIGA MUNICIPAL DE FUTBOL]]></text>
 			</staticText>
 		</band>
 	</title>

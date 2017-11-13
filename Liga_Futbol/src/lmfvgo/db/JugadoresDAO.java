@@ -117,7 +117,7 @@ public class JugadoresDAO extends BaseDAO {
                 j.setLugarProcedencia(rs.getString("lugar_procedencia"));
                 j.setEquipoNombre(rs.getString("equipo_nombre"));
                 j.setFuerza(rs.getInt("fuerza"));
-                j.setNumero(rs.getObject("numero") != null ? rs.getInt("numero") : null);
+                j.setNumero(rs.getString("numero"));
                 resultado.add(j);
             }
             return resultado;
@@ -281,7 +281,7 @@ public class JugadoresDAO extends BaseDAO {
                 CedulaVO c = new CedulaVO();
                 c.setNombre(rs.getString("jugador_nombre"));
                 c.setEquipo(rs.getString("equipo_nombre"));
-                c.setNumero(rs.getInt("numero"));
+                c.setNumero(rs.getString("numero"));
                 credenciales.add(c);
             }
             return credenciales;

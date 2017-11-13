@@ -1,3 +1,18 @@
+insert into equipos(nombre, fuerza, fecha_registro) values
+('ROSTICERIA EL POLLITO', 1, '2017-11-11'),
+('EL CARRO', 1, '2017-11-11'),
+('AGUILAS REALES', 1, '2017-11-11'),
+('3 CRUCES', 1, '2017-11-11'),
+('CAMPAMENTO', 1, '2017-11-11'),
+('RANCHO JM', 1, '2017-11-11'),
+('CORTIJO', 1, '2017-11-11'),
+('DEP JUNIOR', 1, '2017-11-11'),
+('DEP 2000', 1, '2017-11-11'),
+('TOROS', 1, '2017-11-11'),
+('COLONIA', 1, '2017-11-11'),
+('LIRAS', 1, '2017-11-11'),
+('18 PRIMOS', 1, '2017-11-11')
+
 insert into jugadores(nombre, paterno, materno, fecha_nacimiento, lugar_procedencia, fecha_registro) values
 ('HECTOR','ARTEAGA','SALAZAR','1990-12-12','FRANCISCO I MADERO','2017-11-10'),
 ('SEBASTIAN','CASTILLO','HERNANDEZ','1980-05-05','VILLA GONZALEZ ORTEGA','2017-11-10'),

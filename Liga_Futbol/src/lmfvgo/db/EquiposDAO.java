@@ -16,7 +16,6 @@ import java.util.List;
 import lmfvgo.excepciones.LMFVGOException;
 import lmfvgo.modelo.Equipos;
 import lmfvgo.reportes.vo.CedulaVO;
-import lmfvgo.util.ConstantesUtil;
 
 /**
  *
@@ -160,10 +159,10 @@ public class EquiposDAO extends BaseDAO {
                 ps.setInt(1, idEquipo);
                 ps.setInt(2, idJug.getIdJugador());
                 ps.setInt(3, idTorneo);
-                if (idJug.getNumero() != null && idJug.getNumero() > 0) {
-                    ps.setInt(4, idJug.getNumero());
+                if (idJug.getNumero() != null && !idJug.getNumero().isEmpty()) {
+                    ps.setString(4, idJug.getNumero());
                 } else {
-                    ps.setNull(4, Types.INTEGER);
+                    ps.setNull(4, Types.VARCHAR);
                 }
                 ps.addBatch();
             }
