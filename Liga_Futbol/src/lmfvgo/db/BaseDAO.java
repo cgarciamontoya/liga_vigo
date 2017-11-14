@@ -18,7 +18,7 @@ import lmfvgo.modelo.Torneo;
 
 public class BaseDAO {
 
-    private static final String URL_DB = "jdbc:mysql://localhost:3306/lmfvgo";
+    private static final String URL_DB = "jdbc:mysql://192.168.39.18:3306/lmfvgo";
     private static final String DB_USR = "root";
     private static final String DB_PASS = "root";
     private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";

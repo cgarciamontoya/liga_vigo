@@ -7,12 +7,30 @@
 	<parameter name="escudo" class="java.io.InputStream"/>
 	<parameter name="fuerza" class="java.lang.String"/>
 	<field name="jornada" class="java.lang.Integer"/>
-	<field name="juegos" class="java.util.List"/>
+	<field name="local" class="java.lang.String"/>
+	<field name="visitante" class="java.lang.String"/>
+	<group name="jornada">
+		<groupExpression><![CDATA[$F{jornada}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<rectangle>
+					<reportElement x="1" y="0" width="571" height="20" printWhenGroupChanges="jornada" backcolor="#00FFFF" uuid="110942ca-4b48-4dbf-ba1b-7a3b6d0c62d0"/>
+				</rectangle>
+				<textField>
+					<reportElement x="0" y="0" width="572" height="20" uuid="bb0f2c93-6c66-4ae6-b5bd-4947b0a216cd"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Jornada " + $F{jornada}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="78" splitType="Stretch">
+		<band height="83" splitType="Stretch">
 			<staticText>
 				<reportElement x="148" y="18" width="284" height="18" uuid="363403cc-aa59-41c3-a582-a2206fdaa136"/>
 				<textElement textAlignment="Center">
@@ -48,31 +66,30 @@
 			</image>
 			<textField>
 				<reportElement x="152" y="58" width="280" height="20" uuid="6a082e2d-617c-4fe7-966f-38800827eb55"/>
-				<textFieldExpression><![CDATA[$P{fuerza}]]></textFieldExpression>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Rol de Juegos " + $P{fuerza}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
 	<detail>
-		<band height="45" splitType="Stretch">
-			<staticText>
-				<reportElement x="1" y="0" width="51" height="20" uuid="a4e7babc-80d4-407c-a0ae-21953c0e6442"/>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[JORNADA]]></text>
-			</staticText>
+		<band height="20" splitType="Stretch">
 			<textField>
-				<reportElement x="52" y="0" width="100" height="20" uuid="bb0f2c93-6c66-4ae6-b5bd-4947b0a216cd"/>
-				<textElement textAlignment="Center">
-					<font isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{jornada}]]></textFieldExpression>
+				<reportElement x="1" y="0" width="250" height="20" uuid="5af6c6e6-6ff4-41cd-b08c-499b644dd0c3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{local}]]></textFieldExpression>
 			</textField>
-			<subreport isUsingCache="false">
-				<reportElement x="1" y="20" width="571" height="20" uuid="7663938c-d659-40b4-84c4-fa2d11fd270e"/>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{juegos})]]></dataSourceExpression>
-				<subreportExpression><![CDATA["lmfvgo/reportes/Rol_subreport.jasper"]]></subreportExpression>
-			</subreport>
+			<textField>
+				<reportElement x="322" y="0" width="250" height="20" uuid="4db3c95e-6175-4ed9-903e-19f13db370a3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{visitante}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="251" y="0" width="71" height="20" uuid="ddf36cca-8959-45bc-b485-b85a22e5b956"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[VS]]></text>
+			</staticText>
 		</band>
 	</detail>
 	<pageFooter>
@@ -80,7 +97,7 @@
 			<textField>
 				<reportElement x="452" y="5" width="80" height="20" uuid="45c8e920-a4dc-43fb-9807-e68ecadb78bb"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report">
 				<reportElement x="532" y="5" width="40" height="20" uuid="23a82c60-c13e-4bec-b78a-b8269cdef6e5"/>

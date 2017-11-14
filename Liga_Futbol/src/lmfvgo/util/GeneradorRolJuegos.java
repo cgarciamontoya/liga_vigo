@@ -8,8 +8,10 @@ package lmfvgo.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import lmfvgo.modelo.Equipos;
 import lmfvgo.modelo.Juegos;
 
@@ -19,7 +21,18 @@ import lmfvgo.modelo.Juegos;
  */
 public class GeneradorRolJuegos {
 
+    private static List<Equipos> reorderEquipos(List<Equipos> equipos) {
+        Map<Integer, Equipos> mapa = new LinkedHashMap<>();
+        Random rnd = new Random();
+        while(mapa.keySet().size() < equipos.size()) {
+            Integer next = rnd.nextInt(equipos.size()) + 1;
+            mapa.put(next, equipos.get(next - 1));
+        }
+        List<Equipos> resultado = new ArrayList<>(mapa.values());
+        return resultado;
+    }
     public static Map<Integer, List<Juegos>> generarRol10(List<Equipos> equipos, Integer idTorneo) {
+        equipos = reorderEquipos(equipos);
         Map<Integer, List<Juegos>> rol = new HashMap<>();
         Integer[] j1 = new Integer[]{0,7,1,2,3,6,4,5,9,8};
         Integer[] j2 = new Integer[]{2,0,5,9,6,4,7,3,8,1};
@@ -56,6 +69,7 @@ public class GeneradorRolJuegos {
     }
     
     public static Map<Integer, List<Juegos>> generarRol12(List<Equipos> equipos, Integer idTorneo) {
+        equipos = reorderEquipos(equipos);
         Map<Integer, List<Juegos>> rol = new HashMap<>();
         Integer[] j1 = new Integer[]{1,7,10,4,2,9,5,0,6,3,8,11};
         Integer[] j2 = new Integer[]{0,1,11,2,3,8,4,6,7,10,9,5};
@@ -98,6 +112,7 @@ public class GeneradorRolJuegos {
     }
     
     public static Map<Integer, List<Juegos>> generarRol14(List<Equipos> equipos, Integer idTorneo) {
+        equipos = reorderEquipos(equipos);
         Map<Integer, List<Juegos>> rol = new HashMap<>();
         Integer[] j1 = new Integer[]{10,3,12,2,13,6,4,11,7,1,8,5,9,0};
         Integer[] j2 = new Integer[]{0,8,1,4,11,13,2,10,3,9,5,7,6,12};
@@ -146,6 +161,7 @@ public class GeneradorRolJuegos {
     }
 
     public static Map<Integer, List<Juegos>> generarRol16(List<Equipos> equipos, Integer idTorneo) {
+        equipos = reorderEquipos(equipos);
         Map<Integer, List<Juegos>> rol = new HashMap<>();
         Integer[] j1 = new Integer[]{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
         Integer[] j2 = new Integer[]{11,6,13,2,15,8,7,10,1,14,3,4,9,12,5,0};

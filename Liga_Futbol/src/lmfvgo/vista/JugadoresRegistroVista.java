@@ -18,8 +18,6 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.text.ParseException;
@@ -365,6 +363,7 @@ public class JugadoresRegistroVista extends FormBase {
                     WebcamUtils.capture(webcam, "foto1", ImageUtils.FORMAT_JPG);
                     fotoBytes = WebcamUtils.getImageBytes(webcam, "jpg");
                     txtFotografia.setText("FOTOGRAFIA CAPTURADA");
+                    webcam.close();
                     window.dispose();
             }
         });

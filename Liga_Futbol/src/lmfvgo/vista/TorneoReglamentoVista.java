@@ -132,7 +132,7 @@ public class TorneoReglamentoVista extends FormBase {
             }
         });
 
-        btnReporte.setText("PDF");
+        btnReporte.setText("Exportar PDF");
         btnReporte.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 reporte(evt);

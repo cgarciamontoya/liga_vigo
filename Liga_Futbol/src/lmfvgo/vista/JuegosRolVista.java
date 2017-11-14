@@ -6,6 +6,7 @@
 
 package lmfvgo.vista;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.swing.table.DefaultTableModel;
@@ -16,7 +17,9 @@ import lmfvgo.excepciones.LMFVGOException;
 import lmfvgo.modelo.Equipos;
 import lmfvgo.modelo.Juegos;
 import lmfvgo.modelo.Torneo;
+import lmfvgo.reportes.vo.RolVO;
 import lmfvgo.util.GeneradorRolJuegos;
+import lmfvgo.util.ReportesManager;
 
 /**
  *
@@ -29,6 +32,7 @@ public class JuegosRolVista extends FormBase {
     private final TorneoDAO torneoDAO;
     private final JuegosDAO juegosDAO;
     private Map<Integer, List<Juegos>> rol = null;
+    private final ReportesManager reportesManager;
     
     /** Creates new form JuegosRolVista */
     public JuegosRolVista() {
@@ -36,6 +40,7 @@ public class JuegosRolVista extends FormBase {
         equiposDAO = new EquiposDAO();
         torneoDAO = new TorneoDAO();
         juegosDAO = new JuegosDAO();
+        reportesManager = new ReportesManager();
     }
 
     /** This method is called from within the constructor to
@@ -54,6 +59,7 @@ public class JuegosRolVista extends FormBase {
         tblRol = new javax.swing.JTable();
         btnLimpiar = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
+        bnExportar = new javax.swing.JButton();
 
         setClosable(true);
         setTitle("Rol de Juegos");
@@ -113,6 +119,13 @@ public class JuegosRolVista extends FormBase {
             }
         });
 
+        bnExportar.setText("Exportar PDF");
+        bnExportar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportar(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -130,6 +143,8 @@ public class JuegosRolVista extends FormBase {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(bnExportar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnGuardar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnLimpiar)
@@ -148,7 +163,8 @@ public class JuegosRolVista extends FormBase {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLimpiar)
-                    .addComponent(btnGuardar))
+                    .addComponent(btnGuardar)
+                    .addComponent(bnExportar))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -259,8 +275,36 @@ public class JuegosRolVista extends FormBase {
         }
     }//GEN-LAST:event_cargarRol
 
+    private void exportar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportar
+        if (tblRol.getRowCount() > 0) {
+            List<RolVO> reporte = new ArrayList<>();
+            DefaultTableModel model = (DefaultTableModel) tblRol.getModel();
+            int jornada = 0;
+            for (int i = 0; i < model.getRowCount(); i++) {
+                RolVO juego = new RolVO();
+                if (model.getValueAt(i, 0).toString().toLowerCase().startsWith("jornada")) {
+                    jornada = Integer.parseInt(model.getValueAt(i, 0).toString().split(" ")[1]);
+                    continue;
+                }
+                juego.setJornada(jornada);
+                juego.setLocal(model.getValueAt(i, 0).toString());
+                juego.setVisitante(model.getValueAt(i, 1).toString());
+                reporte.add(juego);
+            }
+            try {
+                reportesManager.rol(reporte, cboFuerza.getSelectedIndex());
+            } catch (LMFVGOException ex) {
+                agregarMensajeError(ex.getMessage());
+            }
+        } else {
+            agregarMensajeAdvertencia("Debe seleccionar el rol para exportar");
+        }
+        
+    }//GEN-LAST:event_exportar
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bnExportar;
     private javax.swing.JButton btnGenerar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnLimpiar;

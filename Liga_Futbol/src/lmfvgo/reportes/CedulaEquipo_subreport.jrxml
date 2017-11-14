@@ -49,6 +49,7 @@
 			</line>
 			<staticText>
 				<reportElement x="154" y="44" width="57" height="20" uuid="e0be2e5b-af00-4853-8bf5-d3c23dfac023"/>
+				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Equipo Ant.:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">

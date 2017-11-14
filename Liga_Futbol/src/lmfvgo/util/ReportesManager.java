@@ -20,6 +20,7 @@ import lmfvgo.modelo.Juegos;
 import lmfvgo.modelo.Reglamento;
 import lmfvgo.reportes.vo.CedulaVO;
 import lmfvgo.reportes.vo.CredencialVO;
+import lmfvgo.reportes.vo.RolVO;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -32,12 +33,22 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
  */
 public class ReportesManager {
     
-    private static final String URL_REPORTES = "C:\\lmfvgo\\";
+    private static final String URL_REPORTES = "D:\\lmfvgo\\";
     private static final String REPORTE_CEDULA_JUEGO = "/lmfvgo/reportes/CedulaJuego.jasper";
     private static final String REPORTE_TABLA_GENERAL = "/lmfvgo/reportes/TablaEstadisticas.jasper";
     private static final String REPORTE_CREDENCIALES = "/lmfvgo/reportes/Credenciales.jasper";
     private static final String REPORTE_CEDULA = "/lmfvgo/reportes/CedulaEquipo.jasper";
     private static final String REPORTE_REGLAMENTO = "/lmfvgo/reportes/Reglamento.jasper";
+    private static final String REPORTE_ROL = "/lmfvgo/reportes/Rol.jasper";
+    
+    public void rol(List<RolVO> rol, int fuerza) throws LMFVGOException {
+        Map<String, Object> parametros = new HashMap<>();
+        parametros.put("fuerza", (fuerza == 1) ? "Primera Fuerza" : "Segunda Fuerza");
+        getLogos(parametros);
+        String nombrePdf = URL_REPORTES + "Rol.pdf";
+        exportar(REPORTE_ROL, parametros, nombrePdf, rol);
+        abrirPdf(nombrePdf);
+    }
     
     public void reglamento(List<Reglamento> lista) throws LMFVGOException {
         Map<String, Object> parametros = new HashMap<>();
