@@ -18,6 +18,7 @@ import lmfvgo.db.ReglamentoDAO;
 import lmfvgo.db.SancionesDAO;
 import lmfvgo.excepciones.LMFVGOException;
 import lmfvgo.modelo.Equipos;
+import lmfvgo.modelo.Jugadores;
 import lmfvgo.modelo.Reglamento;
 import lmfvgo.modelo.Sancion;
 
@@ -131,14 +132,14 @@ public class JugadoresSancionesVista extends FormBase {
 
             },
             new String [] {
-                "Clave", "Jornada", "Jugador", "Juegos", "Multa", "Activo"
+                "Clave", "Jornada", "Jugador", "Juegos", "Multa"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Float.class, java.lang.String.class
+                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Float.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -247,8 +248,11 @@ public class JugadoresSancionesVista extends FormBase {
         if (idEquipo > 0) {
             List<String> jugs = new ArrayList<>();
             jugs.add("0 - Seleccione");
-            jugs.addAll(jugadoresDAO.consultaJugadoresEquipo(idEquipo));
-            if (jugs != null && !jugs.isEmpty()) {
+            List<Jugadores> jugadoresBD = jugadoresDAO.consultaJugadoresEquipo(idEquipo);
+            for (Jugadores j : jugadoresBD) {
+                jugs.add(j.getIdJugador() + " - " + j.getNombre() + " " + j.getPaterno() + " " + j.getMaterno());
+            }
+            if (!jugs.isEmpty()) {
                 cboJugador.setModel(new DefaultComboBoxModel(jugs.toArray()));
             }
         }
@@ -266,7 +270,7 @@ public class JugadoresSancionesVista extends FormBase {
         DefaultTableModel modelo = (DefaultTableModel) tblCastigos.getModel();
         Reglamento r = reglamentoDAO.consultaPorClave(cboReglamento.getSelectedItem().toString().split(" - ")[0]);
         modelo.addRow(new Object[]{r.getClave(), Integer.parseInt(cboJornada.getSelectedItem().toString()),
-            cboJugador.getSelectedItem().toString(),r.getSancionJuegos(), r.getSancionEconomica(), null});
+            cboJugador.getSelectedItem().toString(),(String.valueOf(r.getSancionJuegos())), r.getSancionEconomica()});
     }//GEN-LAST:event_agregarClave
 
     private void quitarClave(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_quitarClave
@@ -282,15 +286,16 @@ public class JugadoresSancionesVista extends FormBase {
         if (tblCastigos.getRowCount() > 0) {
             List<Sancion> sanciones = new ArrayList<>();
             DefaultTableModel modelo = (DefaultTableModel) tblCastigos.getModel();
+            int idJugador = Integer.parseInt(((String) modelo.getValueAt(0, 2)).split(" - ")[0]);
             for (int i = 0; i < tblCastigos.getRowCount(); i++) {
                 Sancion s = new Sancion();
                 s.setClave((String) modelo.getValueAt(i, 0));
                 s.setJornada((Integer) modelo.getValueAt(i, 1));
-                s.setIdJugador(Integer.parseInt(((String) modelo.getValueAt(i, 2)).split(" - ")[0]));
+                s.setIdJugador(idJugador);
                 sanciones.add(s);
             }
             try {
-                sancionesDAO.guardar(sanciones);
+                sancionesDAO.guardar(sanciones, idJugador);
                 limpiar(evt);
                 agregarMensajeExito("Las sanciones se guardaron correctamente");
             } catch (LMFVGOException ex) {
@@ -313,8 +318,7 @@ public class JugadoresSancionesVista extends FormBase {
                 DefaultTableModel modelo = (DefaultTableModel) tblCastigos.getModel();
                 for (Sancion s : sanciones) {
                     modelo.addRow(new Object[]{s.getClave(), s.getJornada(), (s.getIdJugador() + " - " + s.getNombreJugador()), 
-                    s.getSancionJuegos(), (s.getSancionEconomica() != null && s.getSancionEconomica() > 0 ? s.getSancionEconomica() : null),
-                    (s.isActivo() ? "SI" : "NO")});
+                    (String.valueOf(s.getSancionJuegos())), (s.getSancionEconomica() != null && s.getSancionEconomica() > 0 ? s.getSancionEconomica() : null)});
                 }
             }
         }

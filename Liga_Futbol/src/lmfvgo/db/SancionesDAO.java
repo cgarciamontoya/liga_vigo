@@ -27,12 +27,16 @@ public class SancionesDAO extends BaseDAO {
         super();
     }
 
-    public void guardar(List<Sancion> sanciones) throws LMFVGOException {
+    public void guardar(List<Sancion> sanciones, int idJugador) throws LMFVGOException {
         sb = new StringBuilder();
         sb.append("insert into sanciones (clave_reglamento, id_jugador, jornada, id_torneo, fecha, activo) values (?,?,?,?,?,?)");
         try {
             PreparedStatement ps = getConnection().prepareStatement(sb.toString());
             Integer idTorneo = getIdTorneoActivo();
+            
+            //se elminan los castigos para insertarlos nuevamente
+            eliminar(idJugador, idTorneo);
+            
             java.sql.Date fecha = new java.sql.Date(new Date().getTime());
             for (Sancion s : sanciones) {
                 ps.setString(1, s.getClave());
@@ -49,6 +53,58 @@ public class SancionesDAO extends BaseDAO {
         }
     }
     
+    private void eliminar(int idJugador, int idTorneo) throws SQLException {
+        sb = new StringBuilder();
+        sb.append("delete from sanciones where id_jugador = ? and id_torneo = ?");
+        PreparedStatement ps = getConnection().prepareStatement(sb.toString());
+        ps.setInt(1, idJugador);
+        ps.setInt(2, idTorneo);
+        
+        ps.execute();
+    }
+    
+    public List<Sancion> consultaSanciones(int idEquipo) {
+        sb = new StringBuilder();
+        sb.append("select s.clave_reglamento, r.descripcion, ")
+                .append("s.id_jugador, concat(j.nombre, ' ', j.paterno, ' ', j.materno) nombre_jugador, ")
+                .append("s.jornada, s.id_torneo, s.fecha, s.activo, sum(r.sancion_juegos) sancion_juegos, r.sancion_economica ")
+                .append("from sanciones s ")
+                .append("inner join reglamento r on r.clave = s.clave_reglamento ")
+                .append("inner join jugadores j on j.id_jugador = s.id_jugador ")
+                .append("left join rel_equipo_jugadores rel on rel.id_jugador = s.id_jugador ");
+        if (idEquipo > 0) {
+            sb.append("where rel.id_equipo = ")
+                    .append(idEquipo)
+                    .append(" ");
+        }
+        sb.append("group by s.id_jugador order by jornada, nombre_jugador");
+        try {
+            int jornadaActual = getJornadaActual();
+            PreparedStatement ps = getConnection().prepareStatement(sb.toString());
+            
+            ResultSet rs = ps.executeQuery();
+            List<Sancion> sanciones = new ArrayList<>();
+            while (rs.next()) {
+                Sancion s = new Sancion();
+                s.setClave(rs.getString("clave_reglamento"));
+                s.setDescripcionClave("descripcion");
+                s.setIdJugador(rs.getInt("id_jugador"));
+                s.setNombreJugador(rs.getString("nombre_jugador"));
+                s.setJornada(rs.getInt("jornada"));
+                s.setTorneo(rs.getInt("id_torneo"));
+                s.setFecha(rs.getDate("fecha"));
+                s.setSancionEconomica(rs.getFloat("sancion_economica"));
+                s.setSancionJuegos(rs.getInt("sancion_juegos"));
+                s.setJuegosCumplidos(jornadaActual - (s.getJornada() + 1));
+                s.setActivo(!s.getJuegosCumplidos().equals(s.getSancionJuegos()));
+                sanciones.add(s);
+            }
+            return sanciones;
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
+    
     public List<Sancion> consultaSancionesJugador(Integer idJugador) {
         sb = new StringBuilder();
         sb.append("select s.clave_reglamento, r.descripcion, ")
@@ -59,6 +115,7 @@ public class SancionesDAO extends BaseDAO {
                 .append("inner join jugadores j on j.id_jugador = s.id_jugador ")
                 .append("where s.id_jugador = ? order by clave_reglamento");
         try {
+            int jornadaActual = getJornadaActual();
             PreparedStatement ps = getConnection().prepareStatement(sb.toString());
             ps.setInt(1, idJugador);
             
@@ -73,9 +130,10 @@ public class SancionesDAO extends BaseDAO {
                 s.setJornada(rs.getInt("jornada"));
                 s.setTorneo(rs.getInt("id_torneo"));
                 s.setFecha(rs.getDate("fecha"));
-                s.setActivo(rs.getInt("activo") == 1);
                 s.setSancionEconomica(rs.getFloat("sancion_economica"));
                 s.setSancionJuegos(rs.getInt("sancion_juegos"));
+                s.setJuegosCumplidos(jornadaActual - (s.getJornada() + 1));
+                s.setActivo(!s.getJuegosCumplidos().equals(s.getSancionJuegos()));
                 sanciones.add(s);
             }
             return sanciones;

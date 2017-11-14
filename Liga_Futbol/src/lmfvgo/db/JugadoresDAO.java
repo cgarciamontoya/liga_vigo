@@ -173,18 +173,24 @@ public class JugadoresDAO extends BaseDAO {
         }
     }
     
-    public List<String> consultaJugadoresEquipo(int idEquipo) {
+    public List<Jugadores> consultaJugadoresEquipo(int idEquipo) {
         try {
             sb = new StringBuilder();
-            sb.append("select j.id_jugador, j.nombre, j.paterno, j.materno ")
+            sb.append("select j.id_jugador, j.nombre, j.paterno, j.materno, r.numero ")
                     .append("from jugadores j inner join rel_equipo_jugadores r on r.id_jugador = j.id_jugador ")
                     .append("where r.id_equipo = ")
                     .append(idEquipo)
                     .append(" order by nombre, paterno, materno");
             ResultSet rs = getConnection().prepareStatement(sb.toString()).executeQuery();
-            List<String> jug = new ArrayList<>();
+            List<Jugadores> jug = new ArrayList<>();
             while (rs.next()) {
-                jug.add(rs.getInt("id_jugador") + " - " + rs.getString("nombre") + " " + rs.getString("paterno") + " " + rs.getString("materno"));
+                Jugadores j = new Jugadores();
+                j.setIdJugador(rs.getInt("id_jugador"));
+                j.setNombre(rs.getString("nombre"));
+                j.setPaterno(rs.getString("paterno"));
+                j.setMaterno(rs.getString("materno"));
+                j.setNumero(rs.getString("numero"));
+                jug.add(j);
             }
             return jug;
         } catch (SQLException ex) {

@@ -50,13 +50,17 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         menuJugadores = new javax.swing.JMenu();
         mnuJugConsulta = new javax.swing.JMenuItem();
         mnuJugRegistro = new javax.swing.JMenuItem();
-        mnuJugSanciones = new javax.swing.JMenuItem();
         menuJuegos = new javax.swing.JMenu();
         mnuJgosRol = new javax.swing.JMenuItem();
         mnuJgosJornada = new javax.swing.JMenuItem();
         menuCredenciales = new javax.swing.JMenu();
         mnuCredJug = new javax.swing.JMenuItem();
         mnuCredEq = new javax.swing.JMenuItem();
+        menuSanciones = new javax.swing.JMenu();
+        mnuJugSanciones = new javax.swing.JMenuItem();
+        mnuSancionesConsulta = new javax.swing.JMenuItem();
+        menuConf = new javax.swing.JMenu();
+        mnuConfParam = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Liga Municipal de Futbol \"Hacienda El Carro\" Villa González Ortega");
@@ -137,14 +141,6 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         });
         menuJugadores.add(mnuJugRegistro);
 
-        mnuJugSanciones.setText("Sanciones");
-        mnuJugSanciones.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuJugSancionesActionPerformed(evt);
-            }
-        });
-        menuJugadores.add(mnuJugSanciones);
-
         jMenuBar1.add(menuJugadores);
 
         menuJuegos.setText("Juegos");
@@ -188,6 +184,38 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         menuCredenciales.add(mnuCredEq);
 
         jMenuBar1.add(menuCredenciales);
+
+        menuSanciones.setText("Sanciones");
+
+        mnuJugSanciones.setText("Registro");
+        mnuJugSanciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuJugSancionesActionPerformed(evt);
+            }
+        });
+        menuSanciones.add(mnuJugSanciones);
+
+        mnuSancionesConsulta.setText("Consulta");
+        mnuSancionesConsulta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                abrirConsultaSanciones(evt);
+            }
+        });
+        menuSanciones.add(mnuSancionesConsulta);
+
+        jMenuBar1.add(menuSanciones);
+
+        menuConf.setText("Configuración");
+
+        mnuConfParam.setText("Actualizar Parámetros");
+        mnuConfParam.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                abrirConfiguracion(evt);
+            }
+        });
+        menuConf.add(mnuConfParam);
+
+        jMenuBar1.add(menuConf);
 
         setJMenuBar(jMenuBar1);
 
@@ -283,6 +311,18 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         jsv.show();
     }//GEN-LAST:event_mnuJugSancionesActionPerformed
 
+    private void abrirConsultaSanciones(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirConsultaSanciones
+        SancionesConsultaVista scv = new SancionesConsultaVista();
+        this.add(scv);
+        scv.show();
+    }//GEN-LAST:event_abrirConsultaSanciones
+
+    private void abrirConfiguracion(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirConfiguracion
+        ConfiguracionVista cv = new ConfiguracionVista();
+        this.add(cv);
+        cv.show();
+    }//GEN-LAST:event_abrirConfiguracion
+
     /**
      * @param args the command line arguments
      */
@@ -320,11 +360,14 @@ public class LigaFutbolMain extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenu menuConf;
     private javax.swing.JMenu menuCredenciales;
     private javax.swing.JMenu menuEquipos;
     private javax.swing.JMenu menuJuegos;
     private javax.swing.JMenu menuJugadores;
+    private javax.swing.JMenu menuSanciones;
     private javax.swing.JMenu menuTorneo;
+    private javax.swing.JMenuItem mnuConfParam;
     private javax.swing.JMenuItem mnuCredEq;
     private javax.swing.JMenuItem mnuCredJug;
     private javax.swing.JMenuItem mnuEqConsulta;
@@ -335,6 +378,7 @@ public class LigaFutbolMain extends javax.swing.JFrame {
     private javax.swing.JMenuItem mnuJugConsulta;
     private javax.swing.JMenuItem mnuJugRegistro;
     private javax.swing.JMenuItem mnuJugSanciones;
+    private javax.swing.JMenuItem mnuSancionesConsulta;
     private javax.swing.JMenuItem mnuTorneoCerrar;
     private javax.swing.JMenuItem mnuTorneoNuevo;
     private javax.swing.JMenuItem mnuTorneoReglas;

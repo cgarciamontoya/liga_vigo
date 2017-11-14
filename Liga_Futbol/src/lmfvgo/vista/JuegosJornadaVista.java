@@ -5,6 +5,7 @@
  */
 package lmfvgo.vista;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -13,6 +14,8 @@ import javax.swing.table.DefaultTableModel;
 import lmfvgo.db.JuegosDAO;
 import lmfvgo.excepciones.LMFVGOException;
 import lmfvgo.modelo.Juegos;
+import lmfvgo.reportes.vo.RolVO;
+import lmfvgo.util.ReportesManager;
 
 /**
  *
@@ -23,12 +26,16 @@ public class JuegosJornadaVista extends FormBase {
 
     private final JuegosDAO juegosDAO;
     private List<Juegos> juegos;
+    private final ReportesManager reportesManager;
     /**
      * Creates new form JuegosJornadaVista
      */
     public JuegosJornadaVista() {
         initComponents();
         juegosDAO = new JuegosDAO();
+        reportesManager = new ReportesManager();
+        btnCerrarJornada.setEnabled(false);
+        btnExportar.setEnabled(false);
     }
 
     /**
@@ -47,6 +54,7 @@ public class JuegosJornadaVista extends FormBase {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblJuegos = new javax.swing.JTable();
         btnCerrarJornada = new javax.swing.JButton();
+        btnExportar = new javax.swing.JButton();
 
         setClosable(true);
         setTitle("REGISTRO POR JORNADA");
@@ -111,6 +119,13 @@ public class JuegosJornadaVista extends FormBase {
             }
         });
 
+        btnExportar.setText("Exportar PDF");
+        btnExportar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportar(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -129,7 +144,11 @@ public class JuegosJornadaVista extends FormBase {
                         .addComponent(cboJornada, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnAbrir)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnExportar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnCerrarJornada)))
                 .addContainerGap())
         );
@@ -142,10 +161,13 @@ public class JuegosJornadaVista extends FormBase {
                     .addComponent(cboFuerza, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
                     .addComponent(cboJornada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAbrir)
-                    .addComponent(btnCerrarJornada))
+                    .addComponent(btnAbrir))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCerrarJornada)
+                    .addComponent(btnExportar))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -193,12 +215,18 @@ public class JuegosJornadaVista extends FormBase {
         limpiarTabla(tblJuegos);
         if (juegos == null || juegos.isEmpty()) {
             agregarMensajeError("No se encontraron juegos para la jornada");
+            btnExportar.setEnabled(false);
+            btnCerrarJornada.setEnabled(false);
             return;
-        }
+        } 
         DefaultTableModel model = (DefaultTableModel) tblJuegos.getModel();
         int jgoDes = -1;
+        boolean jornadaCerrada = false;
         for (int i = 0; i < juegos.size(); i++) {
             Juegos j = juegos.get(i);
+            if (j.isCerrado()) {
+                jornadaCerrada = true;
+            }
             if (!j.getLocalNombre().equalsIgnoreCase("DESCANSA") &&
                     !j.getVisitanteNombre().equalsIgnoreCase("DESCANSA")) {
                 model.addRow(new Object[]{j.getIdJuego(), j.getLocalNombre(), 
@@ -217,6 +245,8 @@ public class JuegosJornadaVista extends FormBase {
                 model.addRow(new Object[]{j.getIdJuego(), j.getVisitanteNombre(), null, null, j.getLocalNombre()});
             }
         }
+        btnCerrarJornada.setEnabled(!jornadaCerrada);
+        btnExportar.setEnabled(model.getRowCount() > 0);
     }//GEN-LAST:event_abrirJornada
 
     private void cargarJornadas(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargarJornadas
@@ -247,9 +277,11 @@ public class JuegosJornadaVista extends FormBase {
             if (descansa) {
                 resJgos += 1;
             }
-            if (resJgos == (tblJuegos.getRowCount() + 1)) {
+            if (resJgos == tblJuegos.getRowCount()) {
                 try {
                     juegosDAO.cerrarJornada(Integer.parseInt(cboJornada.getSelectedItem().toString()));
+                    agregarMensajeExito("La Jornada " + cboJornada.getSelectedItem() + " se cerró correctamente");
+                    btnCerrarJornada.setEnabled(false);
                 } catch (LMFVGOException ex) {
                     agregarMensajeError(ex.getMessage());
                 }
@@ -259,10 +291,33 @@ public class JuegosJornadaVista extends FormBase {
         }
     }//GEN-LAST:event_cerrarJornada
 
+    private void exportar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportar
+        if (tblJuegos.getRowCount() > 0) {
+            List<RolVO> reporte = new ArrayList<>();
+            DefaultTableModel model = (DefaultTableModel) tblJuegos.getModel();
+            int jornada = Integer.parseInt(cboJornada.getSelectedItem().toString());
+            for (int i = 0; i < model.getRowCount(); i++) {
+                RolVO juego = new RolVO();
+                juego.setJornada(jornada);
+                juego.setLocal(model.getValueAt(i, 1).toString());
+                juego.setVisitante(model.getValueAt(i, 4).toString());
+                reporte.add(juego);
+            }
+            try {
+                reportesManager.rol(reporte, cboFuerza.getSelectedIndex());
+            } catch (LMFVGOException ex) {
+                agregarMensajeError(ex.getMessage());
+            }
+        } else {
+            agregarMensajeAdvertencia("Debe seleccionar el rol para exportar");
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_exportar
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAbrir;
     private javax.swing.JButton btnCerrarJornada;
+    private javax.swing.JButton btnExportar;
     private javax.swing.JComboBox cboFuerza;
     private javax.swing.JComboBox cboJornada;
     private javax.swing.JLabel jLabel1;

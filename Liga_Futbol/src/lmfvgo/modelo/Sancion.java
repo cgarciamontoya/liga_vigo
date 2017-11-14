@@ -26,6 +26,7 @@ public class Sancion implements Serializable {
     private Integer torneo;
     private Integer sancionJuegos;
     private Float sancionEconomica;
+    private Integer juegosCumplidos;
 
     public Integer getIdJugador() {
         return idJugador;
@@ -105,6 +106,14 @@ public class Sancion implements Serializable {
 
     public void setSancionEconomica(Float sancionEconomica) {
         this.sancionEconomica = sancionEconomica;
+    }
+
+    public Integer getJuegosCumplidos() {
+        return juegosCumplidos;
+    }
+
+    public void setJuegosCumplidos(Integer juegosCumplidos) {
+        this.juegosCumplidos = juegosCumplidos;
     }
     
     

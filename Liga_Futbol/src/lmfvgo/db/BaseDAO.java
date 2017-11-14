@@ -12,6 +12,7 @@ package lmfvgo.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import lmfvgo.modelo.Torneo;
@@ -64,6 +65,18 @@ public class BaseDAO {
             torneo.setSecretario(rs.getString("secretario"));
             torneo.setTesorero(rs.getString("tesorero"));
             return torneo;
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
+    
+    public Integer getJornadaActual() {
+        try {
+            PreparedStatement ps = getConnection().prepareStatement("select min(jornada) jornada from juegos where cerrado = 0 and id_torneo = ?");
+            ps.setInt(1, getIdTorneoActivo());
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            return rs.getInt("jornada");
         } catch (SQLException ex) {
             return null;
         }

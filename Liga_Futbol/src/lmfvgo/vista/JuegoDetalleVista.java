@@ -23,6 +23,7 @@ import lmfvgo.excepciones.LMFVGOException;
 import lmfvgo.modelo.EstadisticasEquipo;
 import lmfvgo.modelo.EstadisticasJugador;
 import lmfvgo.modelo.Juegos;
+import lmfvgo.modelo.Jugadores;
 import lmfvgo.util.ReportesManager;
 
 /**
@@ -133,11 +134,12 @@ public class JuegoDetalleVista extends FormBase {
             estj = new ArrayList<>();
         }
         if (estj.isEmpty()) {
-            List<String> jLocal = jugadoresDAO.consultaJugadoresEquipo(idEquipo);
-            for (String j: jLocal) {
+            List<Jugadores> jLocal = jugadoresDAO.consultaJugadoresEquipo(idEquipo);
+            for (Jugadores j: jLocal) {
                 EstadisticasJugador ej = new EstadisticasJugador();
-                ej.setIdJugador(Integer.parseInt(j.split(" - ")[0]));
-                ej.setNombreJugador(j);
+                ej.setIdJugador(j.getIdJugador());
+                ej.setNombreJugador(j.getIdJugador() + " - " + j.getNombre() + " " + j.getPaterno() + " " + j.getMaterno());
+                ej.setNumero(j.getNumero());
                 ej.setIdEquipo(idEquipo);
                 ej.setIdJuego(idJuego);
                 estj.add(ej);
