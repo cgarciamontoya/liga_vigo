@@ -148,6 +148,7 @@ public class JuegoDetalleVista extends FormBase {
         for (EstadisticasJugador ej : estj) {
             local.addRow(new Object[]{(ej.getIdEstadistica() != null && ej.getIdEstadistica() > 0 ? ej.getIdEstadistica() : null),
                                         ej.getNombreJugador(), 
+                                        ej.getNumero(),
                                         ej.getInicioCambioNj() == null || ej.getInicioCambioNj().isEmpty() ? "NJ" : ej.getInicioCambioNj(), 
                                         ej.getTa() == null ? 0 : ej.getTa(), 
                                         ej.getTr() == null ? 0 : ej.getTr(), 
@@ -156,10 +157,10 @@ public class JuegoDetalleVista extends FormBase {
     }
     
     private void cargarModelosTable(JTable tabla) {
-        tabla.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(cboAlineacion));
-        tabla.getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(cboTA));
-        tabla.getColumnModel().getColumn(4).setCellEditor(new DefaultCellEditor(cboTR));
-        tabla.getColumnModel().getColumn(5).setCellEditor(new DefaultCellEditor(cboGoles));
+        tabla.getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(cboAlineacion));
+        tabla.getColumnModel().getColumn(4).setCellEditor(new DefaultCellEditor(cboTA));
+        tabla.getColumnModel().getColumn(5).setCellEditor(new DefaultCellEditor(cboTR));
+        tabla.getColumnModel().getColumn(6).setCellEditor(new DefaultCellEditor(cboGoles));
     }
     
     /**
@@ -216,14 +217,14 @@ public class JuegoDetalleVista extends FormBase {
 
             },
             new String [] {
-                "ID-E", "Nombre", "Alinea", "A", "R", "G"
+                "ID-E", "Nombre", "Num", "Alinea", "A", "R", "G"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, true, true, true, true
+                false, false, false, true, true, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -240,13 +241,14 @@ public class JuegoDetalleVista extends FormBase {
             tblLocal.getColumnModel().getColumn(0).setPreferredWidth(5);
             tblLocal.getColumnModel().getColumn(1).setPreferredWidth(105);
             tblLocal.getColumnModel().getColumn(2).setResizable(false);
-            tblLocal.getColumnModel().getColumn(2).setPreferredWidth(10);
             tblLocal.getColumnModel().getColumn(3).setResizable(false);
-            tblLocal.getColumnModel().getColumn(3).setPreferredWidth(5);
+            tblLocal.getColumnModel().getColumn(3).setPreferredWidth(10);
             tblLocal.getColumnModel().getColumn(4).setResizable(false);
             tblLocal.getColumnModel().getColumn(4).setPreferredWidth(5);
             tblLocal.getColumnModel().getColumn(5).setResizable(false);
             tblLocal.getColumnModel().getColumn(5).setPreferredWidth(5);
+            tblLocal.getColumnModel().getColumn(6).setResizable(false);
+            tblLocal.getColumnModel().getColumn(6).setPreferredWidth(5);
         }
 
         tblVisitante.setModel(new javax.swing.table.DefaultTableModel(
@@ -254,14 +256,14 @@ public class JuegoDetalleVista extends FormBase {
 
             },
             new String [] {
-                "ID-E", "Nombre", "Alinea", "A", "R", "G"
+                "ID-E", "Nombre", "Num", "Alinea", "A", "R", "G"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, true, true, true, true
+                false, false, false, true, true, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -278,14 +280,14 @@ public class JuegoDetalleVista extends FormBase {
             tblVisitante.getColumnModel().getColumn(0).setResizable(false);
             tblVisitante.getColumnModel().getColumn(0).setPreferredWidth(5);
             tblVisitante.getColumnModel().getColumn(1).setPreferredWidth(105);
-            tblVisitante.getColumnModel().getColumn(2).setResizable(false);
-            tblVisitante.getColumnModel().getColumn(2).setPreferredWidth(10);
             tblVisitante.getColumnModel().getColumn(3).setResizable(false);
-            tblVisitante.getColumnModel().getColumn(3).setPreferredWidth(5);
+            tblVisitante.getColumnModel().getColumn(3).setPreferredWidth(10);
             tblVisitante.getColumnModel().getColumn(4).setResizable(false);
             tblVisitante.getColumnModel().getColumn(4).setPreferredWidth(5);
             tblVisitante.getColumnModel().getColumn(5).setResizable(false);
             tblVisitante.getColumnModel().getColumn(5).setPreferredWidth(5);
+            tblVisitante.getColumnModel().getColumn(6).setResizable(false);
+            tblVisitante.getColumnModel().getColumn(6).setPreferredWidth(5);
         }
 
         lblLocal.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -578,13 +580,14 @@ public class JuegoDetalleVista extends FormBase {
                 String[] dj = ((String) model.getValueAt(i, 1)).split(" - ");
                 ej.setIdJugador(Integer.parseInt(dj[0]));
                 ej.setNombreJugador(dj[1]);
+                ej.setNumero((String) model.getValueAt(i, 2));
                 ej.setIdEquipo(idEquipo);
                 ej.setIdJuego(idJuego);
                 if (!expCedRep) {
-                    ej.setInicioCambioNj((String) model.getValueAt(i, 2));
-                    ej.setTa((Integer) model.getValueAt(i, 3));
-                    ej.setTr((Integer) model.getValueAt(i, 4));
-                    ej.setGoles((Integer) model.getValueAt(i, 5));
+                    ej.setInicioCambioNj((String) model.getValueAt(i, 3));
+                    ej.setTa((Integer) model.getValueAt(i, 4));
+                    ej.setTr((Integer) model.getValueAt(i, 5));
+                    ej.setGoles((Integer) model.getValueAt(i, 6));
                     goles += ej.getGoles();
                 }
                 ejl.add(ej);

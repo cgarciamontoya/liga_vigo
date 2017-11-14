@@ -16,12 +16,6 @@
 	</background>
 	<detail>
 		<band height="140" splitType="Stretch">
-			<image isUsingCache="false">
-				<reportElement x="1" y="1" width="82" height="88" uuid="fff4337e-9cbd-4030-95b1-7c4b88fef48c">
-					<printWhenExpression><![CDATA[new Boolean($F{foto} != null)]]></printWhenExpression>
-				</reportElement>
-				<imageExpression><![CDATA[$F{foto}]]></imageExpression>
-			</image>
 			<staticText>
 				<reportElement x="85" y="23" width="45" height="13" uuid="19e2cc4d-aec9-43af-9590-40499c941bd4"/>
 				<textElement verticalAlignment="Middle">
@@ -138,6 +132,12 @@ VILLA GONZALEZ ORTEGA]]></text>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{secretario}]]></textFieldExpression>
 			</textField>
+			<image scaleImage="FillFrame" isUsingCache="false">
+				<reportElement x="1" y="1" width="82" height="88" uuid="fff4337e-9cbd-4030-95b1-7c4b88fef48c">
+					<printWhenExpression><![CDATA[new Boolean($F{foto} != null)]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$F{foto}]]></imageExpression>
+			</image>
 		</band>
 	</detail>
 </jasperReport>

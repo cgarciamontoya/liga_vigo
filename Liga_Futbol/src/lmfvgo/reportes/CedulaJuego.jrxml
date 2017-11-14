@@ -16,6 +16,8 @@
 	<parameter name="listaVisitante" class="java.util.List"/>
 	<parameter name="marcadorLocal" class="java.lang.String"/>
 	<parameter name="marcadorVisitante" class="java.lang.String"/>
+	<parameter name="logo" class="java.io.InputStream"/>
+	<parameter name="escudo" class="java.io.InputStream"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -49,6 +51,18 @@
 				</textElement>
 				<text><![CDATA[LIGA MUNICIPAL DE FUTBOL]]></text>
 			</staticText>
+			<image>
+				<reportElement x="0" y="0" width="115" height="60" uuid="e0ca29a7-fc9f-4673-b49d-e4603e31e0d7">
+					<printWhenExpression><![CDATA[new Boolean($P{escudo} != null)]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$P{escudo}]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="457" y="0" width="115" height="60" uuid="251901d0-b72a-4236-b1b5-f337843bc7c2">
+					<printWhenExpression><![CDATA[new Boolean($P{logo} != null)]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<pageHeader>

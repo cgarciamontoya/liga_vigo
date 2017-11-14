@@ -9,6 +9,8 @@
 	<parameter name="fuerza" class="java.lang.String"/>
 	<parameter name="listaGoleo" class="java.util.List"/>
 	<parameter name="listaTabla" class="java.util.List"/>
+	<parameter name="logo" class="java.io.InputStream"/>
+	<parameter name="escudo" class="java.io.InputStream"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -42,6 +44,18 @@
 				</textElement>
 				<text><![CDATA[VILLA GONZALEZ ORTEGA]]></text>
 			</staticText>
+			<image isUsingCache="false">
+				<reportElement x="0" y="0" width="115" height="60" uuid="30356a4f-474d-4520-b7f7-bf8a1a1ec945">
+					<printWhenExpression><![CDATA[new Boolean($P{escudo} != null)]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$P{escudo}]]></imageExpression>
+			</image>
+			<image isUsingCache="false">
+				<reportElement x="457" y="0" width="115" height="60" uuid="5bb6dabe-d60c-4cc4-8bb7-38b938984b85">
+					<printWhenExpression><![CDATA[new Boolean($P{logo} != null)]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<pageHeader>

@@ -269,7 +269,18 @@ public class EquipoAltaJugadoresVista extends FormBase {
                 CedulaVO c = new CedulaVO();
                 c.setIdJugador(Integer.parseInt(modelo.getValueAt(i, 0).toString()));
                 if (modelo.getValueAt(i, 2) != null) {
-                    c.setNumero(modelo.getValueAt(i, 2).toString());
+                    String numTabla = modelo.getValueAt(i, 2).toString().toUpperCase();
+                    try {
+                        Integer.parseInt(numTabla);
+                        c.setNumero(numTabla);
+                    } catch (NumberFormatException ex) {
+                        if (!numTabla.equalsIgnoreCase("dt") && !numTabla.equalsIgnoreCase("aux")) {
+                            agregarMensajeAdvertencia("Solo se deben especificar numeros o los valores DT o AUX");
+                            return;
+                        } else {
+                            c.setNumero(numTabla);
+                        }
+                    }
                     if (numeros.containsKey(c.getNumero())) {
                         agregarMensajeAdvertencia("El número " + c.getNumero() + " se encuentra duplicado");
                         return;

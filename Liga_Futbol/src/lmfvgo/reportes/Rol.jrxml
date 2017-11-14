@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Rol" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="603d7879-5c8b-40eb-a31e-2d9acec6ef0a">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="logo" class="java.io.InputStream"/>
+	<parameter name="escudo" class="java.io.InputStream"/>
+	<parameter name="fuerza" class="java.lang.String"/>
+	<field name="jornada" class="java.lang.Integer"/>
+	<field name="juegos" class="java.util.List"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="78" splitType="Stretch">
+			<staticText>
+				<reportElement x="148" y="18" width="284" height="18" uuid="363403cc-aa59-41c3-a582-a2206fdaa136"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA["HACIENDA EL CARRO"]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="148" y="36" width="284" height="18" uuid="4e79a586-708c-4271-aa69-def80be4656f"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[VILLA GONZALEZ ORTEGA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="148" y="0" width="284" height="18" uuid="cf5186b3-9fb2-4e2f-b082-431d64d146bd"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[LIGA MUNICIPAL DE FUTBOL]]></text>
+			</staticText>
+			<image isUsingCache="false">
+				<reportElement x="0" y="0" width="115" height="60" uuid="db6a13b3-f88c-49cd-81ba-fc116a6f1244">
+					<printWhenExpression><![CDATA[new Boolean($P{escudo} != null)]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$P{escudo}]]></imageExpression>
+			</image>
+			<image isUsingCache="false">
+				<reportElement x="457" y="0" width="115" height="60" uuid="d90781c7-02d0-42e5-9240-1c426ebc46da">
+					<printWhenExpression><![CDATA[new Boolean($P{logo} != null)]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="152" y="58" width="280" height="20" uuid="6a082e2d-617c-4fe7-966f-38800827eb55"/>
+				<textFieldExpression><![CDATA[$P{fuerza}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="45" splitType="Stretch">
+			<staticText>
+				<reportElement x="1" y="0" width="51" height="20" uuid="a4e7babc-80d4-407c-a0ae-21953c0e6442"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[JORNADA]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="52" y="0" width="100" height="20" uuid="bb0f2c93-6c66-4ae6-b5bd-4947b0a216cd"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jornada}]]></textFieldExpression>
+			</textField>
+			<subreport isUsingCache="false">
+				<reportElement x="1" y="20" width="571" height="20" uuid="7663938c-d659-40b4-84c4-fa2d11fd270e"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{juegos})]]></dataSourceExpression>
+				<subreportExpression><![CDATA["lmfvgo/reportes/Rol_subreport.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement x="452" y="5" width="80" height="20" uuid="45c8e920-a4dc-43fb-9807-e68ecadb78bb"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="532" y="5" width="40" height="20" uuid="23a82c60-c13e-4bec-b78a-b8269cdef6e5"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

@@ -3,6 +3,8 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<parameter name="logo" class="java.io.InputStream"/>
+	<parameter name="escudo" class="java.io.InputStream"/>
 	<field name="clave" class="java.lang.String"/>
 	<field name="descripcion" class="java.lang.String"/>
 	<field name="sancionJuegos" class="java.lang.Integer"/>
@@ -40,6 +42,18 @@
 				</textElement>
 				<text><![CDATA[LIGA MUNICIPAL DE FUTBOL]]></text>
 			</staticText>
+			<image isUsingCache="false">
+				<reportElement x="0" y="0" width="115" height="60" uuid="db6a13b3-f88c-49cd-81ba-fc116a6f1244">
+					<printWhenExpression><![CDATA[new Boolean($P{escudo} != null)]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$P{escudo}]]></imageExpression>
+			</image>
+			<image isUsingCache="false">
+				<reportElement x="457" y="0" width="115" height="60" uuid="d90781c7-02d0-42e5-9240-1c426ebc46da">
+					<printWhenExpression><![CDATA[new Boolean($P{logo} != null)]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<columnHeader>

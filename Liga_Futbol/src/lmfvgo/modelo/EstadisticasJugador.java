@@ -25,6 +25,8 @@ public class EstadisticasJugador implements Serializable {
     private String nombreJugador;
     private String nombreEquipo;
     private int posicion;
+    
+    private String numero;
 
     public EstadisticasJugador() {
     }
@@ -117,6 +119,16 @@ public class EstadisticasJugador implements Serializable {
     public void setNombreEquipo(String nombreEquipo) {
         this.nombreEquipo = nombreEquipo;
     }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
+    
+    
     
     @Override
     public int hashCode() {

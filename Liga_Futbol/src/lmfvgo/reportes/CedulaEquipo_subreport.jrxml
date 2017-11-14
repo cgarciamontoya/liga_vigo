@@ -5,8 +5,9 @@
 	<property name="ireport.y" value="0"/>
 	<field name="nombre" class="java.lang.String"/>
 	<field name="equipo" class="java.lang.String"/>
-	<field name="numero" class="java.lang.Integer"/>
+	<field name="numero" class="java.lang.String"/>
 	<field name="equipoAnterior" class="java.lang.String"/>
+	<field name="foto" class="java.io.InputStream"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -15,53 +16,43 @@
 			<rectangle>
 				<reportElement mode="Transparent" x="0" y="0" width="283" height="139" uuid="db6b8cc9-0e00-439e-976f-b4acd5615a2c"/>
 			</rectangle>
-			<staticText>
-				<reportElement x="1" y="1" width="57" height="20" uuid="29bfa23a-5637-4acf-86a6-a0e465cad57c"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Nombre:]]></text>
-			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="58" y="1" width="224" height="20" uuid="b16b6ee9-1f29-40fc-8db3-07a91dc71881"/>
+				<reportElement x="100" y="1" width="182" height="20" uuid="b16b6ee9-1f29-40fc-8db3-07a91dc71881"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="58" y="21" width="224" height="1" uuid="44f504db-913e-4098-aacb-7705fbde17bc"/>
+				<reportElement x="100" y="21" width="182" height="1" uuid="44f504db-913e-4098-aacb-7705fbde17bc"/>
 			</line>
-			<staticText>
-				<reportElement x="1" y="23" width="57" height="20" uuid="fdf91a33-9a5f-47b9-989b-2703aeea7b8f"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Equipo:]]></text>
-			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="58" y="23" width="224" height="20" uuid="56408e1b-368e-4c20-a7f4-c91ecfc95cdc"/>
+				<reportElement x="100" y="23" width="182" height="20" uuid="56408e1b-368e-4c20-a7f4-c91ecfc95cdc"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{equipo}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="58" y="43" width="224" height="1" uuid="7de08480-d15a-4d78-9ab7-261b46d1fceb"/>
+				<reportElement x="100" y="43" width="182" height="1" uuid="7de08480-d15a-4d78-9ab7-261b46d1fceb"/>
 			</line>
 			<staticText>
-				<reportElement x="1" y="44" width="57" height="20" uuid="7d333be3-287e-4d2c-8b57-e7a623551c92"/>
+				<reportElement x="58" y="44" width="42" height="20" uuid="7d333be3-287e-4d2c-8b57-e7a623551c92"/>
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Número:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="58" y="44" width="224" height="20" uuid="7fc151a7-7185-4ea2-a356-2153dfe6b5b2">
-					<printWhenExpression><![CDATA[new Boolean($F{numero} != null && $F{numero}.intValue() > 0)]]></printWhenExpression>
+				<reportElement x="100" y="44" width="54" height="20" uuid="7fc151a7-7185-4ea2-a356-2153dfe6b5b2">
+					<printWhenExpression><![CDATA[new Boolean($F{numero} != null && !$F{numero}.isEmpty())]]></printWhenExpression>
 				</reportElement>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{numero}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="58" y="63" width="224" height="1" uuid="8f8f4e17-0506-4341-b6ea-4f1e264f2230"/>
+				<reportElement x="100" y="64" width="54" height="1" uuid="8f8f4e17-0506-4341-b6ea-4f1e264f2230"/>
 			</line>
 			<staticText>
-				<reportElement x="1" y="64" width="57" height="20" uuid="e0be2e5b-af00-4853-8bf5-d3c23dfac023"/>
+				<reportElement x="154" y="44" width="57" height="20" uuid="e0be2e5b-af00-4853-8bf5-d3c23dfac023"/>
 				<text><![CDATA[Equipo Ant.:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="58" y="64" width="224" height="20" uuid="8c5be496-614e-45ae-b934-a2c320623501"/>
+				<reportElement x="211" y="44" width="71" height="20" uuid="8c5be496-614e-45ae-b934-a2c320623501"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{equipoAnterior}]]></textFieldExpression>
 			</textField>
@@ -74,8 +65,24 @@
 				<text><![CDATA[Firma]]></text>
 			</staticText>
 			<line>
-				<reportElement x="58" y="83" width="224" height="1" uuid="dee9dfbb-34a3-4e1a-a0c4-26c8a09fe97f"/>
+				<reportElement x="211" y="64" width="71" height="1" uuid="dee9dfbb-34a3-4e1a-a0c4-26c8a09fe97f"/>
 			</line>
+			<image scaleImage="FillFrame">
+				<reportElement x="1" y="1" width="57" height="63" uuid="9e044bd0-dc1b-4bb0-b6b2-b3ed9a0c8efe">
+					<printWhenExpression><![CDATA[new Boolean($F{foto} != null)]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$F{foto}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="58" y="1" width="42" height="20" uuid="dbb035f6-2b10-431e-b02c-55bfe95af84c"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<text><![CDATA[Nombre:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="58" y="23" width="42" height="20" uuid="d9ef7195-3326-4aa3-af91-1c9feb7a5e16"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<text><![CDATA[Equipo:]]></text>
+			</staticText>
 		</band>
 	</detail>
 </jasperReport>

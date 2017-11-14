@@ -10,6 +10,7 @@
  */
 package lmfvgo.reportes.vo;
 
+import java.io.InputStream;
 import java.io.Serializable;
 
 public class CedulaVO implements Serializable {
@@ -27,6 +28,7 @@ public class CedulaVO implements Serializable {
     private String numero;
     private String equipoAnterior;
     private Integer idJugador;
+    private InputStream foto;
 
     public String getNombre() {
         return nombre;
@@ -67,6 +69,13 @@ public class CedulaVO implements Serializable {
     public void setIdJugador(Integer idJugador) {
         this.idJugador = idJugador;
     }
-    
 
+    public InputStream getFoto() {
+        return foto;
+    }
+
+    public void setFoto(InputStream foto) {
+        this.foto = foto;
+    }
+    
 }

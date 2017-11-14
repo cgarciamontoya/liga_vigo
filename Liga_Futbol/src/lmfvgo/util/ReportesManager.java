@@ -41,30 +41,37 @@ public class ReportesManager {
     
     public void reglamento(List<Reglamento> lista) throws LMFVGOException {
         Map<String, Object> parametros = new HashMap<>();
-        
+        getLogos(parametros);
         String nombrePdf = URL_REPORTES + "Reglamento.pdf";
         exportar(REPORTE_REGLAMENTO, parametros, nombrePdf, lista);
         abrirPdf(nombrePdf);
     }
     
+    private void getLogos(Map<String, Object> parametros) {
+        parametros.put("logo", ReportesManager.class.getResourceAsStream("/lmfvgo/reportes/logo_1.png"));
+        parametros.put("escudo", ReportesManager.class.getResourceAsStream("/lmfvgo/reportes/escudo.jpg"));
+    }
+    
     public void cedulaEquipo(List<CedulaVO> lista, String equipo) throws LMFVGOException {
-        if (lista.size() < 24) {
-            for (int i = lista.size(); i < 24; i++) {
+        if (lista.size() < 20) {
+            for (int i = lista.size(); i < 20; i++) {
                 lista.add(new CedulaVO(equipo));
             }
         }
         List<CedulaVO> lista1 = new ArrayList<>();
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < 10; i++) {
             lista1.add(lista.get(i));
         }
         List<CedulaVO> lista2 = new ArrayList<>();
-        for (int i = 12; i < 24; i++) {
+        for (int i = 10; i < 20; i++) {
             lista2.add(lista.get(i));
         }
         
         Map<String, Object> parametros = new HashMap<>();
         parametros.put("lista1", lista1);
         parametros.put("lista2", lista2);
+        parametros.put("equipo", equipo);
+        getLogos(parametros);
         
         String nombrePdf = URL_REPORTES + "Cedula_" + equipo + ".pdf";
         exportar(REPORTE_CEDULA, parametros, nombrePdf);
@@ -93,6 +100,7 @@ public class ReportesManager {
         parametros.put("lugar", juego.getLugar());
         parametros.put("listaLocal", local);
         parametros.put("listaVisitante", visitante);
+        getLogos(parametros);
         
         String nombrePdf = URL_REPORTES + "J" + juego.getJornada() + "_" + juego.getLocalNombre() + "_VS_" + juego.getVisitanteNombre() + ".pdf";
         exportar(REPORTE_CEDULA_JUEGO, parametros, nombrePdf);
@@ -105,7 +113,7 @@ public class ReportesManager {
         parametros.put("fuerza", fuerza == 1 ? "Primera Fuerza" : "Segunda Fuerza");
         parametros.put("listaTabla", ee);
         parametros.put("listaGoleo", goleo);
-        
+        getLogos(parametros);
         String nombrePdf = URL_REPORTES + "Tabla_" + (fuerza == 1 ? "Primera" : "Segunda") + ".pdf";
         exportar(REPORTE_TABLA_GENERAL, parametros, nombrePdf);
         abrirPdf(nombrePdf);
@@ -145,7 +153,4 @@ public class ReportesManager {
         }
     }
     
-    private InputStream getLogo() {
-        return ReportesManager.class.getResourceAsStream("/reportes/logo_cobaez.jpg");
-    }
 }

@@ -251,7 +251,7 @@ public class JugadoresDAO extends BaseDAO {
                 }
                 c.setEquipo(rs.getString("equipo_nombre"));
                 c.setFuerza(rs.getInt("fuerza") == 1 ? "Primera" : "Segunda");
-                c.setNumero(rs.getInt("numero"));
+                c.setNumero(rs.getString("numero"));
                 c.setPresidente(torneo.getPresidente());
                 c.setSecretario(torneo.getSecretario());
                 credenciales.add(c);
@@ -268,7 +268,7 @@ public class JugadoresDAO extends BaseDAO {
             PreparedStatement ps = null;
             sb = new StringBuilder();
             sb.append("select concat(j.nombre, ' ', j.paterno, ' ', j.materno) jugador_nombre, j.imagen, ")
-                .append("e.nombre equipo_nombre, e.fuerza, rel.numero ")
+                .append("e.nombre equipo_nombre, e.fuerza, rel.numero, j.imagen ")
                 .append("from jugadores j left join rel_equipo_jugadores rel on rel.id_jugador = j.id_jugador ")
                 .append("inner join equipos e on e.id_equipo = rel.id_equipo ");
                 sb.append("where e.id_equipo = ? order by jugador_nombre");
@@ -282,6 +282,10 @@ public class JugadoresDAO extends BaseDAO {
                 c.setNombre(rs.getString("jugador_nombre"));
                 c.setEquipo(rs.getString("equipo_nombre"));
                 c.setNumero(rs.getString("numero"));
+                byte[] foto = rs.getBytes("imagen");
+                if (foto != null && foto.length > 0) {
+                    c.setFoto(new ByteArrayInputStream(foto));
+                }
                 credenciales.add(c);
             }
             return credenciales;

@@ -8,9 +8,63 @@
 	</parameter>
 	<parameter name="lista1" class="java.util.List"/>
 	<parameter name="lista2" class="java.util.List"/>
+	<parameter name="logo" class="java.io.InputStream"/>
+	<parameter name="escudo" class="java.io.InputStream"/>
+	<parameter name="equipo" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
+	<title>
+		<band height="78">
+			<image isUsingCache="false">
+				<reportElement x="457" y="0" width="115" height="60" uuid="50436938-e7ce-432a-8927-f657726e6530">
+					<printWhenExpression><![CDATA[new Boolean($P{logo} != null)]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="148" y="0" width="284" height="18" uuid="2503443e-da73-46c1-adc5-e17c09f28672"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[LIGA MUNICIPAL DE FUTBOL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="148" y="36" width="284" height="18" uuid="5de7112f-7d86-449a-9aea-f28add9f99d6"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[VILLA GONZALEZ ORTEGA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="148" y="18" width="284" height="18" uuid="787808fe-4a7d-4b02-83e5-1f2e7a532d36"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA["HACIENDA EL CARRO"]]></text>
+			</staticText>
+			<image isUsingCache="false">
+				<reportElement x="0" y="0" width="115" height="60" uuid="067a2a18-f284-4d5f-b1e5-8b9d50a46bf2">
+					<printWhenExpression><![CDATA[new Boolean($P{escudo} != null)]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$P{escudo}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="148" y="58" width="137" height="20" uuid="b0fe5322-956a-42a7-8f52-aab19bf0c3b6"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[CÉDULA INSCRIPCIÓN]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="283" y="58" width="149" height="20" uuid="ebba4998-804b-469a-83d7-a0c20791c6dd"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{equipo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
 	<detail>
 		<band height="140">
 			<subreport>

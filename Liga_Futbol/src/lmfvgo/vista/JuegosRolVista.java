@@ -6,7 +6,6 @@
 
 package lmfvgo.vista;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import javax.swing.table.DefaultTableModel;
@@ -17,7 +16,6 @@ import lmfvgo.excepciones.LMFVGOException;
 import lmfvgo.modelo.Equipos;
 import lmfvgo.modelo.Juegos;
 import lmfvgo.modelo.Torneo;
-import lmfvgo.util.ConstantesUtil;
 import lmfvgo.util.GeneradorRolJuegos;
 
 /**

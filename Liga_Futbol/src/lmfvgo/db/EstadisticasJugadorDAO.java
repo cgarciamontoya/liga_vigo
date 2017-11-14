@@ -29,8 +29,9 @@ public class EstadisticasJugadorDAO extends BaseDAO {
     public List<EstadisticasJugador> consultarEstadisticasJuego(Integer idEquipo, Integer idJuego) {
         sb = new StringBuilder();
         sb.append("select ej.id_estadistica, ej.id_jugador, ej.id_juego, ej.goles, ej.ta, ej.tr, ej.inicio_cambio_nj, ej.id_equipo, ")
-                .append("concat(j.id_jugador, ' - ',j.nombre, ' ', j.paterno, ' ', j.materno) jugador_nombre ")
+                .append("concat(j.id_jugador, ' - ',j.nombre, ' ', j.paterno, ' ', j.materno) jugador_nombre, rel.numero ")
                 .append("from estadisticas_jugador ej inner join jugadores j on j.id_jugador = ej.id_jugador ")
+                .append("left join rel_equipo_jugadores rel on rel.id_jugador = j.id_jugador ")
                 .append("where ej.id_equipo = ? and ej.id_juego = ?");
         try {
             PreparedStatement ps = getConnection().prepareStatement(sb.toString());
@@ -51,6 +52,7 @@ public class EstadisticasJugadorDAO extends BaseDAO {
                 est.setInicioCambioNj(rs.getString("inicio_cambio_nj"));
                 est.setIdEquipo(rs.getInt("id_equipo"));
                 est.setNombreJugador(rs.getString("jugador_nombre"));
+                est.setNumero(rs.getString("numero"));
                 estadisticas.add(est);
             }
             return estadisticas;

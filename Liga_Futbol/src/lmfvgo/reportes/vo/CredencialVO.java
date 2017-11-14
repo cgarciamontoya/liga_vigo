@@ -18,7 +18,7 @@ public class CredencialVO implements Serializable {
     private String nombre;
     private String equipo;
     private String fuerza;
-    private Integer numero;
+    private String numero;
     private Integer folio;
     private InputStream foto;
     private String presidente;
@@ -48,11 +48,11 @@ public class CredencialVO implements Serializable {
         this.fuerza = fuerza;
     }
 
-    public Integer getNumero() {
+    public String getNumero() {
         return numero;
     }
 
-    public void setNumero(Integer numero) {
+    public void setNumero(String numero) {
         this.numero = numero;
     }
 

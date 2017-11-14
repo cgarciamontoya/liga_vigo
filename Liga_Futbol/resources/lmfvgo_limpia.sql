@@ -52,7 +52,7 @@ CREATE TABLE `estadisticas_equipo` (
   KEY `fk_eq_equipo_idx` (`id_equipo`),
   CONSTRAINT `fk_eq_equipo` FOREIGN KEY (`id_equipo`) REFERENCES `equipos` (`id_equipo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_eq_juego` FOREIGN KEY (`id_juego`) REFERENCES `juegos` (`id_juego`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -78,7 +78,7 @@ CREATE TABLE `estadisticas_jugador` (
   CONSTRAINT `fk_estadistica_juego` FOREIGN KEY (`id_juego`) REFERENCES `juegos` (`id_juego`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_estadistica_jugador` FOREIGN KEY (`id_jugador`) REFERENCES `jugadores` (`id_jugador`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_estadisticas_jug_equipo` FOREIGN KEY (`id_equipo`) REFERENCES `equipos` (`id_equipo`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -100,6 +100,7 @@ CREATE TABLE `juegos` (
   `fuerza` int(11) NOT NULL,
   `marcador` varchar(5) DEFAULT NULL,
   `hora` varchar(5) DEFAULT NULL,
+  `cerrado` int(11) DEFAULT '0',
   PRIMARY KEY (`id_juego`),
   KEY `fk_juego_torneo_idx` (`id_torneo`),
   KEY `fk_local_equipo_idx` (`local`),
@@ -127,7 +128,7 @@ CREATE TABLE `jugadores` (
   `fecha_registro` date NOT NULL,
   `imagen` blob,
   PRIMARY KEY (`id_jugador`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -158,7 +159,7 @@ CREATE TABLE `rel_equipo_jugadores` (
   `id_equipo` int(11) NOT NULL,
   `id_jugador` int(11) NOT NULL,
   `id_torneo` int(11) NOT NULL,
-  `numero` int(11) DEFAULT NULL,
+  `numero` varchar(3) DEFAULT NULL,
   KEY `fk_torneo_ej_idx` (`id_torneo`),
   KEY `fk_ej_equipo_idx` (`id_equipo`),
   KEY `fk_ej_jugador_idx` (`id_jugador`),
@@ -239,4 +240,4 @@ CREATE TABLE `torneo` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-11-01 12:28:16
+-- Dump completed on 2017-11-13 14:22:52
