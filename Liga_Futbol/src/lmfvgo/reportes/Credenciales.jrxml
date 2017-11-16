@@ -8,22 +8,33 @@
 	</parameter>
 	<parameter name="lista1" class="java.util.List"/>
 	<parameter name="lista2" class="java.util.List"/>
+	<parameter name="logo" class="java.io.InputStream"/>
+	<parameter name="escudo" class="java.io.InputStream"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
 		<band height="140">
 			<subreport>
-				<reportElement x="0" y="0" width="243" height="140" uuid="bab03d3d-991e-4464-ae7f-5049e783b0c8"/>
+				<reportElement x="0" y="0" width="270" height="140" uuid="bab03d3d-991e-4464-ae7f-5049e783b0c8"/>
+				<subreportParameter name="logo">
+					<subreportParameterExpression><![CDATA[$P{logo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="escudo">
+					<subreportParameterExpression><![CDATA[$P{escudo}]]></subreportParameterExpression>
+				</subreportParameter>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{lista1})]]></dataSourceExpression>
 				<subreportExpression><![CDATA["lmfvgo/reportes/Credenciales_subreport.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement x="329" y="0" width="243" height="140" uuid="0e5ed70b-7147-4dca-bd97-95eb79b05fbf">
+				<reportElement x="302" y="0" width="270" height="140" uuid="0e5ed70b-7147-4dca-bd97-95eb79b05fbf">
 					<printWhenExpression><![CDATA[new Boolean($P{lista2} != null && !$P{lista2}.isEmpty())]]></printWhenExpression>
 				</reportElement>
-				<subreportParameter name="lista">
-					<subreportParameterExpression><![CDATA[$P{lista2}]]></subreportParameterExpression>
+				<subreportParameter name="logo">
+					<subreportParameterExpression><![CDATA[$P{logo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="escudo">
+					<subreportParameterExpression><![CDATA[$P{escudo}]]></subreportParameterExpression>
 				</subreportParameter>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{lista2})]]></dataSourceExpression>
 				<subreportExpression><![CDATA["lmfvgo/reportes/Credenciales_subreport.jasper"]]></subreportExpression>

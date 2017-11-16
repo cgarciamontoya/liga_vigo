@@ -23,6 +23,7 @@ public class CredencialVO implements Serializable {
     private InputStream foto;
     private String presidente;
     private String secretario;
+    private String tesorero;
 
     public String getNombre() {
         return nombre;
@@ -86,6 +87,14 @@ public class CredencialVO implements Serializable {
 
     public void setSecretario(String secretario) {
         this.secretario = secretario;
+    }
+
+    public String getTesorero() {
+        return tesorero;
+    }
+
+    public void setTesorero(String tesorero) {
+        this.tesorero = tesorero;
     }
     
     

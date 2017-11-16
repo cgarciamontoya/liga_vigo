@@ -260,6 +260,7 @@ public class JugadoresDAO extends BaseDAO {
                 c.setNumero(rs.getString("numero"));
                 c.setPresidente(torneo.getPresidente());
                 c.setSecretario(torneo.getSecretario());
+                c.setTesorero(torneo.getTesorero());
                 credenciales.add(c);
             }
             return credenciales;

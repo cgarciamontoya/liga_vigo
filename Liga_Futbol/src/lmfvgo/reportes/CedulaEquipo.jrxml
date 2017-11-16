@@ -41,7 +41,7 @@
 				<textElement textAlignment="Center">
 					<font size="12" isBold="true" isItalic="true"/>
 				</textElement>
-				<text><![CDATA["HACIENDA EL CARRO"]]></text>
+				<text><![CDATA[HACIENDA "EL CARRO"]]></text>
 			</staticText>
 			<image isUsingCache="false">
 				<reportElement x="0" y="0" width="115" height="60" uuid="067a2a18-f284-4d5f-b1e5-8b9d50a46bf2">

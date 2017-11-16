@@ -63,7 +63,7 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         mnuConfParam = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Liga Municipal de Futbol \"Hacienda El Carro\" Villa González Ortega");
+        setTitle("Liga Municipal de Futbol Hacienda \"El Carro\" Villa González Ortega");
         setPreferredSize(new java.awt.Dimension(1200, 700));
         setResizable(false);
 
@@ -229,6 +229,8 @@ public class LigaFutbolMain extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 479, Short.MAX_VALUE)
         );
+
+        getAccessibleContext().setAccessibleName("Liga Municipal de Futbol Hacienda \"El Carro\" Villa González Ortega");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

@@ -18,6 +18,7 @@ import lmfvgo.modelo.EstadisticasEquipo;
 import lmfvgo.modelo.EstadisticasJugador;
 import lmfvgo.modelo.Juegos;
 import lmfvgo.modelo.Reglamento;
+import lmfvgo.modelo.Sancion;
 import lmfvgo.reportes.vo.CedulaVO;
 import lmfvgo.reportes.vo.CredencialVO;
 import lmfvgo.reportes.vo.RolVO;
@@ -40,6 +41,15 @@ public class ReportesManager {
     private static final String REPORTE_CEDULA = "/lmfvgo/reportes/CedulaEquipo.jasper";
     private static final String REPORTE_REGLAMENTO = "/lmfvgo/reportes/Reglamento.jasper";
     private static final String REPORTE_ROL = "/lmfvgo/reportes/Rol.jasper";
+    private static final String REPORTE_SANCIONES = "/lmfvgo/reportes/Sanciones.jasper";
+    
+    public void sanciones(List<Sancion> sanciones) throws LMFVGOException {
+        Map<String, Object> parametros = new HashMap<>();
+        getLogos(parametros);
+        String nombrePdf = URL_REPORTES + "Sanciones.pdf";
+        exportar(REPORTE_SANCIONES, parametros, nombrePdf, sanciones);
+        abrirPdf(nombrePdf);
+    }
     
     public void rol(List<RolVO> rol, int fuerza) throws LMFVGOException {
         Map<String, Object> parametros = new HashMap<>();
@@ -93,6 +103,7 @@ public class ReportesManager {
         Map<String, Object> parametros = new HashMap<>();
         parametros.put("lista1", lista1);
         parametros.put("lista2", lista2);
+        getLogos(parametros);
         
         String nombrePdf = URL_REPORTES + "Credenciales.pdf";
         exportar(REPORTE_CREDENCIALES, parametros, nombrePdf);

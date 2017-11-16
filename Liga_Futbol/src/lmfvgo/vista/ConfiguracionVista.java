@@ -62,7 +62,6 @@ public class ConfiguracionVista extends FormBase {
             g2d.addRenderingHints(new RenderingHints(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY));
             g2d.drawImage(ii.getImage(), 0, 0, WIDTH, HEIGHT, null);
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
         return bi;
