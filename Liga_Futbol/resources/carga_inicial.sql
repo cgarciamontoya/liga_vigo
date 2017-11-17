@@ -1,4 +1,6 @@
 insert into equipos(nombre, fuerza, fecha_registro) values
+('DESCANSA', 1, '2017-11-11'),
+('DESCANSA', 2, '2017-11-11'),
 ('ROSTICERIA EL POLLITO', 1, '2017-11-11'),
 ('EL CARRO', 1, '2017-11-11'),
 ('AGUILAS REALES', 1, '2017-11-11'),
@@ -11,7 +13,7 @@ insert into equipos(nombre, fuerza, fecha_registro) values
 ('TOROS', 1, '2017-11-11'),
 ('COLONIA', 1, '2017-11-11'),
 ('LIRAS', 1, '2017-11-11'),
-('18 PRIMOS', 1, '2017-11-11')
+('18 PRIMOS', 1, '2017-11-11');
 
 insert into jugadores(nombre, paterno, materno, fecha_nacimiento, lugar_procedencia, fecha_registro) values
 ('HECTOR','ARTEAGA','SALAZAR','1990-12-12','FRANCISCO I MADERO','2017-11-10'),
@@ -33,4 +35,4 @@ insert into jugadores(nombre, paterno, materno, fecha_nacimiento, lugar_proceden
 ('ABELARDO','SIFUENTES','GUZMAN','1980-06-03','VILLA GONZALEZ ORTEGA','2017-11-10'),
 ('ANTONIO','ORNELAS','HERNANDEZ','1989-05-09','VILLA GONZALEZ ORTEGA','2017-11-10'),
 ('ISAAC','ORNELAS','HERNANDEZ','1986-02-03','VILLA GONZALEZ ORTEGA','2017-11-10'),
-('WILIBALDO','MOTA','DEL CAMPO','1986-04-08','VILLA GONZALEZ ORTEGA','2017-11-10')
+('WILIBALDO','MOTA','DEL CAMPO','1986-04-08','VILLA GONZALEZ ORTEGA','2017-11-10');
