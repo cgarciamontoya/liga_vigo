@@ -18,6 +18,7 @@ import lmfvgo.modelo.Equipos;
 import lmfvgo.modelo.Juegos;
 import lmfvgo.modelo.Torneo;
 import lmfvgo.reportes.vo.RolVO;
+import lmfvgo.util.ConstantesUtil;
 import lmfvgo.util.GeneradorRolJuegos;
 import lmfvgo.util.ReportesManager;
 
@@ -211,9 +212,25 @@ public class JuegosRolVista extends FormBase {
 
     private void llenarRol() {
         DefaultTableModel modelo = (DefaultTableModel) tblRol.getModel();
-        for (Integer jornada : rol.keySet()) {
+        int jornada = 1;
+        int totalJornadas = juegosDAO.getTotalJornadas(cboFuerza.getSelectedIndex());
+        while (jornada <= totalJornadas) {
             List<Juegos> juegos = rol.get(jornada);
-            modelo.addRow(new Object[]{("Jornada " + jornada), ""});
+            String jornadaTitulo = "";
+            switch (jornada) {
+                case ConstantesUtil.JORNADA_CUARTOS :
+                    jornadaTitulo = "CUARTOS DE FINAL";
+                    break;
+                case ConstantesUtil.JORNADA_SEMIS : 
+                    jornadaTitulo = "SEMIFINAL";
+                    break;
+                case ConstantesUtil.JORNADA_FINAL:
+                    jornadaTitulo = "FINAL";
+                    break;
+                default:
+                    jornadaTitulo = String.valueOf(jornada);
+            }
+            modelo.addRow(new Object[]{("Jornada " + jornadaTitulo), ""});
             int jgoDesc = -1;
             for (int i = 0; i < juegos.size(); i++) {
                 Juegos juego = juegos.get(i);
@@ -232,6 +249,7 @@ public class JuegosRolVista extends FormBase {
                     modelo.addRow(new Object[]{juego.getVisitanteNombre(), juego.getLocalNombre()});
                 }
             }
+            jornada++;
         }
     }
     private void limpiar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_limpiar
@@ -279,11 +297,18 @@ public class JuegosRolVista extends FormBase {
         if (tblRol.getRowCount() > 0) {
             List<RolVO> reporte = new ArrayList<>();
             DefaultTableModel model = (DefaultTableModel) tblRol.getModel();
-            int jornada = 0;
+            String jornada = "";
             for (int i = 0; i < model.getRowCount(); i++) {
                 RolVO juego = new RolVO();
                 if (model.getValueAt(i, 0).toString().toLowerCase().startsWith("jornada")) {
-                    jornada = Integer.parseInt(model.getValueAt(i, 0).toString().split(" ")[1]);
+                    String[] datos = model.getValueAt(i, 0).toString().split(" ");
+                    jornada = datos[1];
+                    if (datos.length > 2) {
+                        for (int idx = 2; idx < datos.length; idx++) {
+                            jornada += " " + datos[idx];
+                        }
+                    }
+                    
                     continue;
                 }
                 juego.setJornada(jornada);

@@ -15,15 +15,15 @@ import java.io.Serializable;
 public class RolVO implements Serializable {
     private static final long serialVersionUID = 5065207672341058071L;
 
-    private int jornada;
+    private String jornada;
     private String local;
     private String visitante;
 
-    public int getJornada() {
+    public String getJornada() {
         return jornada;
     }
 
-    public void setJornada(int jornada) {
+    public void setJornada(String jornada) {
         this.jornada = jornada;
     }
 

@@ -6,7 +6,7 @@
 	<parameter name="logo" class="java.io.InputStream"/>
 	<parameter name="escudo" class="java.io.InputStream"/>
 	<parameter name="fuerza" class="java.lang.String"/>
-	<field name="jornada" class="java.lang.Integer"/>
+	<field name="jornada" class="java.lang.String"/>
 	<field name="local" class="java.lang.String"/>
 	<field name="visitante" class="java.lang.String"/>
 	<group name="jornada">
@@ -16,7 +16,7 @@
 				<rectangle>
 					<reportElement x="1" y="0" width="571" height="20" printWhenGroupChanges="jornada" backcolor="#00FFFF" uuid="110942ca-4b48-4dbf-ba1b-7a3b6d0c62d0"/>
 				</rectangle>
-				<textField>
+				<textField isStretchWithOverflow="true">
 					<reportElement x="0" y="0" width="572" height="20" uuid="bb0f2c93-6c66-4ae6-b5bd-4947b0a216cd"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font isBold="true"/>
@@ -41,14 +41,14 @@
 			<staticText>
 				<reportElement x="148" y="36" width="284" height="18" uuid="4e79a586-708c-4271-aa69-def80be4656f"/>
 				<textElement textAlignment="Center">
-					<font size="12" isBold="true" isItalic="false"/>
+					<font size="12" isBold="false" isItalic="false"/>
 				</textElement>
 				<text><![CDATA[VILLA GONZALEZ ORTEGA]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="148" y="0" width="284" height="18" uuid="cf5186b3-9fb2-4e2f-b082-431d64d146bd"/>
 				<textElement textAlignment="Center">
-					<font size="12" isBold="true" isItalic="false"/>
+					<font size="12" isBold="false" isItalic="false"/>
 				</textElement>
 				<text><![CDATA[LIGA MUNICIPAL DE FUTBOL]]></text>
 			</staticText>

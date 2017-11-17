@@ -172,6 +172,52 @@ public class EquiposDAO extends BaseDAO {
         }
     }
     
+    public void guardarEquiposLiguilla(List<Integer> ids) throws LMFVGOException {
+        try {
+            String query = "insert into control_liguilla(id_torneo, id_equipo, eliminado) values (?,?,0)";
+            PreparedStatement ps = getConnection().prepareStatement(query);
+            Integer idTorneo = getIdTorneoActivo();
+            for (Integer id : ids) {
+                ps.setInt(1, idTorneo);
+                ps.setInt(2, id);
+                ps.addBatch();
+            }
+            ps.executeBatch();
+        } catch (SQLException ex) {
+            throw new LMFVGOException("No se pudo guardar la configuracion de la liguilla debido a: " + ex.getMessage());
+        }
+    }
     
+    public void eliminarEquipoLiguilla(int idEquipo) throws LMFVGOException {
+        try {
+            PreparedStatement ps = getConnection().prepareStatement("update contro_liguilla set eliminado = 1 where id_torneo = ? and id_equipo = ?");
+            ps.setInt(1, getIdTorneoActivo());
+            ps.setInt(2, idEquipo);
+            ps.execute();
+        } catch (SQLException ex) {
+            throw new LMFVGOException("No se pudo eliminar el equipo de la liguilla");
+        }
+    }
+    
+    public List<Equipos> consultaEquiposLiguilla(int fuerza) {
+        try {
+            sb = new StringBuilder();
+            sb.append("select e.id_equipo, e.nombre, e.fuerza, e.fecha_registro ")
+                    .append("from equipos e inner join control_liguilla cl on cl.id_equipo = e.id_equipo ")
+                    .append("where cl.eliminado = 0 and cl.id_torneo = ? and e.fuerza = ?");
+            PreparedStatement ps = getConnection().prepareStatement(sb.toString());
+            ps.setInt(1, getIdTorneoActivo());
+            ps.setInt(2, fuerza);
+            
+            ResultSet rs = ps.executeQuery();
+            List<Equipos> equipos = new ArrayList<>();
+            while (rs.next()) {
+                equipos.add(new Equipos(rs.getInt("id_equipo"), rs.getString("nombre"), rs.getInt("fuerza"), rs.getDate("fecha_registro")));
+            }
+            return equipos;
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
     
 }

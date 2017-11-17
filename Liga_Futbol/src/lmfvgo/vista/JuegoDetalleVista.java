@@ -24,6 +24,7 @@ import lmfvgo.modelo.EstadisticasEquipo;
 import lmfvgo.modelo.EstadisticasJugador;
 import lmfvgo.modelo.Juegos;
 import lmfvgo.modelo.Jugadores;
+import lmfvgo.util.ConstantesUtil;
 import lmfvgo.util.ReportesManager;
 
 /**
@@ -98,7 +99,21 @@ public class JuegoDetalleVista extends FormBase {
     }
     
     private void cargarDatosJuego() {
-        setTitle("Jornada " + juego.getJornada() + ": " + juego.getLocalNombre() + " vs " + juego.getVisitanteNombre());
+        String jornadaTitulo = "Jornada ";
+        switch(juego.getJornada()) {
+            case ConstantesUtil.JORNADA_CUARTOS:
+                jornadaTitulo += "CUARTOS DE FINAL";
+                break;
+            case ConstantesUtil.JORNADA_SEMIS:
+                jornadaTitulo += "SEMIFINAL";
+                break;
+            case ConstantesUtil.JORNADA_FINAL:
+                jornadaTitulo += "FINAL";
+                break;
+            default:
+                jornadaTitulo += juego.getJornada();
+        }
+        setTitle(jornadaTitulo + ": " + juego.getLocalNombre() + " vs " + juego.getVisitanteNombre());
         lblLocal.setText(juego.getLocalNombre() + 
                 (estadisticaLocal != null && estadisticaLocal.getIdEstadistica() != null && estadisticaLocal.getIdEstadistica() > 0 ? 
                         (" - " + estadisticaLocal.getGolesFavor()) : ""));
@@ -534,6 +549,7 @@ public class JuegoDetalleVista extends FormBase {
                 estadisticasEquipoDAO.actualizarEstadisticas(estadisticaVisitante);
             }
             agregarMensajeExito("Se guardaron correctamente los registos");
+            this.dispose();
             btnGenerarEsta.setVisible(true);
         } catch (LMFVGOException ex) {
             agregarMensajeError(ex.getMessage());

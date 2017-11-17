@@ -25,14 +25,14 @@
 			<staticText>
 				<reportElement x="148" y="0" width="284" height="18" uuid="2503443e-da73-46c1-adc5-e17c09f28672"/>
 				<textElement textAlignment="Center">
-					<font size="12" isBold="true" isItalic="false"/>
+					<font size="12" isBold="false" isItalic="false"/>
 				</textElement>
 				<text><![CDATA[LIGA MUNICIPAL DE FUTBOL]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="148" y="36" width="284" height="18" uuid="5de7112f-7d86-449a-9aea-f28add9f99d6"/>
 				<textElement textAlignment="Center">
-					<font size="12" isBold="true" isItalic="false"/>
+					<font size="12" isBold="false" isItalic="false"/>
 				</textElement>
 				<text><![CDATA[VILLA GONZALEZ ORTEGA]]></text>
 			</staticText>

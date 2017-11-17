@@ -63,7 +63,7 @@ public class SancionesDAO extends BaseDAO {
         ps.execute();
     }
     
-    public List<Sancion> consultaSanciones(int idEquipo) {
+    public List<Sancion> consultaSanciones(int idEquipo, int fuerza) {
         sb = new StringBuilder();
         sb.append("select s.clave_reglamento, r.descripcion, ")
                 .append("s.id_jugador, concat(j.nombre, ' ', j.paterno, ' ', j.materno) nombre_jugador, ")
@@ -80,7 +80,7 @@ public class SancionesDAO extends BaseDAO {
         }
         sb.append("group by s.id_jugador order by jornada, nombre_equipo, nombre_jugador");
         try {
-            int jornadaActual = getJornadaActual();
+            int jornadaActual = getJornadaActual(fuerza);
             PreparedStatement ps = getConnection().prepareStatement(sb.toString());
             
             ResultSet rs = ps.executeQuery();
@@ -107,7 +107,7 @@ public class SancionesDAO extends BaseDAO {
         }
     }
     
-    public List<Sancion> consultaSancionesJugador(Integer idJugador) {
+    public List<Sancion> consultaSancionesJugador(Integer idJugador, int fuerza) {
         sb = new StringBuilder();
         sb.append("select s.clave_reglamento, r.descripcion, ")
                 .append("s.id_jugador, concat(j.nombre, ' ', j.paterno, ' ', j.materno) nombre_jugador, ")
@@ -117,7 +117,7 @@ public class SancionesDAO extends BaseDAO {
                 .append("inner join jugadores j on j.id_jugador = s.id_jugador ")
                 .append("where s.id_jugador = ? order by clave_reglamento");
         try {
-            int jornadaActual = getJornadaActual();
+            int jornadaActual = getJornadaActual(fuerza);
             PreparedStatement ps = getConnection().prepareStatement(sb.toString());
             ps.setInt(1, idJugador);
             

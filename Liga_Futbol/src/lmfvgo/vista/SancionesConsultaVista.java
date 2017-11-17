@@ -188,7 +188,7 @@ public class SancionesConsultaVista extends FormBase {
         limpiarTabla(tblSanciones);
         sanciones = sancionesDAO.consultaSanciones(
                 cboEquipos.getItemCount() > 0 ?
-                Integer.parseInt(cboEquipos.getSelectedItem().toString().split(" - ")[0]) : 0);
+                Integer.parseInt(cboEquipos.getSelectedItem().toString().split(" - ")[0]) : 0, cboFuerza.getSelectedIndex());
         if (sanciones != null && !sanciones.isEmpty()) {
             DefaultTableModel modelo = (DefaultTableModel) tblSanciones.getModel();
             for (Sancion s : sanciones) {

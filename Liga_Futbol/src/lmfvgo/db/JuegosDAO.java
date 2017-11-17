@@ -57,7 +57,7 @@ public class JuegosDAO extends BaseDAO {
                     .append("l.nombre local_nombre, v.nombre visitante_nombre, j.cerrado ")
                     .append("from juegos j inner join equipos l on l.id_equipo = j.local ")
                     .append("inner join equipos v on v.id_equipo = j.visitante ")
-                    .append("where j.fuerza = ? order by id_juego");
+                    .append("where j.fuerza = ? order by jornada, id_juego");
             PreparedStatement ps = getConnection().prepareStatement(sb.toString());
             ps.setInt(1, fuerza);
             ResultSet rs = ps.executeQuery();
@@ -174,15 +174,17 @@ public class JuegosDAO extends BaseDAO {
         }
     }
     
-    public void cerrarJornada(int jornada) throws LMFVGOException {
+    public void cerrarJornada(int jornada, int fuerza) throws LMFVGOException {
         try {
-            PreparedStatement ps = getConnection().prepareStatement("update juegos set cerrado = 1 where jornada = ? and id_torneo = ?");
+            PreparedStatement ps = getConnection().prepareStatement("update juegos set cerrado = 1 where jornada = ? and id_torneo = ? and fuerza = ?");
             ps.setInt(1, jornada);
             ps.setInt(2, getIdTorneoActivo());
+            ps.setInt(3, fuerza);
             
             ps.execute();
         } catch (SQLException ex) {
             throw new LMFVGOException("No fue posible cerrar la jornada debido a: " + ex.getMessage());
         }
     }
+    
 }

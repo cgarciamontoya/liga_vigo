@@ -6,6 +6,7 @@
 
 package lmfvgo.util;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,7 +14,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lmfvgo.db.ConfiguracionDAO;
 import lmfvgo.excepciones.LMFVGOException;
+import lmfvgo.modelo.Configuracion;
 import lmfvgo.modelo.EstadisticasEquipo;
 import lmfvgo.modelo.EstadisticasJugador;
 import lmfvgo.modelo.Juegos;
@@ -43,6 +46,14 @@ public class ReportesManager {
     private static final String REPORTE_ROL = "/lmfvgo/reportes/Rol.jasper";
     private static final String REPORTE_SANCIONES = "/lmfvgo/reportes/Sanciones.jasper";
     
+    private ConfiguracionDAO configuracionDAO;
+    private Configuracion configuracion;
+
+    public ReportesManager() {
+        configuracionDAO = new ConfiguracionDAO();
+        configuracion = configuracionDAO.consultaConfiguracion();
+    }
+    
     public void sanciones(List<Sancion> sanciones) throws LMFVGOException {
         Map<String, Object> parametros = new HashMap<>();
         getLogos(parametros);
@@ -69,8 +80,15 @@ public class ReportesManager {
     }
     
     private void getLogos(Map<String, Object> parametros) {
-        parametros.put("logo", ReportesManager.class.getResourceAsStream("/lmfvgo/reportes/logo_1.png"));
-        parametros.put("escudo", ReportesManager.class.getResourceAsStream("/lmfvgo/reportes/escudo.jpg"));
+        if (configuracion != null &&
+                configuracion.getLogo() != null && configuracion.getLogo().length > 0 &&
+                configuracion.getEscudo() != null && configuracion.getEscudo().length > 0) {
+            parametros.put("logo", new ByteArrayInputStream(configuracion.getLogo()));
+            parametros.put("escudo", new ByteArrayInputStream(configuracion.getEscudo()));
+        } else {
+            parametros.put("logo", ReportesManager.class.getResourceAsStream("/lmfvgo/reportes/logo_1.png"));
+            parametros.put("escudo", ReportesManager.class.getResourceAsStream("/lmfvgo/reportes/escudo.jpg"));
+        }
     }
     
     public void cedulaEquipo(List<CedulaVO> lista, String equipo) throws LMFVGOException {

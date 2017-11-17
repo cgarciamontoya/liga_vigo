@@ -47,14 +47,6 @@ public class JugadoresSancionesVista extends FormBase {
         juegosDAO = new JuegosDAO();
         sancionesDAO = new SancionesDAO();
         
-        List<Equipos> equipos = equiposDAO.consultarEquipo(null, 0);
-        DefaultComboBoxModel modelEquipos = (DefaultComboBoxModel) cboEquipos.getModel();
-        modelEquipos.addElement("0 - Seleccione");
-        for (Equipos e : equipos) {
-            modelEquipos.addElement(e.getIdEquipo() + " - " + e.getNombre());
-        }
-        cboEquipos.setModel(modelEquipos);
-        
         List<Reglamento> reglas = reglamentoDAO.consultaPorFiltros(new Reglamento());
         DefaultComboBoxModel modelReglas = (DefaultComboBoxModel) cboReglamento.getModel();
         for (Reglamento r : reglas) {
@@ -66,6 +58,7 @@ public class JugadoresSancionesVista extends FormBase {
         if (jornadas != null && !jornadas.isEmpty()) {
             cboJornada.setModel(new DefaultComboBoxModel(jornadas.toArray()));
         }
+        
     }
 
     /**
@@ -90,6 +83,8 @@ public class JugadoresSancionesVista extends FormBase {
         cboJornada = new javax.swing.JComboBox();
         btnGuardar = new javax.swing.JButton();
         btnClave = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        cboFuerza = new javax.swing.JComboBox();
 
         setClosable(true);
         setTitle("SANCIONES A JUGADORES");
@@ -173,6 +168,15 @@ public class JugadoresSancionesVista extends FormBase {
             }
         });
 
+        jLabel5.setText("Fuerza:");
+
+        cboFuerza.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione", "Primera", "Segunda" }));
+        cboFuerza.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cargarEquipos(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -182,25 +186,13 @@ public class JugadoresSancionesVista extends FormBase {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 796, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(18, 18, 18)
-                                .addComponent(cboEquipos, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cboJornada, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(22, 22, 22)
-                                .addComponent(cboReglamento, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cboJugador, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(cboJornada, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel3)
+                        .addGap(22, 22, 22)
+                        .addComponent(cboReglamento, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -210,16 +202,33 @@ public class JugadoresSancionesVista extends FormBase {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnAgregar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnLimpiar)))))
+                                .addComponent(btnLimpiar))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addGap(18, 18, 18)
+                        .addComponent(cboFuerza, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, 18)
+                        .addComponent(cboEquipos, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cboJugador, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(19, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(cboFuerza, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
-                    .addComponent(cboEquipos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cboEquipos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(cboJugador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -233,8 +242,8 @@ public class JugadoresSancionesVista extends FormBase {
                     .addComponent(btnLimpiar)
                     .addComponent(btnAgregar)
                     .addComponent(btnClave))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnGuardar))
         );
@@ -260,9 +269,10 @@ public class JugadoresSancionesVista extends FormBase {
 
     private void limpiar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_limpiar
         cboJugador.removeAllItems();
-        cboEquipos.setSelectedIndex(0);
+        cboEquipos.removeAllItems();
         cboJornada.setSelectedIndex(0);
         cboReglamento.setSelectedIndex(0);
+        cboFuerza.setSelectedIndex(0);
         limpiarTabla(tblCastigos);
     }//GEN-LAST:event_limpiar
 
@@ -313,7 +323,7 @@ public class JugadoresSancionesVista extends FormBase {
         if (cboJugador.getSelectedIndex() > 0) {
             limpiarTabla(tblCastigos);
             Integer idJugador = Integer.parseInt(cboJugador.getSelectedItem().toString().split(" - ")[0]);
-            List<Sancion> sanciones = sancionesDAO.consultaSancionesJugador(idJugador);
+            List<Sancion> sanciones = sancionesDAO.consultaSancionesJugador(idJugador, cboFuerza.getSelectedIndex());
             if (sanciones != null && !sanciones.isEmpty()) {
                 DefaultTableModel modelo = (DefaultTableModel) tblCastigos.getModel();
                 for (Sancion s : sanciones) {
@@ -324,6 +334,17 @@ public class JugadoresSancionesVista extends FormBase {
         }
     }//GEN-LAST:event_cargarSanciones
 
+    private void cargarEquipos(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargarEquipos
+        List<Equipos> equipos = equiposDAO.consultarEquipo(null, 0);
+        DefaultComboBoxModel modelEquipos = (DefaultComboBoxModel) cboEquipos.getModel();
+        modelEquipos.addElement("0 - Seleccione");
+        for (Equipos e : equipos) {
+            modelEquipos.addElement(e.getIdEquipo() + " - " + e.getNombre());
+        }
+        cboEquipos.setModel(modelEquipos);
+        
+    }//GEN-LAST:event_cargarEquipos
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
@@ -331,6 +352,7 @@ public class JugadoresSancionesVista extends FormBase {
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JComboBox cboEquipos;
+    private javax.swing.JComboBox cboFuerza;
     private javax.swing.JComboBox cboJornada;
     private javax.swing.JComboBox cboJugador;
     private javax.swing.JComboBox cboReglamento;
@@ -338,6 +360,7 @@ public class JugadoresSancionesVista extends FormBase {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblCastigos;
     // End of variables declaration//GEN-END:variables

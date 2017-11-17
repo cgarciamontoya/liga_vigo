@@ -53,6 +53,7 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         menuJuegos = new javax.swing.JMenu();
         mnuJgosRol = new javax.swing.JMenuItem();
         mnuJgosJornada = new javax.swing.JMenuItem();
+        mnuJgoLiguilla = new javax.swing.JMenuItem();
         menuCredenciales = new javax.swing.JMenu();
         mnuCredJug = new javax.swing.JMenuItem();
         mnuCredEq = new javax.swing.JMenuItem();
@@ -161,6 +162,14 @@ public class LigaFutbolMain extends javax.swing.JFrame {
             }
         });
         menuJuegos.add(mnuJgosJornada);
+
+        mnuJgoLiguilla.setText("Liguilla");
+        mnuJgoLiguilla.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                abrirLiguilla(evt);
+            }
+        });
+        menuJuegos.add(mnuJgoLiguilla);
 
         jMenuBar1.add(menuJuegos);
 
@@ -325,6 +334,12 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         cv.show();
     }//GEN-LAST:event_abrirConfiguracion
 
+    private void abrirLiguilla(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirLiguilla
+        JuegosLiguillaVista jlv = new JuegosLiguillaVista();
+        this.add(jlv);
+        jlv.show();
+    }//GEN-LAST:event_abrirLiguilla
+
     /**
      * @param args the command line arguments
      */
@@ -375,6 +390,7 @@ public class LigaFutbolMain extends javax.swing.JFrame {
     private javax.swing.JMenuItem mnuEqConsulta;
     private javax.swing.JMenuItem mnuEqRegistro;
     private javax.swing.JMenuItem mnuEquipoEstadisticas;
+    private javax.swing.JMenuItem mnuJgoLiguilla;
     private javax.swing.JMenuItem mnuJgosJornada;
     private javax.swing.JMenuItem mnuJgosRol;
     private javax.swing.JMenuItem mnuJugConsulta;

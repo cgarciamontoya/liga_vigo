@@ -16,6 +16,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import lmfvgo.modelo.Torneo;
+import lmfvgo.util.ConstantesUtil;
 
 public class BaseDAO {
 
@@ -70,10 +71,25 @@ public class BaseDAO {
         }
     }
     
-    public Integer getJornadaActual() {
+    public Integer getJornadaActual(int fuerza) {
         try {
-            PreparedStatement ps = getConnection().prepareStatement("select min(jornada) jornada from juegos where cerrado = 0 and id_torneo = ?");
+            PreparedStatement ps = getConnection().prepareStatement("select max(jornada) jornada from juegos where cerrado = 1 and id_torneo = ? and fuerza = ?");
             ps.setInt(1, getIdTorneoActivo());
+            ps.setInt(2, fuerza);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            return rs.getInt("jornada");
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
+    
+    public Integer getTotalJornadas(int fuerza) {
+        try {
+            PreparedStatement ps = getConnection().prepareStatement("select max(jornada) jornada from juegos where jornada < ? and id_torneo = ? and fuerza = ?");
+            ps.setInt(1, ConstantesUtil.JORNADA_CUARTOS);
+            ps.setInt(2, getIdTorneoActivo());
+            ps.setInt(3, fuerza);
             ResultSet rs = ps.executeQuery();
             rs.next();
             return rs.getInt("jornada");

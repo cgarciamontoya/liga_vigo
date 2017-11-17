@@ -15,6 +15,7 @@ import lmfvgo.db.JuegosDAO;
 import lmfvgo.excepciones.LMFVGOException;
 import lmfvgo.modelo.Juegos;
 import lmfvgo.reportes.vo.RolVO;
+import lmfvgo.util.ConstantesUtil;
 import lmfvgo.util.ReportesManager;
 
 /**
@@ -187,12 +188,12 @@ public class JuegosJornadaVista extends FormBase {
                         break;
                     }
                 }
-                if (juegoSel.getLocalNombre().equalsIgnoreCase("descansa") ||
-                        juegoSel.getVisitanteNombre().equalsIgnoreCase("descansa")) {
-                    agregarMensajeError("No se puede abrir el detalle debido a que el equipo DESCANSA");
-                    return;
-                }
                 if (juegoSel != null){
+                    if (juegoSel.getLocalNombre().equalsIgnoreCase("descansa") ||
+                            juegoSel.getVisitanteNombre().equalsIgnoreCase("descansa")) {
+                        agregarMensajeError("No se puede abrir el detalle debido a que el equipo DESCANSA");
+                        return;
+                    }
                     JuegoDetalleVista jdv = new JuegoDetalleVista(juegoSel);
                     this.getParent().add(jdv);
                     jdv.show();
@@ -211,7 +212,21 @@ public class JuegosJornadaVista extends FormBase {
             agregarMensajeAdvertencia("La fuerza es requerida");
             return;
         }
-        juegos = juegosDAO.consultaJuegosJornada(cboFuerza.getSelectedIndex(), (cboJornada.getSelectedIndex() + 1));
+        int jornada = 0;
+        switch (cboJornada.getSelectedItem().toString()) {
+            case "CT" :
+                jornada = ConstantesUtil.JORNADA_CUARTOS;
+                break;
+            case "SF":
+                jornada = ConstantesUtil.JORNADA_SEMIS;
+                break;
+            case "FN":
+                jornada = ConstantesUtil.JORNADA_FINAL;
+                break;
+            default:
+                jornada = Integer.parseInt(cboJornada.getSelectedItem().toString());
+        }
+        juegos = juegosDAO.consultaJuegosJornada(cboFuerza.getSelectedIndex(), jornada);
         limpiarTabla(tblJuegos);
         if (juegos == null || juegos.isEmpty()) {
             agregarMensajeError("No se encontraron juegos para la jornada");
@@ -253,8 +268,24 @@ public class JuegosJornadaVista extends FormBase {
         cboJornada.removeAllItems();
         if (cboFuerza.getSelectedIndex() > 0) {
             List<Integer> jornadas = juegosDAO.consultaNumeroJornadas(cboFuerza.getSelectedIndex());
+            List<String> jornadasFinal = new ArrayList<>();
             if (jornadas != null && !jornadas.isEmpty()) {
-                cboJornada.setModel(new DefaultComboBoxModel(jornadas.toArray()));
+                for (Integer j : jornadas) {
+                    switch (j) {
+                        case ConstantesUtil.JORNADA_CUARTOS :
+                            jornadasFinal.add("CT");
+                            break;
+                        case ConstantesUtil.JORNADA_SEMIS : 
+                            jornadasFinal.add("SF");
+                            break;
+                        case ConstantesUtil.JORNADA_FINAL:
+                            jornadasFinal.add("FN");
+                            break;
+                        default:
+                            jornadasFinal.add(String.valueOf(j));
+                    }
+                }
+                cboJornada.setModel(new DefaultComboBoxModel(jornadasFinal.toArray()));
             }
         }
     }//GEN-LAST:event_cargarJornadas
@@ -279,7 +310,23 @@ public class JuegosJornadaVista extends FormBase {
             }
             if (resJgos == tblJuegos.getRowCount()) {
                 try {
-                    juegosDAO.cerrarJornada(Integer.parseInt(cboJornada.getSelectedItem().toString()));
+                    String ji = cboJornada.getSelectedItem().toString();
+                    int jc = 0;
+                    switch (ji) {
+                        case "CT":
+                            jc = ConstantesUtil.JORNADA_CUARTOS;
+                            break;
+                        case "SF":
+                            jc = ConstantesUtil.JORNADA_SEMIS;
+                            break;
+                        case "FN":
+                            jc = ConstantesUtil.JORNADA_FINAL;
+                            break;
+                        default:
+                            jc = Integer.parseInt(ji);
+                            break;
+                    }
+                    juegosDAO.cerrarJornada(jc, cboFuerza.getSelectedIndex());
                     agregarMensajeExito("La Jornada " + cboJornada.getSelectedItem() + " se cerró correctamente");
                     btnCerrarJornada.setEnabled(false);
                 } catch (LMFVGOException ex) {
@@ -295,10 +342,25 @@ public class JuegosJornadaVista extends FormBase {
         if (tblJuegos.getRowCount() > 0) {
             List<RolVO> reporte = new ArrayList<>();
             DefaultTableModel model = (DefaultTableModel) tblJuegos.getModel();
-            int jornada = Integer.parseInt(cboJornada.getSelectedItem().toString());
+            String ji = cboJornada.getSelectedItem().toString();
+            String jc = "";
+            switch (ji) {
+                case "CT":
+                    jc = "CUARTOS DE FINAL";
+                    break;
+                case "SF":
+                    jc = "SEMIFINAL";
+                    break;
+                case "FN":
+                    jc = "FINAL";
+                    break;
+                default:
+                    jc = ji;
+                    break;
+            }
             for (int i = 0; i < model.getRowCount(); i++) {
                 RolVO juego = new RolVO();
-                juego.setJornada(jornada);
+                juego.setJornada(jc);
                 juego.setLocal(model.getValueAt(i, 1).toString());
                 juego.setVisitante(model.getValueAt(i, 4).toString());
                 reporte.add(juego);
