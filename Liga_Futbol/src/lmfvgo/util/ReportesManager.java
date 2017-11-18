@@ -37,7 +37,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
  */
 public class ReportesManager {
     
-    private static final String URL_REPORTES = "D:\\lmfvgo\\";
+    private static final String URL_REPORTES = "C:\\lmfvgo\\";
     private static final String REPORTE_CEDULA_JUEGO = "/lmfvgo/reportes/CedulaJuego.jasper";
     private static final String REPORTE_TABLA_GENERAL = "/lmfvgo/reportes/TablaEstadisticas.jasper";
     private static final String REPORTE_CREDENCIALES = "/lmfvgo/reportes/Credenciales.jasper";

@@ -327,6 +327,9 @@ public class JuegosJornadaVista extends FormBase {
                             break;
                     }
                     juegosDAO.cerrarJornada(jc, cboFuerza.getSelectedIndex());
+                    if (jc >= ConstantesUtil.JORNADA_CUARTOS) {
+                        marcarEliminadosLiguilla();
+                    }
                     agregarMensajeExito("La Jornada " + cboJornada.getSelectedItem() + " se cerró correctamente");
                     btnCerrarJornada.setEnabled(false);
                 } catch (LMFVGOException ex) {
@@ -338,6 +341,12 @@ public class JuegosJornadaVista extends FormBase {
         }
     }//GEN-LAST:event_cerrarJornada
 
+    private void marcarEliminadosLiguilla() {
+        DefaultTableModel modelo = (DefaultTableModel) tblJuegos.getModel();
+        for (int i = 0; i < modelo.getRowCount(); i++) {
+        }
+    }
+    
     private void exportar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportar
         if (tblJuegos.getRowCount() > 0) {
             List<RolVO> reporte = new ArrayList<>();

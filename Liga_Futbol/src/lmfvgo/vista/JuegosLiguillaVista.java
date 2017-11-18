@@ -224,7 +224,8 @@ public class JuegosLiguillaVista extends FormBase {
             cboEquiposVisitante.removeAllItems();
             cboJuego.removeAllItems();
             equipos = estadisticasEquipoDAO.consultaEstadisticasFuerza(cboFuerza.getSelectedIndex());
-            if (jornadaActual == totalJornadas) {
+            List<Equipos> equiposLiguilla = equiposDAO.consultaEquiposLiguilla(cboFuerza.getSelectedIndex());
+            if (jornadaActual == totalJornadas && (equiposLiguilla == null || equiposLiguilla.isEmpty())) {
                 //INICIA CONF CONTROL_LIGUILLA
                 List<Integer> idsLiguilla = new ArrayList<>();
                 for (int idx = 1; idx <= configuracion.getEquiposCalifican(); idx++) {
@@ -237,31 +238,31 @@ public class JuegosLiguillaVista extends FormBase {
                 }
                 try {
                     equiposDAO.guardarEquiposLiguilla(idsLiguilla);
+                    equiposLiguilla = equiposDAO.consultaEquiposLiguilla(cboFuerza.getSelectedIndex());
                 } catch (LMFVGOException ex) {
                     agregarMensajeError(ex.getMessage());
                     return;
                 }
             }
-            List<Equipos> equiposLiguilla = equiposDAO.consultaEquiposLiguilla(cboFuerza.getSelectedIndex());
             List<String> equiposLocal = new ArrayList<>();
             List<String> equiposVisitante = new ArrayList<>();
             equiposLocal.add("Seleccione");
             equiposVisitante.add("Seleccione");
-            int numEL = configuracion.getEquiposCalifican() / 2;
+            /*int numEL = configuracion.getEquiposCalifican() / 2;
             if (configuracion.getEquiposCalifican() == 6) {
                 numEL++;
-            }
+            }*/
             
             for (int i = 0; i < configuracion.getEquiposCalifican(); i++) {
-                for (Equipos el : equiposLiguilla) {
-                    if (el.getIdEquipo().equals(equipos.get(i).getIdEquipo())) {
-                        if (equipos.get(i).getPosicion() <= numEL) {
+                //for (Equipos el : equiposLiguilla) {
+                    //if (el.getIdEquipo().equals(equipos.get(i).getIdEquipo())) {
+                      //  if (equipos.get(i).getPosicion() <= numEL) {
                             equiposLocal.add(equipos.get(i).getPosicion() + "o. - " + equipos.get(i).getEquipoNombre());
-                        } else {
+                        //} else {
                             equiposVisitante.add(equipos.get(i).getPosicion() + "o. - " + equipos.get(i).getEquipoNombre());
-                        }
-                    }
-                }
+                        //}
+                    //}
+                //}
                 
             }
             cboEquipos.setModel(new DefaultComboBoxModel(equiposLocal.toArray()));
@@ -287,6 +288,8 @@ public class JuegosLiguillaVista extends FormBase {
     private void limpiar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_limpiar
         cboJuego.removeAllItems();
         cboEquipos.removeAllItems();
+        cboEquiposVisitante.removeAllItems();
+        equipos = null;
         limpiarTabla(tblJuegos);
         cboFuerza.setSelectedIndex(0);
     }//GEN-LAST:event_limpiar
