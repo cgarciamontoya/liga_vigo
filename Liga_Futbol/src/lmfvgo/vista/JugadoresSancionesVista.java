@@ -21,6 +21,7 @@ import lmfvgo.modelo.Equipos;
 import lmfvgo.modelo.Jugadores;
 import lmfvgo.modelo.Reglamento;
 import lmfvgo.modelo.Sancion;
+import lmfvgo.util.ConstantesUtil;
 
 /**
  *
@@ -55,8 +56,24 @@ public class JugadoresSancionesVista extends FormBase {
         cboReglamento.setModel(modelReglas);
         
         List<Integer> jornadas = juegosDAO.consultaNumeroJornadas(1);
+        List<String> jcbo = new ArrayList<>();
         if (jornadas != null && !jornadas.isEmpty()) {
-            cboJornada.setModel(new DefaultComboBoxModel(jornadas.toArray()));
+            for (Integer j : jornadas) {
+                switch (j) {
+                    case ConstantesUtil.JORNADA_CUARTOS:
+                        jcbo.add("CT");
+                        break;
+                    case ConstantesUtil.JORNADA_SEMIS:
+                        jcbo.add("SF");
+                        break;
+                    case ConstantesUtil.JORNADA_FINAL:
+                        jcbo.add("FN");
+                        break;
+                    default:
+                        jcbo.add(String.valueOf(j));
+                }
+            }
+            cboJornada.setModel(new DefaultComboBoxModel(jcbo.toArray()));
         }
         
     }
@@ -131,7 +148,7 @@ public class JugadoresSancionesVista extends FormBase {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Float.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Float.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false
@@ -279,7 +296,7 @@ public class JugadoresSancionesVista extends FormBase {
     private void agregarClave(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarClave
         DefaultTableModel modelo = (DefaultTableModel) tblCastigos.getModel();
         Reglamento r = reglamentoDAO.consultaPorClave(cboReglamento.getSelectedItem().toString().split(" - ")[0]);
-        modelo.addRow(new Object[]{r.getClave(), Integer.parseInt(cboJornada.getSelectedItem().toString()),
+        modelo.addRow(new Object[]{r.getClave(), cboJornada.getSelectedItem().toString(),
             cboJugador.getSelectedItem().toString(),(String.valueOf(r.getSancionJuegos())), r.getSancionEconomica()});
     }//GEN-LAST:event_agregarClave
 
@@ -300,7 +317,20 @@ public class JugadoresSancionesVista extends FormBase {
             for (int i = 0; i < tblCastigos.getRowCount(); i++) {
                 Sancion s = new Sancion();
                 s.setClave((String) modelo.getValueAt(i, 0));
-                s.setJornada((Integer) modelo.getValueAt(i, 1));
+                String jor = modelo.getValueAt(i, 1).toString();
+                switch (jor) {
+                    case "CT":
+                        s.setJornada(ConstantesUtil.JORNADA_CUARTOS);
+                        break;
+                    case "SF":
+                        s.setJornada(ConstantesUtil.JORNADA_SEMIS);
+                        break;
+                    case "FN":
+                        s.setJornada(ConstantesUtil.JORNADA_FINAL);
+                        break;
+                    default:
+                        s.setJornada(Integer.parseInt(jor));
+                }
                 s.setIdJugador(idJugador);
                 sanciones.add(s);
             }

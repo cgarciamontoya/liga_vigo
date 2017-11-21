@@ -75,6 +75,11 @@ public class JuegoDetalleVista extends FormBase {
                 estadisticaVisitante != null && estadisticaVisitante.getIdEstadistica() != null && estadisticaVisitante.getIdEstadistica() > 0);
         
         cargarDatosJuego();
+        if (juego.isCerrado()) {
+            btnActualizar.setEnabled(false);
+            btnGuardar.setEnabled(false);
+            btnLimpiar.setEnabled(false);
+        }
     }
     
     private void iniciarCombos() {

@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 import lmfvgo.excepciones.LMFVGOException;
 import lmfvgo.modelo.Sancion;
+import lmfvgo.util.ConstantesUtil;
 
 public class SancionesDAO extends BaseDAO {
 
@@ -96,9 +97,11 @@ public class SancionesDAO extends BaseDAO {
                 s.setFecha(rs.getDate("fecha"));
                 s.setSancionEconomica(rs.getFloat("sancion_economica"));
                 s.setSancionJuegos(rs.getInt("sancion_juegos"));
-                s.setJuegosCumplidos(jornadaActual - (s.getJornada() + 1));
+                if (jornadaActual < ConstantesUtil.JORNADA_CUARTOS) {
+                    s.setJuegosCumplidos(jornadaActual - (s.getJornada() + 1));
+                    s.setActivo(!s.getJuegosCumplidos().equals(s.getSancionJuegos()));
+                }
                 s.setNombreEquipo(rs.getString("nombre_equipo"));
-                s.setActivo(!s.getJuegosCumplidos().equals(s.getSancionJuegos()));
                 sanciones.add(s);
             }
             return sanciones;

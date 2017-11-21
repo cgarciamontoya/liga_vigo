@@ -129,6 +129,7 @@ public class EstadisticasEquipoDAO extends BaseDAO {
                 .append("e.id_equipo, e.nombre equipo, ")
                 .append("sum(ej.goles) goles ")
                 .append("from estadisticas_jugador ej ")
+                .append("inner join juegos jgos on jgos.id_juego = ej.id_juego and jgos.jornada < 98 ")
                 .append("inner join rel_equipo_jugadores rel on rel.id_jugador = ej.id_jugador ")
                 .append("inner join equipos e on e.id_equipo = rel.id_equipo ")
                 .append("inner join jugadores j on ej.id_jugador = j.id_jugador ")

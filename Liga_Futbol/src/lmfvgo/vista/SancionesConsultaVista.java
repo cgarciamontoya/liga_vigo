@@ -191,6 +191,7 @@ public class SancionesConsultaVista extends FormBase {
                 Integer.parseInt(cboEquipos.getSelectedItem().toString().split(" - ")[0]) : 0, cboFuerza.getSelectedIndex());
         if (sanciones != null && !sanciones.isEmpty()) {
             DefaultTableModel modelo = (DefaultTableModel) tblSanciones.getModel();
+            boolean agregado = false;
             for (Sancion s : sanciones) {
                 if (s.isActivo()) {
                     modelo.addRow(new Object[]{
@@ -201,6 +202,11 @@ public class SancionesConsultaVista extends FormBase {
                         (String.valueOf(s.getJuegosCumplidos()) + "/" + String.valueOf(s.getSancionJuegos())),
                         (s.getSancionEconomica() != null && s.getSancionEconomica() > 0 ? s.getSancionEconomica() : null)
                     });
+                    agregado = true;
+                }
+                if (!agregado) {
+                    agregarMensajeError("No se encontraron resultados");
+                    return;
                 }
             }
             btnExportar.setEnabled(true);
