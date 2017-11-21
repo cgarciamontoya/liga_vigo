@@ -6,7 +6,12 @@
 package lmfvgo.vista;
 
 import com.github.sarxos.webcam.Webcam;
+import com.github.sarxos.webcam.WebcamDiscoveryEvent;
+import com.github.sarxos.webcam.WebcamDiscoveryListener;
+import com.github.sarxos.webcam.WebcamEvent;
+import com.github.sarxos.webcam.WebcamListener;
 import com.github.sarxos.webcam.WebcamPanel;
+import com.github.sarxos.webcam.WebcamPicker;
 import com.github.sarxos.webcam.WebcamResolution;
 import com.github.sarxos.webcam.WebcamUtils;
 import com.github.sarxos.webcam.util.ImageUtils;
@@ -16,6 +21,10 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -29,6 +38,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 import lmfvgo.db.JugadoresDAO;
@@ -42,6 +52,7 @@ import lmfvgo.modelo.Jugadores;
 public class JugadoresRegistroVista extends FormBase {
 
     private static final int PICTURE_MAX_SIZE = 65500;
+    private static final long serialVersionUID = -40885056066966584L;
     private SimpleDateFormat sdf;
     private Date fechaActual;
     private JugadoresDAO jugadoresDAO;
@@ -64,6 +75,7 @@ public class JugadoresRegistroVista extends FormBase {
                 BufferedImage img = scaleImage(120, 65, jbd.getImagen());
                 lblFoto.setIcon(new ImageIcon((Image) img));
             }
+            lblEditando.setVisible(true);
         }
     }
 
@@ -96,6 +108,7 @@ public class JugadoresRegistroVista extends FormBase {
      */
     public JugadoresRegistroVista() {
         initLocal();
+        lblEditando.setVisible(false);
     }
 
     /**
@@ -127,6 +140,8 @@ public class JugadoresRegistroVista extends FormBase {
         jButton3 = new javax.swing.JButton();
         lblFoto = new javax.swing.JLabel();
         btnCamara = new javax.swing.JButton();
+        btnNuevo = new javax.swing.JButton();
+        lblEditando = new javax.swing.JLabel();
 
         setClosable(true);
         setTitle("Registro de Jugadores");
@@ -179,6 +194,16 @@ public class JugadoresRegistroVista extends FormBase {
             }
         });
 
+        btnNuevo.setText("Nuevo");
+        btnNuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nuevoRegistro(evt);
+            }
+        });
+
+        lblEditando.setForeground(new java.awt.Color(255, 51, 51));
+        lblEditando.setText("Editando...");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -188,46 +213,51 @@ public class JugadoresRegistroVista extends FormBase {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jSeparator1)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(lblEditando)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnNuevo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton2))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(txtLugar, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel1))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(txtPaterno, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel2))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel3)
-                                .addComponent(txtMaterno, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addComponent(jLabel4)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(txtFechaNac, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel5))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel6)
-                                        .addComponent(txtFechaReg, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addComponent(txtFotografia, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel7))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jButton1)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnCamara))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(lblFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(0, 0, Short.MAX_VALUE))))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtFechaNac, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel5))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel6)
+                                    .addComponent(txtFechaReg, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtFotografia, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jButton1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnCamara))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtLugar, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel1))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtPaterno, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel2))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(txtMaterno, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel4))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -270,7 +300,9 @@ public class JugadoresRegistroVista extends FormBase {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(jButton3)
+                    .addComponent(btnNuevo)
+                    .addComponent(lblEditando))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -335,7 +367,6 @@ public class JugadoresRegistroVista extends FormBase {
                 }
                 jugadoresDAO.guardarJugador(jugador);
                 agregarMensajeExito("El registro fue almacenado correctamente");
-                limpiar(evt);
             } catch (LMFVGOException ex) {
                 agregarMensajeError(ex.getMessage());
             }
@@ -343,7 +374,8 @@ public class JugadoresRegistroVista extends FormBase {
     }//GEN-LAST:event_guardar
 
     private void abrirCamara(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirCamara
-        final Webcam webcam = Webcam.getDefault();
+        SwingUtilities.invokeLater(new WebCamViewer());
+        /*final Webcam webcam = Webcam.getDefault();
         if (webcam.isOpen()) {
             webcam.close();
         }
@@ -372,8 +404,15 @@ public class JugadoresRegistroVista extends FormBase {
         window.setResizable(true);
         window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         window.pack();
-        window.setVisible(true);
+        window.setVisible(true);*/
     }//GEN-LAST:event_abrirCamara
+
+    private void nuevoRegistro(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoRegistro
+        limpiar(evt);
+        lblFoto.setIcon(null);
+        this.idJugador = 0;
+        lblEditando.setVisible(false);
+    }//GEN-LAST:event_nuevoRegistro
 
     private boolean jugadorValido() {
         if (!datoValido(txtNombre.getText())) {
@@ -448,6 +487,7 @@ public class JugadoresRegistroVista extends FormBase {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCamara;
+    private javax.swing.JButton btnNuevo;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -459,6 +499,7 @@ public class JugadoresRegistroVista extends FormBase {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JLabel lblEditando;
     private javax.swing.JLabel lblFoto;
     private javax.swing.JTextField txtFechaNac;
     private javax.swing.JTextField txtFechaReg;
@@ -468,4 +509,190 @@ public class JugadoresRegistroVista extends FormBase {
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtPaterno;
     // End of variables declaration//GEN-END:variables
+
+    private class WebCamViewer implements Runnable, WebcamListener, WindowListener, Thread.UncaughtExceptionHandler, ItemListener, WebcamDiscoveryListener {
+
+    private Webcam webcam = null;
+    private WebcamPanel panel = null;
+    private WebcamPicker picker = null;
+    private JFrame window = null;
+
+    @Override
+    public void run() {
+
+        window = new JFrame("CAPTURA");
+
+        Webcam.addDiscoveryListener(this);
+
+        window.setTitle("FOTOGRAFIA");
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.setLayout(new BorderLayout());
+
+        window.addWindowListener(this);
+
+        picker = new WebcamPicker();
+        picker.addItemListener(this);
+
+        webcam = picker.getSelectedWebcam();
+
+        if (webcam == null) {
+            agregarMensajeError("No se detectaron cámaras...");
+            System.exit(1);
+        }
+
+        webcam.setViewSize(WebcamResolution.VGA.getSize());
+        webcam.addWebcamListener(WebCamViewer.this);
+
+        panel = new WebcamPanel(webcam, false);
+        panel.setFPSDisplayed(true);
+
+        JButton boton = new JButton();
+        boton.setText("Capturar");
+        boton.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                WebcamUtils.capture(webcam, "foto1", ImageUtils.FORMAT_JPG);
+                fotoBytes = WebcamUtils.getImageBytes(webcam, "jpg");
+                txtFotografia.setText("FOTOGRAFIA CAPTURADA");
+                BufferedImage img = scaleImage(120, 65, fotoBytes);
+                lblFoto.setIcon(new ImageIcon((Image) img));
+                webcam.close();
+                window.dispose();
+            }
+        });
+
+        window.add(picker, BorderLayout.NORTH);
+        window.add(panel, BorderLayout.CENTER);
+        window.add(boton, BorderLayout.SOUTH);
+
+        window.pack();
+        window.setVisible(true);
+
+        Thread t = new Thread() {
+
+            @Override
+            public void run() {
+                panel.start();
+            }
+        };
+        t.setName("example-starter");
+        t.setDaemon(true);
+        t.setUncaughtExceptionHandler(this);
+        t.start();
+    }
+
+    @Override
+    public void webcamOpen(WebcamEvent we) {
+        System.out.println("webcam open");
+    }
+
+    @Override
+    public void webcamClosed(WebcamEvent we) {
+        System.out.println("webcam closed");
+    }
+
+    @Override
+    public void webcamDisposed(WebcamEvent we) {
+        System.out.println("webcam disposed");
+    }
+
+    @Override
+    public void webcamImageObtained(WebcamEvent we) {
+        // do nothing
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+        webcam.close();
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+    }
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+        System.out.println("webcam viewer resumed");
+        panel.resume();
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+        System.out.println("webcam viewer paused");
+        panel.pause();
+    }
+
+    @Override
+    public void uncaughtException(Thread t, Throwable e) {
+        System.err.println(String.format("Exception in thread %s", t.getName()));
+        e.printStackTrace();
+    }
+
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        if (e.getItem() != webcam) {
+            if (webcam != null) {
+
+                panel.stop();
+
+                window.remove(panel);
+
+                webcam.removeWebcamListener(this);
+                webcam.close();
+
+                webcam = (Webcam) e.getItem();
+                webcam.setViewSize(WebcamResolution.VGA.getSize());
+                webcam.addWebcamListener(this);
+
+                System.out.println("cámara seleccionada " + webcam.getName());
+
+                panel = new WebcamPanel(webcam, false);
+                panel.setFPSDisplayed(true);
+
+                window.add(panel, BorderLayout.CENTER);
+                window.pack();
+
+                Thread t = new Thread() {
+
+                    @Override
+                    public void run() {
+                        panel.start();
+                    }
+                };
+                t.setName("example-stoper");
+                t.setDaemon(true);
+                t.setUncaughtExceptionHandler(this);
+                t.start();
+            }
+        }
+    }
+
+    @Override
+    public void webcamFound(WebcamDiscoveryEvent event) {
+        if (picker != null) {
+            picker.addItem(event.getWebcam());
+        }
+    }
+
+    @Override
+    public void webcamGone(WebcamDiscoveryEvent event) {
+        if (picker != null) {
+            picker.removeItem(event.getWebcam());
+        }
+    }
+    
+    
+}
 }
