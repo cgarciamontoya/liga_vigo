@@ -525,7 +525,7 @@ public class JugadoresRegistroVista extends FormBase {
         Webcam.addDiscoveryListener(this);
 
         window.setTitle("FOTOGRAFIA");
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         window.setLayout(new BorderLayout());
 
         window.addWindowListener(this);
