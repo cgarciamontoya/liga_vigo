@@ -6,13 +6,17 @@
 package lmfvgo.vista;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import lmfvgo.db.EquiposDAO;
 import lmfvgo.db.JuegosDAO;
 import lmfvgo.excepciones.LMFVGOException;
+import lmfvgo.modelo.EquipoLiguilla;
 import lmfvgo.modelo.Juegos;
 import lmfvgo.reportes.vo.RolVO;
 import lmfvgo.util.ConstantesUtil;
@@ -28,6 +32,7 @@ public class JuegosJornadaVista extends FormBase {
     private final JuegosDAO juegosDAO;
     private List<Juegos> juegos;
     private final ReportesManager reportesManager;
+    private final EquiposDAO equiposDAO;
     /**
      * Creates new form JuegosJornadaVista
      */
@@ -37,6 +42,7 @@ public class JuegosJornadaVista extends FormBase {
         reportesManager = new ReportesManager();
         btnCerrarJornada.setEnabled(false);
         btnExportar.setEnabled(false);
+        equiposDAO = new EquiposDAO();
     }
 
     /**
@@ -328,7 +334,7 @@ public class JuegosJornadaVista extends FormBase {
                     }
                     juegosDAO.cerrarJornada(jc, cboFuerza.getSelectedIndex());
                     if (jc >= ConstantesUtil.JORNADA_CUARTOS) {
-                        marcarEliminadosLiguilla();
+                        marcarEliminadosLiguilla(jc);
                     }
                     agregarMensajeExito("La Jornada " + cboJornada.getSelectedItem() + " se cerró correctamente");
                     btnCerrarJornada.setEnabled(false);
@@ -341,10 +347,74 @@ public class JuegosJornadaVista extends FormBase {
         }
     }//GEN-LAST:event_cerrarJornada
 
-    private void marcarEliminadosLiguilla() {
+    private void marcarEliminadosLiguilla(int jornada) {
         DefaultTableModel modelo = (DefaultTableModel) tblJuegos.getModel();
+        Map<String, Integer> resultados = new HashMap<>();
         for (int i = 0; i < modelo.getRowCount(); i++) {
+            int gl = (Integer) modelo.getValueAt(i, 2);
+            int gv = (Integer) modelo.getValueAt(i, 3);
+            int res;
+            if (!resultados.containsKey(modelo.getValueAt(i, 1).toString().concat(";").concat(modelo.getValueAt(i, 4).toString())) &&
+                    !resultados.containsKey(modelo.getValueAt(i, 4).toString().concat(";").concat(modelo.getValueAt(i, 1).toString()))) {
+                res = gl - gv;
+                resultados.put(modelo.getValueAt(i, 1).toString().concat(";").concat(modelo.getValueAt(i, 4).toString()), res);
+            } else {
+                if (resultados.containsKey(modelo.getValueAt(i, 1).toString().concat(";").concat(modelo.getValueAt(i, 4).toString()))) {
+                    res = resultados.get(modelo.getValueAt(i, 1).toString().concat(";").concat(modelo.getValueAt(i, 4).toString()));
+                    res += gl - gv;
+                    resultados.put(modelo.getValueAt(i, 1).toString().concat(";").concat(modelo.getValueAt(i, 4).toString()), res);
+                } else {
+                    res = resultados.get(modelo.getValueAt(i, 4).toString().concat(";").concat(modelo.getValueAt(i, 1).toString()));
+                    res += gv - gl;
+                    resultados.put(modelo.getValueAt(i, 4).toString().concat(";").concat(modelo.getValueAt(i, 1).toString()), res);
+                }
+            }
         }
+        try {
+            List<EquipoLiguilla> eqsLiguilla = equiposDAO.consultaEquiposLiguilla(cboFuerza.getSelectedIndex());
+            for (String key : resultados.keySet()) {
+                String[] eqs = key.split(";");
+                if (resultados.get(key) > 0) {
+                    equiposDAO.eliminarEquipoLiguilla(getIdEquipo(eqs[1]), jornada);
+                } else if (resultados.get(key) < 0) {
+                    equiposDAO.eliminarEquipoLiguilla(getIdEquipo(eqs[0]), jornada);
+                } else {
+                    int idLocal = getIdEquipo(eqs[0]);
+                    int idVisitante = getIdEquipo(eqs[1]);
+                    int posLocal = 0;
+                    int posVisitante = 0;
+                    for (EquipoLiguilla el : eqsLiguilla) {
+                        if (el.getIdEquipo() == idLocal) {
+                            posLocal = el.getPosicion();
+                            continue;
+                        }
+                        if (el.getIdEquipo() == idVisitante) {
+                            posVisitante = el.getPosicion();
+                        }
+                    }
+                    if (posLocal > posVisitante) {
+                        equiposDAO.eliminarEquipoLiguilla(idLocal, jornada);
+                    } else {
+                        equiposDAO.eliminarEquipoLiguilla(idVisitante, jornada);
+                    }
+                }
+            }    
+        } catch (LMFVGOException ex) {
+
+        }
+        
+    }
+    
+    private int getIdEquipo(String nombre) {
+        for (Juegos j : juegos) {
+            if (j.getLocalNombre().equals(nombre)) {
+                return j.getLocal();
+            }
+            if (j.getVisitanteNombre().equals(nombre)) {
+                return j.getVisitante();
+            }
+        }
+        return 0;
     }
     
     private void exportar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportar

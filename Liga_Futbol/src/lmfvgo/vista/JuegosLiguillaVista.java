@@ -19,6 +19,7 @@ import lmfvgo.db.EstadisticasEquipoDAO;
 import lmfvgo.db.JuegosDAO;
 import lmfvgo.excepciones.LMFVGOException;
 import lmfvgo.modelo.Configuracion;
+import lmfvgo.modelo.EquipoLiguilla;
 import lmfvgo.modelo.Equipos;
 import lmfvgo.modelo.EstadisticasEquipo;
 import lmfvgo.modelo.Juegos;
@@ -224,20 +225,20 @@ public class JuegosLiguillaVista extends FormBase {
             cboEquiposVisitante.removeAllItems();
             cboJuego.removeAllItems();
             equipos = estadisticasEquipoDAO.consultaEstadisticasFuerza(cboFuerza.getSelectedIndex());
-            List<Equipos> equiposLiguilla = equiposDAO.consultaEquiposLiguilla(cboFuerza.getSelectedIndex());
+            List<EquipoLiguilla> equiposLiguilla = equiposDAO.consultaEquiposLiguilla(cboFuerza.getSelectedIndex());
             if (jornadaActual == totalJornadas && (equiposLiguilla == null || equiposLiguilla.isEmpty())) {
                 //INICIA CONF CONTROL_LIGUILLA
-                List<Integer> idsLiguilla = new ArrayList<>();
+                List<EquipoLiguilla> idsLiguilla = new ArrayList<>();
                 for (int idx = 1; idx <= configuracion.getEquiposCalifican(); idx++) {
                     for (EstadisticasEquipo ee : equipos) {
                         if (idx == ee.getPosicion()) {
-                            idsLiguilla.add(ee.getIdEquipo());
+                            idsLiguilla.add(new EquipoLiguilla(ee.getIdEquipo(), ee.getEquipoNombre(), ee.getPosicion()));
                             break;
                         }
                     }
                 }
                 try {
-                    equiposDAO.guardarEquiposLiguilla(idsLiguilla);
+                    equiposDAO.guardarEquiposLiguilla(idsLiguilla, cboFuerza.getSelectedIndex());
                     equiposLiguilla = equiposDAO.consultaEquiposLiguilla(cboFuerza.getSelectedIndex());
                 } catch (LMFVGOException ex) {
                     agregarMensajeError(ex.getMessage());
@@ -248,21 +249,17 @@ public class JuegosLiguillaVista extends FormBase {
             List<String> equiposVisitante = new ArrayList<>();
             equiposLocal.add("Seleccione");
             equiposVisitante.add("Seleccione");
-            /*int numEL = configuracion.getEquiposCalifican() / 2;
-            if (configuracion.getEquiposCalifican() == 6) {
+            int numEL = equiposLiguilla.size()/ 2;
+            if (equiposLiguilla.size() == 6) {
                 numEL++;
-            }*/
+            }
             
-            for (int i = 0; i < configuracion.getEquiposCalifican(); i++) {
-                //for (Equipos el : equiposLiguilla) {
-                    //if (el.getIdEquipo().equals(equipos.get(i).getIdEquipo())) {
-                      //  if (equipos.get(i).getPosicion() <= numEL) {
-                            equiposLocal.add(equipos.get(i).getPosicion() + "o. - " + equipos.get(i).getEquipoNombre());
-                        //} else {
-                            equiposVisitante.add(equipos.get(i).getPosicion() + "o. - " + equipos.get(i).getEquipoNombre());
-                        //}
-                    //}
-                //}
+            for (int i = 0; i < equiposLiguilla.size(); i++) {
+                if (equiposLiguilla.get(i).getPosicion() <= numEL) {
+                    equiposLocal.add(equiposLiguilla.get(i).getPosicion() + "o. - " + equiposLiguilla.get(i).getNombre());
+                } else {
+                    equiposVisitante.add(equiposLiguilla.get(i).getPosicion() + "o. - " + equiposLiguilla.get(i).getNombre());
+                }
                 
             }
             cboEquipos.setModel(new DefaultComboBoxModel(equiposLocal.toArray()));
@@ -375,6 +372,7 @@ public class JuegosLiguillaVista extends FormBase {
             try {
                 juegosDAO.guardarRol(rol, cboFuerza.getSelectedIndex());
                 agregarMensajeExito("Los juegos de " + cboJuego.getSelectedItem().toString() + " fueron guardados correctamente");
+                this.dispose();
             } catch (LMFVGOException ex) {
                 agregarMensajeError(ex.getMessage());
             }

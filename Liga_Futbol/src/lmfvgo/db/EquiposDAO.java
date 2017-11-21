@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import lmfvgo.excepciones.LMFVGOException;
+import lmfvgo.modelo.EquipoLiguilla;
 import lmfvgo.modelo.Equipos;
 import lmfvgo.reportes.vo.CedulaVO;
 
@@ -172,14 +173,16 @@ public class EquiposDAO extends BaseDAO {
         }
     }
     
-    public void guardarEquiposLiguilla(List<Integer> ids) throws LMFVGOException {
+    public void guardarEquiposLiguilla(List<EquipoLiguilla> equipos, int fuerza) throws LMFVGOException {
         try {
-            String query = "insert into control_liguilla(id_torneo, id_equipo, eliminado) values (?,?,0)";
+            String query = "insert into control_liguilla(id_torneo, id_equipo, posicion, fuerza, eliminado) values (?,?,?,?,0)";
             PreparedStatement ps = getConnection().prepareStatement(query);
             Integer idTorneo = getIdTorneoActivo();
-            for (Integer id : ids) {
+            for (EquipoLiguilla id : equipos) {
                 ps.setInt(1, idTorneo);
-                ps.setInt(2, id);
+                ps.setInt(2, id.getIdEquipo());
+                ps.setInt(3, id.getPosicion());
+                ps.setInt(4, fuerza);
                 ps.addBatch();
             }
             ps.executeBatch();
@@ -188,21 +191,22 @@ public class EquiposDAO extends BaseDAO {
         }
     }
     
-    public void eliminarEquipoLiguilla(int idEquipo) throws LMFVGOException {
+    public void eliminarEquipoLiguilla(int idEquipo, int jornada) throws LMFVGOException {
         try {
-            PreparedStatement ps = getConnection().prepareStatement("update contro_liguilla set eliminado = 1 where id_torneo = ? and id_equipo = ?");
-            ps.setInt(1, getIdTorneoActivo());
-            ps.setInt(2, idEquipo);
+            PreparedStatement ps = getConnection().prepareStatement("update control_liguilla set eliminado = 1, jornada = ? where id_torneo = ? and id_equipo = ?");
+            ps.setInt(1, jornada);
+            ps.setInt(2, getIdTorneoActivo());
+            ps.setInt(3, idEquipo);
             ps.execute();
         } catch (SQLException ex) {
             throw new LMFVGOException("No se pudo eliminar el equipo de la liguilla");
         }
     }
     
-    public List<Equipos> consultaEquiposLiguilla(int fuerza) {
+    public List<EquipoLiguilla> consultaEquiposLiguilla(int fuerza) {
         try {
             sb = new StringBuilder();
-            sb.append("select e.id_equipo, e.nombre, e.fuerza, e.fecha_registro ")
+            sb.append("select e.id_equipo, e.nombre, cl.posicion, cl.jornada, cl.eliminado ")
                     .append("from equipos e inner join control_liguilla cl on cl.id_equipo = e.id_equipo ")
                     .append("where cl.eliminado = 0 and cl.id_torneo = ? and e.fuerza = ?");
             PreparedStatement ps = getConnection().prepareStatement(sb.toString());
@@ -210,9 +214,30 @@ public class EquiposDAO extends BaseDAO {
             ps.setInt(2, fuerza);
             
             ResultSet rs = ps.executeQuery();
-            List<Equipos> equipos = new ArrayList<>();
+            List<EquipoLiguilla> equipos = new ArrayList<>();
             while (rs.next()) {
-                equipos.add(new Equipos(rs.getInt("id_equipo"), rs.getString("nombre"), rs.getInt("fuerza"), rs.getDate("fecha_registro")));
+                equipos.add(new EquipoLiguilla(rs.getInt("id_equipo"), rs.getString("nombre"), rs.getInt("posicion"), (rs.getInt("eliminado") == 1), rs.getInt("jornada")));
+            }
+            return equipos;
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
+    
+    public List<EquipoLiguilla> consultaCampeonSub(int fuerza) {
+        try {
+            sb = new StringBuilder();
+            sb.append("select e.id_equipo, e.nombre, cl.posicion, cl.jornada, cl.eliminado ")
+                    .append("from equipos e inner join control_liguilla cl on cl.id_equipo = e.id_equipo ")
+                    .append("where (cl.jornada = 100 or cl.jornada is null) and cl.id_torneo = ? and e.fuerza = ?");
+            PreparedStatement ps = getConnection().prepareStatement(sb.toString());
+            ps.setInt(1, getIdTorneoActivo());
+            ps.setInt(2, fuerza);
+            
+            ResultSet rs = ps.executeQuery();
+            List<EquipoLiguilla> equipos = new ArrayList<>();
+            while (rs.next()) {
+                equipos.add(new EquipoLiguilla(rs.getInt("id_equipo"), rs.getString("nombre"), rs.getInt("posicion"), (rs.getInt("eliminado") == 1), rs.getInt("jornada")));
             }
             return equipos;
         } catch (SQLException ex) {
