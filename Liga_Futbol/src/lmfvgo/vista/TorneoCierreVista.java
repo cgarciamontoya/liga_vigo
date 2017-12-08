@@ -5,22 +5,18 @@
  */
 package lmfvgo.vista;
 
+import java.sql.Connection;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import lmfvgo.db.EquiposDAO;
 import lmfvgo.db.EstadisticasEquipoDAO;
 import lmfvgo.db.TorneoDAO;
 import lmfvgo.excepciones.LMFVGOException;
 import lmfvgo.modelo.EquipoLiguilla;
-import lmfvgo.modelo.Equipos;
 import lmfvgo.modelo.EstadisticasJugador;
 import lmfvgo.modelo.Torneo;
-import lmfvgo.util.ConstantesUtil;
 
 /**
  *
@@ -36,12 +32,13 @@ public class TorneoCierreVista extends FormBase {
 
     /**
      * Creates new form TorneoCierreVista
+     * @param con
      */
-    public TorneoCierreVista() {
+    public TorneoCierreVista(Connection con) {
         initComponents();
-        torneoDAO = new TorneoDAO();
-        equiposDAO = new EquiposDAO();
-        estadisticasEquipoDAO = new EstadisticasEquipoDAO();
+        torneoDAO = new TorneoDAO(con);
+        equiposDAO = new EquiposDAO(con);
+        estadisticasEquipoDAO = new EstadisticasEquipoDAO(con);
         
         torneo = torneoDAO.torneoActivo();
         

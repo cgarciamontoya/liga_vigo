@@ -44,13 +44,13 @@
 				</textElement>
 				<text><![CDATA[VILLA GONZALEZ ORTEGA]]></text>
 			</staticText>
-			<image isUsingCache="false">
+			<image isUsingCache="true">
 				<reportElement x="0" y="0" width="115" height="60" uuid="30356a4f-474d-4520-b7f7-bf8a1a1ec945">
 					<printWhenExpression><![CDATA[new Boolean($P{escudo} != null)]]></printWhenExpression>
 				</reportElement>
 				<imageExpression><![CDATA[$P{escudo}]]></imageExpression>
 			</image>
-			<image isUsingCache="false">
+			<image isUsingCache="true">
 				<reportElement x="457" y="0" width="115" height="60" uuid="5bb6dabe-d60c-4cc4-8bb7-38b938984b85">
 					<printWhenExpression><![CDATA[new Boolean($P{logo} != null)]]></printWhenExpression>
 				</reportElement>

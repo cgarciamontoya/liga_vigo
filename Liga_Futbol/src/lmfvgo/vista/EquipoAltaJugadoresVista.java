@@ -5,6 +5,7 @@
  */
 package lmfvgo.vista;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,16 +26,19 @@ import lmfvgo.reportes.vo.CedulaVO;
  */
 public class EquipoAltaJugadoresVista extends FormBase {
 
+    private static final long serialVersionUID = 6169380252941499637L;
+
     private final EquiposDAO equiposDAO;
     private final JugadoresDAO jugadoresDAO;
 
     /**
      * Creates new form EquipoAltaJugadoresVista
+     * @param con
      */
-    public EquipoAltaJugadoresVista() {
+    public EquipoAltaJugadoresVista(Connection con) {
         initComponents();
-        equiposDAO = new EquiposDAO();
-        jugadoresDAO = new JugadoresDAO();
+        equiposDAO = new EquiposDAO(con);
+        jugadoresDAO = new JugadoresDAO(con);
 
         inicializarJugadores();
         

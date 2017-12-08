@@ -5,6 +5,7 @@
  */
 package lmfvgo.db;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,8 +27,8 @@ public class EquiposDAO extends BaseDAO {
     
     private StringBuilder sb;
 
-    public EquiposDAO() {
-        super();
+    public EquiposDAO(Connection con) {
+        super(con);
     }
     
     public void guardarEquipo(Equipos equipo) throws LMFVGOException {

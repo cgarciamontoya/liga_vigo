@@ -10,6 +10,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +38,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
  */
 public class ReportesManager {
     
-    private static final String URL_REPORTES = "C:\\lmfvgo\\";
+    private static final String URL_REPORTES = "D:\\lmfvgo\\";
     private static final String REPORTE_CEDULA_JUEGO = "/lmfvgo/reportes/CedulaJuego.jasper";
     private static final String REPORTE_TABLA_GENERAL = "/lmfvgo/reportes/TablaEstadisticas.jasper";
     private static final String REPORTE_CREDENCIALES = "/lmfvgo/reportes/Credenciales.jasper";
@@ -46,11 +47,11 @@ public class ReportesManager {
     private static final String REPORTE_ROL = "/lmfvgo/reportes/Rol.jasper";
     private static final String REPORTE_SANCIONES = "/lmfvgo/reportes/Sanciones.jasper";
     
-    private ConfiguracionDAO configuracionDAO;
-    private Configuracion configuracion;
+    private final ConfiguracionDAO configuracionDAO;
+    private final Configuracion configuracion;
 
-    public ReportesManager() {
-        configuracionDAO = new ConfiguracionDAO();
+    public ReportesManager(Connection con) {
+        configuracionDAO = new ConfiguracionDAO(con);
         configuracion = configuracionDAO.consultaConfiguracion();
     }
     

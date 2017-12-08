@@ -24,6 +24,9 @@ public class EstadisticasEquipo implements Serializable {
     private int partidosJugados;
     private int difGoles;
     private int posicion;
+    private int juegosGanados;
+    private int juegosEmpatados;
+    private int juegosPerdidos;
 
     public EstadisticasEquipo() {
     }
@@ -117,6 +120,30 @@ public class EstadisticasEquipo implements Serializable {
 
     public void setPosicion(int posicion) {
         this.posicion = posicion;
+    }
+
+    public int getJuegosGanados() {
+        return juegosGanados;
+    }
+
+    public void setJuegosGanados(int juegosGanados) {
+        this.juegosGanados = juegosGanados;
+    }
+
+    public int getJuegosEmpatados() {
+        return juegosEmpatados;
+    }
+
+    public void setJuegosEmpatados(int juegosEmpatados) {
+        this.juegosEmpatados = juegosEmpatados;
+    }
+
+    public int getJuegosPerdidos() {
+        return juegosPerdidos;
+    }
+
+    public void setJuegosPerdidos(int juegosPerdidos) {
+        this.juegosPerdidos = juegosPerdidos;
     }
     
     @Override

@@ -6,6 +6,7 @@
 
 package lmfvgo.vista;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,13 +36,14 @@ public class JuegosRolVista extends FormBase {
     private Map<Integer, List<Juegos>> rol = null;
     private final ReportesManager reportesManager;
     
-    /** Creates new form JuegosRolVista */
-    public JuegosRolVista() {
+    /** Creates new form JuegosRolVista
+     * @param con */
+    public JuegosRolVista(Connection con) {
         initComponents();
-        equiposDAO = new EquiposDAO();
-        torneoDAO = new TorneoDAO();
-        juegosDAO = new JuegosDAO();
-        reportesManager = new ReportesManager();
+        equiposDAO = new EquiposDAO(con);
+        torneoDAO = new TorneoDAO(con);
+        juegosDAO = new JuegosDAO(con);
+        reportesManager = new ReportesManager(con);
     }
 
     /** This method is called from within the constructor to

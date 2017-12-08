@@ -7,6 +7,7 @@
 package lmfvgo.db;
 
 import java.io.ByteArrayInputStream;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,8 +30,8 @@ public class JugadoresDAO extends BaseDAO {
     private StringBuilder sb;
     private SimpleDateFormat sdf;
 
-    public JugadoresDAO() {
-        super();
+    public JugadoresDAO(Connection con) {
+        super(con);
         sdf = new SimpleDateFormat("yyyy-MM-dd");
     }
 

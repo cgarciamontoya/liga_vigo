@@ -6,6 +6,7 @@
 
 package lmfvgo.db;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,8 +24,8 @@ public class EstadisticasEquipoDAO extends BaseDAO {
 
     StringBuilder sb = null;
     
-    public EstadisticasEquipoDAO() {
-        super();
+    public EstadisticasEquipoDAO(Connection con) {
+        super(con);
     }
 
     public void guardarEstadisticas(EstadisticasEquipo estadisticas) throws LMFVGOException {
@@ -90,7 +91,10 @@ public class EstadisticasEquipoDAO extends BaseDAO {
         sb.append("select ee.id_equipo, eq.nombre, ")
                 .append("sum(ee.goles_favor) gf, sum(ee.goles_contra) gc, ")
                 .append("(sum(ee.goles_favor) - sum(ee.goles_contra)) dif, ")
-                .append("sum(ee.puntos) pts, count(ee.id_juego) jj ")
+                .append("sum(ee.puntos) pts, count(ee.id_juego) jj, ")
+                .append("(select count(jgsg.id_juego) from juegos jgsg where jgsg.local = ee.id_equipo and jgsg.resultado = 1) + (select count(jgsg2.id_juego) from juegos jgsg2 where jgsg2.visitante = ee.id_equipo and jgsg2.resultado = 2) as jg, ")
+                .append("(select count(jgse.id_juego) from juegos jgse where jgse.resultado = 0 and (jgse.local = ee.id_equipo or jgse.visitante = ee.id_equipo)) je, ")
+                .append("(select count(jgsp.id_juego) from juegos jgsp where jgsp.local = ee.id_equipo and jgsp.resultado = 2) + (select count(jgsp2.id_juego) from juegos jgsp2 where jgsp2.visitante = ee.id_equipo and jgsp2.resultado = 1) jp ")
                 .append("from estadisticas_equipo ee ")
                 .append("inner join equipos eq on eq.id_equipo = ee.id_equipo ")
                 .append("inner join juegos j on j.id_juego = ee.id_juego and j.jornada < 98 ")
@@ -114,6 +118,9 @@ public class EstadisticasEquipoDAO extends BaseDAO {
                 ee.setGolesContra(rs.getInt("gc"));
                 ee.setDifGoles(rs.getInt("dif"));
                 ee.setPuntos(rs.getInt("pts"));
+                ee.setJuegosGanados(rs.getInt("jg"));
+                ee.setJuegosEmpatados(rs.getInt("je"));
+                ee.setJuegosPerdidos(rs.getInt("jp"));
                 estadisticas.add(ee);
                 i++;
             }

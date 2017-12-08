@@ -5,6 +5,7 @@
  */
 package lmfvgo.vista;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,16 +34,18 @@ public class JuegosJornadaVista extends FormBase {
     private List<Juegos> juegos;
     private final ReportesManager reportesManager;
     private final EquiposDAO equiposDAO;
+    private Connection connection;
     /**
      * Creates new form JuegosJornadaVista
      */
-    public JuegosJornadaVista() {
+    public JuegosJornadaVista(Connection con) {
         initComponents();
-        juegosDAO = new JuegosDAO();
-        reportesManager = new ReportesManager();
+        juegosDAO = new JuegosDAO(con);
+        reportesManager = new ReportesManager(con);
         btnCerrarJornada.setEnabled(false);
         btnExportar.setEnabled(false);
-        equiposDAO = new EquiposDAO();
+        equiposDAO = new EquiposDAO(con);
+        this.connection = con;
     }
 
     /**
@@ -200,7 +203,7 @@ public class JuegosJornadaVista extends FormBase {
                         agregarMensajeError("No se puede abrir el detalle debido a que el equipo DESCANSA");
                         return;
                     }
-                    JuegoDetalleVista jdv = new JuegoDetalleVista(juegoSel);
+                    JuegoDetalleVista jdv = new JuegoDetalleVista(juegoSel, connection);
                     this.getParent().add(jdv);
                     jdv.show();
                     this.dispose();

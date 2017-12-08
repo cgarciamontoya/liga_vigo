@@ -6,6 +6,7 @@
 
 package lmfvgo.db;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,8 +24,8 @@ public class ReglamentoDAO extends BaseDAO {
     
     private StringBuilder sb;
 
-    public ReglamentoDAO() {
-        super();
+    public ReglamentoDAO(Connection con) {
+        super(con);
     }
 
     public void guardarReglamento(Reglamento reglamento) throws LMFVGOException {

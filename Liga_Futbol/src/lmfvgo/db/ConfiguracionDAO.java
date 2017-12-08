@@ -6,6 +6,7 @@
 
 package lmfvgo.db;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,8 +20,8 @@ import lmfvgo.modelo.Configuracion;
  */
 public class ConfiguracionDAO extends BaseDAO {
 
-    public ConfiguracionDAO() {
-        super();
+    public ConfiguracionDAO(Connection con) {
+        super(con);
     }
     
     public void guardar(Configuracion conf) throws LMFVGOException {

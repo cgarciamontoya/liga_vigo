@@ -5,6 +5,7 @@
  */
 package lmfvgo.vista;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -22,18 +23,21 @@ import lmfvgo.util.ReportesManager;
  */
 public class SancionesConsultaVista extends FormBase {
 
+    private static final long serialVersionUID = 8482977825586734796L;
+
     private final EquiposDAO equiposDAO;
     private final SancionesDAO sancionesDAO;
     private List<Sancion> sanciones;
     private ReportesManager reportesManager;
     /**
      * Creates new form SancionesConsultaVista
+     * @param con
      */
-    public SancionesConsultaVista() {
+    public SancionesConsultaVista(Connection con) {
         initComponents();
-        equiposDAO = new EquiposDAO();
-        sancionesDAO = new SancionesDAO();
-        reportesManager = new ReportesManager();
+        equiposDAO = new EquiposDAO(con);
+        sancionesDAO = new SancionesDAO(con);
+        reportesManager = new ReportesManager(con);
         btnExportar.setEnabled(false);
     }
 

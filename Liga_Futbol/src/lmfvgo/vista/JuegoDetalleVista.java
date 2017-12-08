@@ -5,6 +5,7 @@
  */
 package lmfvgo.vista;
 
+import java.sql.Connection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import lmfvgo.db.EstadisticasEquipoDAO;
 import lmfvgo.db.EstadisticasJugadorDAO;
 import lmfvgo.db.JuegosDAO;
 import lmfvgo.db.JugadoresDAO;
+import lmfvgo.enums.ResultadosJuegoEnum;
 import lmfvgo.excepciones.LMFVGOException;
 import lmfvgo.modelo.EstadisticasEquipo;
 import lmfvgo.modelo.EstadisticasJugador;
@@ -52,15 +54,16 @@ public class JuegoDetalleVista extends FormBase {
     /**
      * Creates new form JuegoDetalleVista
      * @param juego
+     * @param con
      */
-    public JuegoDetalleVista(Juegos juego) {
+    public JuegoDetalleVista(Juegos juego, Connection con) {
         initComponents();
         
-        juegosDAO = new JuegosDAO();
-        jugadoresDAO = new JugadoresDAO();
-        estadisticasJugadorDAO = new EstadisticasJugadorDAO();
-        estadisticasEquipoDAO = new EstadisticasEquipoDAO();
-        reportesManager = new ReportesManager();
+        juegosDAO = new JuegosDAO(con);
+        jugadoresDAO = new JugadoresDAO(con);
+        estadisticasJugadorDAO = new EstadisticasJugadorDAO(con);
+        estadisticasEquipoDAO = new EstadisticasEquipoDAO(con);
+        reportesManager = new ReportesManager(con);
         
         this.juego = juego;
         btnCedula.setEnabled(false);
@@ -533,16 +536,21 @@ public class JuegoDetalleVista extends FormBase {
             }
             estadisticaLocal.setGolesContra(estadisticaVisitante.getGolesFavor());
             estadisticaVisitante.setGolesContra(estadisticaLocal.getGolesFavor());
+            int resultado = ResultadosJuegoEnum.EMPATE.getResultado();
+            String marcador = "";
             if (estadisticaLocal.getGolesFavor() == estadisticaVisitante.getGolesFavor()) {
                 estadisticaLocal.setPuntos(1);
                 estadisticaVisitante.setPuntos(1);
             } else if (estadisticaLocal.getGolesFavor() > estadisticaVisitante.getGolesFavor()) {
                 estadisticaLocal.setPuntos(3);
                 estadisticaVisitante.setPuntos(0);
+                resultado = ResultadosJuegoEnum.LOCAL.getResultado();
             } else {
                 estadisticaVisitante.setPuntos(3);
                 estadisticaLocal.setPuntos(0);
+                resultado = ResultadosJuegoEnum.VISITANTE.getResultado();
             }
+            marcador = estadisticaLocal.getGolesFavor() + " - " + estadisticaVisitante.getGolesFavor();
             if (estadisticaLocal.getIdEstadistica() == null || estadisticaLocal.getIdEstadistica() == 0) {
                 estadisticasEquipoDAO.guardarEstadisticas(estadisticaLocal);
             } else {
@@ -553,6 +561,7 @@ public class JuegoDetalleVista extends FormBase {
             } else {
                 estadisticasEquipoDAO.actualizarEstadisticas(estadisticaVisitante);
             }
+            juegosDAO.actualizarMarcadorJuego(juego.getIdJuego(), resultado, marcador);
             agregarMensajeExito("Se guardaron correctamente los registos");
             this.dispose();
             btnGenerarEsta.setVisible(true);

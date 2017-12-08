@@ -5,6 +5,7 @@
  */
 package lmfvgo.vista;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -21,17 +22,22 @@ import lmfvgo.modelo.Jugadores;
  * @author cgarcia
  */
 public class JugadorConsultaVista extends FormBase {
+
+    private static final long serialVersionUID = 7466806948907236876L;
     
     private final JugadoresDAO jugadoresDAO;
     private final EquiposDAO equiposDAO;
+    private Connection connection;
 
     /**
      * Creates new form JugadorConsultaVista
+     * @param con
      */
-    public JugadorConsultaVista() {
+    public JugadorConsultaVista(Connection con) {
+        this.connection = con;
         initComponents();
-        jugadoresDAO = new JugadoresDAO();
-        equiposDAO = new EquiposDAO();
+        jugadoresDAO = new JugadoresDAO(con);
+        equiposDAO = new EquiposDAO(con);
         
     }
 
@@ -274,7 +280,7 @@ public class JugadorConsultaVista extends FormBase {
             int dialogResult = JOptionPane.showConfirmDialog(null, "Desea abrir el detalle del jugador?", "Advertencia", JOptionPane.YES_NO_OPTION);
             if (dialogResult == JOptionPane.YES_OPTION) {
                 DefaultTableModel model = (DefaultTableModel) tblResultados.getModel();
-                JugadoresRegistroVista jrv = new JugadoresRegistroVista((Integer) model.getValueAt(tblResultados.getSelectedRow(), 0));
+                JugadoresRegistroVista jrv = new JugadoresRegistroVista((Integer) model.getValueAt(tblResultados.getSelectedRow(), 0), connection);
                 this.getParent().add(jrv);
                 jrv.show();
                 this.dispose();

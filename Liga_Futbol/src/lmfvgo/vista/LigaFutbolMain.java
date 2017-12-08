@@ -5,6 +5,10 @@
  */
 package lmfvgo.vista;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import lmfvgo.db.TorneoDAO;
 import lmfvgo.modelo.Torneo;
@@ -17,6 +21,7 @@ public class LigaFutbolMain extends javax.swing.JFrame {
     private static final long serialVersionUID = -8859322752060669243L;
 
     private final TorneoDAO torneoDAO;
+    private Connection connection;
     /**
      * Creates new form LigaFutbolMain
      */
@@ -27,6 +32,7 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         if (torneo == null) {
             JOptionPane.showMessageDialog(this, "NO EXISTE TORNEO ACTIVO", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
+        this.connection = torneoDAO.getConnection();
     }
 
     /**
@@ -38,6 +44,8 @@ public class LigaFutbolMain extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuTorneo = new javax.swing.JMenu();
         mnuTorneoNuevo = new javax.swing.JMenuItem();
@@ -63,10 +71,19 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         menuConf = new javax.swing.JMenu();
         mnuConfParam = new javax.swing.JMenuItem();
 
+        jMenuItem1.setText("jMenuItem1");
+
+        jMenuItem2.setText("jMenuItem2");
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Liga Municipal de Futbol Hacienda \"El Carro\" Villa González Ortega");
         setPreferredSize(new java.awt.Dimension(1200, 700));
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                cerrandoSistema(evt);
+            }
+        });
 
         menuTorneo.setText("Torneos");
 
@@ -239,13 +256,11 @@ public class LigaFutbolMain extends javax.swing.JFrame {
             .addGap(0, 479, Short.MAX_VALUE)
         );
 
-        getAccessibleContext().setAccessibleName("Liga Municipal de Futbol Hacienda \"El Carro\" Villa González Ortega");
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void mnuEqRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuEqRegistroActionPerformed
-        EquipoRegistroVista equipos= new EquipoRegistroVista();
+        EquipoRegistroVista equipos= new EquipoRegistroVista(connection);
         this.add(equipos);
         equipos.show();
     }//GEN-LAST:event_mnuEqRegistroActionPerformed
@@ -257,88 +272,96 @@ public class LigaFutbolMain extends javax.swing.JFrame {
     }//GEN-LAST:event_jugadorRegistro
 
     private void abrirConsultaJugadores(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirConsultaJugadores
-        JugadorConsultaVista jcv = new JugadorConsultaVista();
+        JugadorConsultaVista jcv = new JugadorConsultaVista(connection);
         this.add(jcv);
         jcv.show();
     }//GEN-LAST:event_abrirConsultaJugadores
 
     private void mnuEqConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuEqConsultaActionPerformed
-        EquipoAltaJugadoresVista ejv = new EquipoAltaJugadoresVista();
+        EquipoAltaJugadoresVista ejv = new EquipoAltaJugadoresVista(connection);
         this.add(ejv);
         ejv.show();
     }//GEN-LAST:event_mnuEqConsultaActionPerformed
 
     private void mnuTorneoNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuTorneoNuevoActionPerformed
-        TorneoRegistroVista trv = new TorneoRegistroVista();
+        TorneoRegistroVista trv = new TorneoRegistroVista(connection);
         this.add(trv);
         trv.show();
     }//GEN-LAST:event_mnuTorneoNuevoActionPerformed
 
     private void abrirRolJuegos(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirRolJuegos
-        JuegosRolVista jrv = new JuegosRolVista();
+        JuegosRolVista jrv = new JuegosRolVista(connection);
         this.add(jrv);
         jrv.show();
     }//GEN-LAST:event_abrirRolJuegos
 
     private void abrirRegistroJornada(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirRegistroJornada
-        JuegosJornadaVista jjv = new JuegosJornadaVista();
+        JuegosJornadaVista jjv = new JuegosJornadaVista(connection);
         this.add(jjv);
         jjv.show();
     }//GEN-LAST:event_abrirRegistroJornada
 
     private void abrirEstadisticasEquipo(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirEstadisticasEquipo
-        EquipoEstadisticasVista eev = new EquipoEstadisticasVista();
+        EquipoEstadisticasVista eev = new EquipoEstadisticasVista(connection);
         this.add(eev);
         eev.show();
     }//GEN-LAST:event_abrirEstadisticasEquipo
 
     private void abrirCredJugador(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirCredJugador
-        CredencialesJugadorVista cjv = new CredencialesJugadorVista();
+        CredencialesJugadorVista cjv = new CredencialesJugadorVista(connection);
         this.add(cjv);
         cjv.show();
     }//GEN-LAST:event_abrirCredJugador
 
     private void abrirCredEquipo(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirCredEquipo
-        CredencialesEquipoVista cev = new CredencialesEquipoVista();
+        CredencialesEquipoVista cev = new CredencialesEquipoVista(connection);
         this.add(cev);
         cev.show();
     }//GEN-LAST:event_abrirCredEquipo
 
     private void abrirCierreTorneo(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirCierreTorneo
-        TorneoCierreVista tcv = new TorneoCierreVista();
+        TorneoCierreVista tcv = new TorneoCierreVista(connection);
         this.add(tcv);
         tcv.show();
     }//GEN-LAST:event_abrirCierreTorneo
 
     private void abrirReglamento(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirReglamento
-        TorneoReglamentoVista trv = new TorneoReglamentoVista();
+        TorneoReglamentoVista trv = new TorneoReglamentoVista(connection);
         this.add(trv);
         trv.show();
     }//GEN-LAST:event_abrirReglamento
 
     private void mnuJugSancionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuJugSancionesActionPerformed
-        JugadoresSancionesVista jsv = new JugadoresSancionesVista();
+        JugadoresSancionesVista jsv = new JugadoresSancionesVista(connection);
         this.add(jsv);
         jsv.show();
     }//GEN-LAST:event_mnuJugSancionesActionPerformed
 
     private void abrirConsultaSanciones(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirConsultaSanciones
-        SancionesConsultaVista scv = new SancionesConsultaVista();
+        SancionesConsultaVista scv = new SancionesConsultaVista(connection);
         this.add(scv);
         scv.show();
     }//GEN-LAST:event_abrirConsultaSanciones
 
     private void abrirConfiguracion(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirConfiguracion
-        ConfiguracionVista cv = new ConfiguracionVista();
+        ConfiguracionVista cv = new ConfiguracionVista(connection);
         this.add(cv);
         cv.show();
     }//GEN-LAST:event_abrirConfiguracion
 
     private void abrirLiguilla(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirLiguilla
-        JuegosLiguillaVista jlv = new JuegosLiguillaVista();
+        JuegosLiguillaVista jlv = new JuegosLiguillaVista(connection);
         this.add(jlv);
         jlv.show();
     }//GEN-LAST:event_abrirLiguilla
+
+    private void cerrandoSistema(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_cerrandoSistema
+        try {
+            connection.close();
+        } catch (SQLException ex) {
+            System.out.println("Error al cerrar la sesion: " +  ex.getMessage());
+        }
+    }//GEN-LAST:event_cerrandoSistema
 
     /**
      * @param args the command line arguments
@@ -377,6 +400,8 @@ public class LigaFutbolMain extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenu menuConf;
     private javax.swing.JMenu menuCredenciales;
     private javax.swing.JMenu menuEquipos;

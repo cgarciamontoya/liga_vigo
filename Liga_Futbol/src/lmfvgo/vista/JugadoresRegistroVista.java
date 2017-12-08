@@ -29,6 +29,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.sql.Connection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -58,8 +59,10 @@ public class JugadoresRegistroVista extends FormBase {
     private JugadoresDAO jugadoresDAO;
     private int idJugador;
     private byte[] fotoBytes;
+    private Connection connection;
 
-    public JugadoresRegistroVista(int idJugador) {
+    public JugadoresRegistroVista(int idJugador, Connection con) {
+        this.connection = con;
         initLocal();
         this.idJugador = idJugador;
         Jugadores jbd = jugadoresDAO.consultarJugadorId(idJugador);
@@ -83,7 +86,7 @@ public class JugadoresRegistroVista extends FormBase {
         initComponents();
         sdf = new SimpleDateFormat("dd/MM/yyyy");
         fechaActual = new Date();
-        jugadoresDAO = new JugadoresDAO();
+        jugadoresDAO = new JugadoresDAO(connection);
         txtFechaReg.setText(sdf.format(fechaActual));
         txtNombre.requestFocus();
     }

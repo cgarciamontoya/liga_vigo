@@ -6,6 +6,7 @@
 
 package lmfvgo.vista;
 
+import java.sql.Connection;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -21,14 +22,17 @@ import lmfvgo.util.ReportesManager;
  */
 public class TorneoReglamentoVista extends FormBase {
 
+    private static final long serialVersionUID = 2643853580167543772L;
+
     private final ReglamentoDAO reglamentoDAO;
     private final ReportesManager reportesManager;
     private boolean editar;
-    /** Creates new form TorneoReglamentoVista */
-    public TorneoReglamentoVista() {
+    /** Creates new form TorneoReglamentoVista
+     * @param con */
+    public TorneoReglamentoVista(Connection con) {
         initComponents();
-        reglamentoDAO = new ReglamentoDAO();
-        reportesManager = new ReportesManager();
+        reglamentoDAO = new ReglamentoDAO(con);
+        reportesManager = new ReportesManager(con);
         editar = false;
         lblEditar.setVisible(false);
         List<Reglamento> reglas = reglamentoDAO.consultaPorFiltros(new Reglamento());

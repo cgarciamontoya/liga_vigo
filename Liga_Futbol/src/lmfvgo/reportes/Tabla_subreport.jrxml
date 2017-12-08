@@ -10,6 +10,9 @@
 	<field name="golesContra" class="java.lang.Integer"/>
 	<field name="difGoles" class="java.lang.Integer"/>
 	<field name="puntos" class="java.lang.Integer"/>
+	<field name="juegosGanados" class="java.lang.Integer"/>
+	<field name="juegosEmpatados" class="java.lang.Integer"/>
+	<field name="juegosPerdidos" class="java.lang.Integer"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -30,7 +33,7 @@
 				<text><![CDATA[GC]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="20" y="0" width="402" height="20" uuid="68f881a4-9470-4752-98c6-08ebb147f87a"/>
+				<reportElement x="20" y="0" width="312" height="20" uuid="68f881a4-9470-4752-98c6-08ebb147f87a"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -100,7 +103,7 @@
 				<text><![CDATA[PTS]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="422" y="0" width="30" height="20" uuid="f28b03fa-eb34-4442-a2d3-9f78925f6a88"/>
+				<reportElement x="332" y="0" width="30" height="20" uuid="f28b03fa-eb34-4442-a2d3-9f78925f6a88"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -113,12 +116,51 @@
 				</textElement>
 				<text><![CDATA[JJ]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="362" y="0" width="30" height="20" uuid="e28bcdd6-017f-4ebf-bbb0-171eaafbef71"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[JG]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="392" y="0" width="30" height="20" uuid="7abe2fa6-dc5c-44b5-afaa-6ef469948b31"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[JE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="422" y="0" width="30" height="20" uuid="1c3b8636-d6ba-443b-b6d2-dcc871dd4ea9"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[JP]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField>
-				<reportElement x="20" y="0" width="402" height="20" uuid="f7509b51-75bf-4230-b242-9b535df8e550"/>
+				<reportElement x="20" y="0" width="312" height="20" uuid="f7509b51-75bf-4230-b242-9b535df8e550"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -126,7 +168,7 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement>
+				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{equipoNombre}]]></textFieldExpression>
@@ -140,13 +182,13 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{puntos}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="422" y="0" width="30" height="20" uuid="6381c5e8-9e6e-4bb1-b907-c98a43dc7cd7"/>
+				<reportElement x="332" y="0" width="30" height="20" uuid="6381c5e8-9e6e-4bb1-b907-c98a43dc7cd7"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -154,7 +196,7 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{partidosJugados}]]></textFieldExpression>
@@ -168,7 +210,7 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{posicion}]]></textFieldExpression>
@@ -182,7 +224,7 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{difGoles}]]></textFieldExpression>
@@ -196,7 +238,7 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{golesFavor}]]></textFieldExpression>
@@ -210,10 +252,49 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{golesContra}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="362" y="0" width="30" height="20" uuid="654d2661-b237-42ea-94a5-ea34b60e268d"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{juegosGanados}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="392" y="0" width="30" height="20" uuid="c7100b6b-9e9a-4a5b-9e13-c7c518af664a"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{juegosEmpatados}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="422" y="0" width="30" height="20" uuid="81b384ab-c06e-4e59-8244-8c025ce55362"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{juegosPerdidos}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

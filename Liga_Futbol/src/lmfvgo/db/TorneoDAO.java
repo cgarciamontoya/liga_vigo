@@ -6,6 +6,7 @@
 
 package lmfvgo.db;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -21,6 +22,10 @@ public class TorneoDAO extends BaseDAO {
     public static final String ID_TORNEO = "id_torneo";
     public static final String NOMBRE_TORNEO = "nombre_torneo";
     private StringBuilder sb;
+    public TorneoDAO(Connection con) {
+        super(con);
+    }
+    
     public TorneoDAO() {
         super();
     }

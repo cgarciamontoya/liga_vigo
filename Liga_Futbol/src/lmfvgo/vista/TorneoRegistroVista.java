@@ -6,6 +6,7 @@
 
 package lmfvgo.vista;
 
+import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import lmfvgo.db.EquiposDAO;
@@ -24,11 +25,12 @@ public class TorneoRegistroVista extends FormBase {
     private final TorneoDAO torneoDAO;
     private final EquiposDAO equiposDAO;
     private Torneo torneo;
-    /** Creates new form TorneoRegistroVista */
-    public TorneoRegistroVista() {
+    /** Creates new form TorneoRegistroVista
+     * @param con */
+    public TorneoRegistroVista(Connection con) {
         initComponents();
-        torneoDAO = new TorneoDAO();
-        equiposDAO = new EquiposDAO();
+        torneoDAO = new TorneoDAO(con);
+        equiposDAO = new EquiposDAO(con);
         txtFechaInicio.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
         torneo = torneoDAO.torneoActivo();
         if (torneo == null) {

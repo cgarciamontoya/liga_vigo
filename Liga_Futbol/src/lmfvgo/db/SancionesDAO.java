@@ -10,6 +10,7 @@
  */
 package lmfvgo.db;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,8 +25,8 @@ public class SancionesDAO extends BaseDAO {
 
     private StringBuilder sb;
     
-    public SancionesDAO() {
-        super();
+    public SancionesDAO(Connection con) {
+        super(con);
     }
 
     public void guardar(List<Sancion> sanciones, int idJugador) throws LMFVGOException {

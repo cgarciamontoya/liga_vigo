@@ -13,6 +13,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.sql.Connection;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -28,15 +29,17 @@ import lmfvgo.modelo.Configuracion;
 public class ConfiguracionVista extends FormBase {
     
     private static final int PICTURE_MAX_SIZE = 65500;
+    private static final long serialVersionUID = 4235684075125932638L;
 
     private final ConfiguracionDAO configuracionDAO;
     private Configuracion configuracion;
     /**
      * Creates new form ConfiguracionVista
+     * @param con
      */
-    public ConfiguracionVista() {
+    public ConfiguracionVista(Connection con) {
         initComponents();
-        configuracionDAO = new ConfiguracionDAO();
+        configuracionDAO = new ConfiguracionDAO(con);
         configuracion = configuracionDAO.consultaConfiguracion();
         if (configuracion != null) {
             cboEquipos.setSelectedItem(String.valueOf(configuracion.getEquiposCalifican()));

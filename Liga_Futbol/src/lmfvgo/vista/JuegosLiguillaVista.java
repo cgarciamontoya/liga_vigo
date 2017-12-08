@@ -5,6 +5,7 @@
  */
 package lmfvgo.vista;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +21,6 @@ import lmfvgo.db.JuegosDAO;
 import lmfvgo.excepciones.LMFVGOException;
 import lmfvgo.modelo.Configuracion;
 import lmfvgo.modelo.EquipoLiguilla;
-import lmfvgo.modelo.Equipos;
 import lmfvgo.modelo.EstadisticasEquipo;
 import lmfvgo.modelo.Juegos;
 import lmfvgo.util.ConstantesUtil;
@@ -43,13 +43,13 @@ public class JuegosLiguillaVista extends FormBase {
     /**
      * Creates new form JuegosLiguillaVista
      */
-    public JuegosLiguillaVista() {
+    public JuegosLiguillaVista(Connection con) {
         initComponents();
-        juegosDAO = new JuegosDAO();
-        estadisticasEquipoDAO = new EstadisticasEquipoDAO();
-        configuracionDAO = new ConfiguracionDAO();
+        juegosDAO = new JuegosDAO(con);
+        estadisticasEquipoDAO = new EstadisticasEquipoDAO(con);
+        configuracionDAO = new ConfiguracionDAO(con);
         configuracion = configuracionDAO.consultaConfiguracion();
-        equiposDAO = new EquiposDAO();
+        equiposDAO = new EquiposDAO(con);
         
     }
 

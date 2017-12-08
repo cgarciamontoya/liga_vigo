@@ -10,6 +10,7 @@
  */
 package lmfvgo.db;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,8 +25,8 @@ public class JuegosDAO extends BaseDAO {
     
     private StringBuilder sb;
 
-    public JuegosDAO() {
-        super();
+    public JuegosDAO(Connection con) {
+        super(con);
     }
 
     public void guardarRol(Map<Integer, List<Juegos>> rol, Integer fuerza) throws LMFVGOException {

@@ -5,6 +5,7 @@
  */
 package lmfvgo.vista;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -28,12 +29,13 @@ public class CredencialesEquipoVista extends FormBase {
 
     /**
      * Creates new form CredencialesEquipoVista
+     * @param con
      */
-    public CredencialesEquipoVista() {
+    public CredencialesEquipoVista(Connection con) {
         initComponents();
-        jugadoresDAO = new JugadoresDAO();
-        equiposDAO = new EquiposDAO();
-        reportesManager = new ReportesManager();
+        jugadoresDAO = new JugadoresDAO(con);
+        equiposDAO = new EquiposDAO(con);
+        reportesManager = new ReportesManager(con);
         
         cboEquipos.setModel(new DefaultComboBoxModel());
     }

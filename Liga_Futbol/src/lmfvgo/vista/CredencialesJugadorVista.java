@@ -6,6 +6,7 @@
 
 package lmfvgo.vista;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultListModel;
@@ -24,11 +25,12 @@ public class CredencialesJugadorVista extends FormBase {
     private final JugadoresDAO jugadoresDAO;
     private final ReportesManager reportesManager;
     
-    /** Creates new form CredencialesJugadorVista */
-    public CredencialesJugadorVista() {
+    /** Creates new form CredencialesJugadorVista
+     * @param con */
+    public CredencialesJugadorVista(Connection con) {
         initComponents();
-        jugadoresDAO = new JugadoresDAO();
-        reportesManager = new ReportesManager();
+        jugadoresDAO = new JugadoresDAO(con);
+        reportesManager = new ReportesManager(con);
         
         inicializarJugadores();
     }

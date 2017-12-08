@@ -5,6 +5,7 @@
  */
 package lmfvgo.vista;
 
+import java.sql.Connection;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import lmfvgo.db.EstadisticasEquipoDAO;
@@ -19,6 +20,8 @@ import lmfvgo.util.ReportesManager;
  */
 public class EquipoEstadisticasVista extends FormBase {
 
+    private static final long serialVersionUID = 6431512445437343129L;
+
     private final EstadisticasEquipoDAO estadisticasEquipoDAO;
     private final ReportesManager reportesManager;
     
@@ -26,11 +29,12 @@ public class EquipoEstadisticasVista extends FormBase {
     List<EstadisticasJugador> estJug = null;
     /**
      * Creates new form EquipoEstadisticasVista
+     * @param con
      */
-    public EquipoEstadisticasVista() {
+    public EquipoEstadisticasVista(Connection con) {
         initComponents();
-        estadisticasEquipoDAO = new EstadisticasEquipoDAO();
-        reportesManager = new ReportesManager();
+        estadisticasEquipoDAO = new EstadisticasEquipoDAO(con);
+        reportesManager = new ReportesManager(con);
         btnGenerarReporte.setEnabled(false);
     }
 
@@ -94,14 +98,14 @@ public class EquipoEstadisticasVista extends FormBase {
 
             },
             new String [] {
-                "Posición", "Nombre", "Juegos", "Goles Favor", "Goles Contra", "Dif", "Puntos"
+                "Posición", "Nombre", "JJ", "JG", "JE", "JP", "GF", "GC", "Dif", "PTS"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -156,23 +160,23 @@ public class EquipoEstadisticasVista extends FormBase {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 715, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cboFuerza, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addComponent(cboFuerza, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnConsultar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnLimpiar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnGenerarReporte))
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 226, Short.MAX_VALUE)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 524, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(200, 200, 200)))
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(96, 96, 96)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 524, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -185,12 +189,12 @@ public class EquipoEstadisticasVista extends FormBase {
                     .addComponent(btnLimpiar)
                     .addComponent(btnGenerarReporte))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel2)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -222,7 +226,9 @@ public class EquipoEstadisticasVista extends FormBase {
         DefaultTableModel dtm = (DefaultTableModel) tblEstadisticas.getModel();
         for (EstadisticasEquipo ee : estadisticas) {
             dtm.addRow(new Object[]{ee.getPosicion(), ee.getEquipoNombre(), 
-                ee.getPartidosJugados(), ee.getGolesFavor(), ee.getGolesContra(), ee.getDifGoles(), ee.getPuntos()});
+                ee.getPartidosJugados(), 
+                ee.getJuegosGanados(), ee.getJuegosEmpatados(), ee.getJuegosPerdidos(),
+                ee.getGolesFavor(), ee.getGolesContra(), ee.getDifGoles(), ee.getPuntos()});
         }
         
         estJug = estadisticasEquipoDAO.consultaGoleo(cboFuerza.getSelectedIndex());

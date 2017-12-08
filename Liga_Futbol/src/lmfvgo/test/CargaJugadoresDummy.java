@@ -28,7 +28,7 @@ public class CargaJugadoresDummy {
     }
     
     private void cargarJugadores() {
-        try {
+        /*try {
             JugadoresDAO dao = new JugadoresDAO();
             List<Jugadores> jugadores = initNombres();
             for (Jugadores j : jugadores) {
@@ -37,7 +37,7 @@ public class CargaJugadoresDummy {
             System.out.println("FINALIZADO");
         } catch (LMFVGOException ex) {
             ex.printStackTrace();
-        }
+        }*/
     }
     
     private List<Jugadores> initNombres() {

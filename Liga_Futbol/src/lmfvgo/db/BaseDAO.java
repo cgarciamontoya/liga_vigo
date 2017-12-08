@@ -27,6 +27,10 @@ public class BaseDAO {
     
     private Connection connection;
     
+    public BaseDAO(Connection con) {
+        this.connection = con;
+    }
+    
     public BaseDAO() {
         
     }
@@ -98,4 +102,17 @@ public class BaseDAO {
         }
     }
     
+    public void close() {
+        try {
+            if (connection != null && !connection.isClosed()) {
+                connection.close();
+            }
+        } catch (SQLException ex) {
+            System.out.println("No se pudo cerrar la conexion");
+        }
+    }
+
+    public void setConnection(Connection connection) {
+        this.connection = connection;
+    }
 }

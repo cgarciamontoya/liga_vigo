@@ -5,6 +5,7 @@
  */
 package lmfvgo.vista;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -38,15 +39,16 @@ public class JugadoresSancionesVista extends FormBase {
 
     /**
      * Creates new form JugadoresSancionesVista
+     * @param con
      */
-    public JugadoresSancionesVista() {
+    public JugadoresSancionesVista(Connection con) {
         initComponents();
         
-        reglamentoDAO = new ReglamentoDAO();
-        equiposDAO = new EquiposDAO();
-        jugadoresDAO = new JugadoresDAO();
-        juegosDAO = new JuegosDAO();
-        sancionesDAO = new SancionesDAO();
+        reglamentoDAO = new ReglamentoDAO(con);
+        equiposDAO = new EquiposDAO(con);
+        jugadoresDAO = new JugadoresDAO(con);
+        juegosDAO = new JuegosDAO(con);
+        sancionesDAO = new SancionesDAO(con);
         
         List<Reglamento> reglas = reglamentoDAO.consultaPorFiltros(new Reglamento());
         DefaultComboBoxModel modelReglas = (DefaultComboBoxModel) cboReglamento.getModel();

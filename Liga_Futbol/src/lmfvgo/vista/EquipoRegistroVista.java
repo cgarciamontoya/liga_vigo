@@ -5,6 +5,7 @@
  */
 package lmfvgo.vista;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -25,6 +26,8 @@ import lmfvgo.util.ReportesManager;
  * @author sandra
  */
 public class EquipoRegistroVista extends FormBase {
+
+    private static final long serialVersionUID = -2371466490914252211L;
     
     private final EquiposDAO equiposDAO;
     private final JugadoresDAO jugadoresDAO;
@@ -34,15 +37,16 @@ public class EquipoRegistroVista extends FormBase {
 
     /**
      * Creates new form EquipoRegistroVista
+     * @param con
      */
-    public EquipoRegistroVista() {
+    public EquipoRegistroVista(Connection con) {
         initComponents();
         lblActualizando.setVisible(false);
         btnEliminar.setVisible(false);
         btnCedula.setVisible(false);
-        equiposDAO = new EquiposDAO();
-        jugadoresDAO = new JugadoresDAO();
-        reportesManager = new ReportesManager();
+        equiposDAO = new EquiposDAO(con);
+        jugadoresDAO = new JugadoresDAO(con);
+        reportesManager = new ReportesManager(con);
         catFuerza = new HashMap<>();
         catFuerza.put("SELECCIONE", 0);
         catFuerza.put("PRIMERA", 1);
