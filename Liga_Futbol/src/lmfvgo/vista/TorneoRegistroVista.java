@@ -186,6 +186,8 @@ public class TorneoRegistroVista extends FormBase {
         }
         if (txtTesorero.getText() != null && !txtTesorero.getText().isEmpty()) {
             torneo.setTesorero(txtTesorero.getText());
+        } else {
+            torneo.setTesorero("");
         }
         try {
                 if (torneo.getIdTorneo() != null && torneo.getIdTorneo() > 0) {
