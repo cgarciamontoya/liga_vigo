@@ -248,6 +248,7 @@ public class JugadoresDAO extends BaseDAO {
             }
             ResultSet rs = ps.executeQuery();
             List<CredencialVO> credenciales = new ArrayList<>();
+            List<CredencialVO> finales = new ArrayList<>();
             while (rs.next()) {
                 CredencialVO c = new CredencialVO();
                 c.setFolio(rs.getInt("id_jugador"));
@@ -262,8 +263,13 @@ public class JugadoresDAO extends BaseDAO {
                 c.setPresidente(torneo.getPresidente());
                 c.setSecretario(torneo.getSecretario());
                 c.setTesorero(torneo.getTesorero());
-                credenciales.add(c);
+                if (c.getNumero() != null && (c.getNumero().contains("DT") || c.getNumero().contains("AUX"))) {
+                    finales.add(c);
+                } else {
+                    credenciales.add(c);
+                }
             }
+            credenciales.addAll(finales);
             return credenciales;
         } catch (SQLException ex) {
             return null;
