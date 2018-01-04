@@ -173,28 +173,4 @@
 			</textField>
 		</band>
 	</detail>
-	<columnFooter>
-		<band height="80">
-			<staticText>
-				<reportElement x="0" y="5" width="53" height="20" uuid="5da77668-f657-4c34-b490-b9d2f65c3b2e"/>
-				<text><![CDATA[Marcador:]]></text>
-			</staticText>
-			<line>
-				<reportElement x="56" y="18" width="150" height="1" uuid="ef41fa9e-8fba-42bd-a7c2-7f8031c25fd3"/>
-			</line>
-			<staticText>
-				<reportElement x="0" y="25" width="286" height="20" uuid="b8dd704f-8550-41df-8e1d-6cc9e9067ece"/>
-				<textElement textAlignment="Center"/>
-				<text><![CDATA[CAPITAN]]></text>
-			</staticText>
-			<line>
-				<reportElement x="33" y="79" width="220" height="1" uuid="1af3ec14-d81e-47d5-9720-3cece9f7ffd2"/>
-			</line>
-			<textField isBlankWhenNull="true">
-				<reportElement x="56" y="4" width="140" height="20" uuid="9ca92171-f4cf-40e1-9349-6ea5985614e0"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$P{marcador}]]></textFieldExpression>
-			</textField>
-		</band>
-	</columnFooter>
 </jasperReport>

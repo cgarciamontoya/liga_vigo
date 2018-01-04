@@ -138,6 +138,50 @@
 			</subreport>
 		</band>
 	</detail>
+	<columnFooter>
+		<band height="96">
+			<staticText>
+				<reportElement x="2" y="11" width="53" height="20" uuid="6aacbefc-8e68-44ab-893b-2cee1aaab1c1"/>
+				<text><![CDATA[Marcador:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="58" y="24" width="150" height="1" uuid="512409e8-614f-4601-9688-92afd99bcdf1"/>
+			</line>
+			<staticText>
+				<reportElement x="2" y="31" width="284" height="20" uuid="14daddfa-2c4e-41b5-96b7-f06db86ae614"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[CAPITAN]]></text>
+			</staticText>
+			<line>
+				<reportElement x="35" y="85" width="220" height="1" uuid="696be493-1892-421b-836b-f932a2fcbcf3"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="58" y="10" width="140" height="20" uuid="2c70ffae-1208-4091-9ba3-fd717c29046d"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$P{marcadorLocal}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="343" y="24" width="150" height="1" uuid="4750e11a-6913-4d25-825d-882e55a04a45"/>
+			</line>
+			<line>
+				<reportElement x="320" y="85" width="220" height="1" uuid="79698708-7868-4118-95ee-5b534da69d7f"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="343" y="10" width="140" height="20" uuid="cea3ab70-ee24-4f15-afac-8aff9cd73261"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$P{marcadorVisitante}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="287" y="31" width="284" height="20" uuid="4d2e948c-19d3-4252-aa4a-d5e826b6f0ec"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[CAPITAN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="287" y="11" width="53" height="20" uuid="0d2d0a48-e776-404d-b2e5-337746ee9fcb"/>
+				<text><![CDATA[Marcador:]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
 	<pageFooter>
 		<band height="54" splitType="Stretch">
 			<staticText>
