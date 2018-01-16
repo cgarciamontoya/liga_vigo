@@ -169,15 +169,30 @@ public class JuegoDetalleVista extends FormBase {
             }
         }
         DefaultTableModel local = (DefaultTableModel) tabla.getModel();
-        
+        List<EstadisticasJugador> dts = new ArrayList<>();
         for (EstadisticasJugador ej : estj) {
-            local.addRow(new Object[]{(ej.getIdEstadistica() != null && ej.getIdEstadistica() > 0 ? ej.getIdEstadistica() : null),
+            if (ej.getNumero() == null || ej.getNumero().equals("DT") || ej.getNumero().equals("AUX")) {
+                dts.add(ej);
+            } else {
+                local.addRow(new Object[]{(ej.getIdEstadistica() != null && ej.getIdEstadistica() > 0 ? ej.getIdEstadistica() : null),
                                         ej.getNombreJugador(), 
                                         ej.getNumero(),
                                         ej.getInicioCambioNj() == null || ej.getInicioCambioNj().isEmpty() ? "NJ" : ej.getInicioCambioNj(), 
                                         ej.getTa() == null ? 0 : ej.getTa(), 
                                         ej.getTr() == null ? 0 : ej.getTr(), 
                                         ej.getGoles() == null ? 0 : ej.getGoles()});
+            }
+        }
+        if (!dts.isEmpty()) {
+            for (EstadisticasJugador ej : dts) {
+                local.addRow(new Object[]{(ej.getIdEstadistica() != null && ej.getIdEstadistica() > 0 ? ej.getIdEstadistica() : null),
+                                        ej.getNombreJugador(), 
+                                        ej.getNumero(),
+                                        ej.getInicioCambioNj() == null || ej.getInicioCambioNj().isEmpty() ? "NJ" : ej.getInicioCambioNj(), 
+                                        ej.getTa() == null ? 0 : ej.getTa(), 
+                                        ej.getTr() == null ? 0 : ej.getTr(), 
+                                        ej.getGoles() == null ? 0 : ej.getGoles()});
+            }
         }
     }
     
