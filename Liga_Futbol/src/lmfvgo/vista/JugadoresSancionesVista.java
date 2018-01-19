@@ -271,17 +271,19 @@ public class JugadoresSancionesVista extends FormBase {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cargarJugadores(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargarJugadores
-        int idEquipo = Integer.parseInt(cboEquipos.getSelectedItem().toString().split(" - ")[0]);
-        cboJugador.removeAllItems();
-        if (idEquipo > 0) {
-            List<String> jugs = new ArrayList<>();
-            jugs.add("0 - Seleccione");
-            List<Jugadores> jugadoresBD = jugadoresDAO.consultaJugadoresEquipo(idEquipo);
-            for (Jugadores j : jugadoresBD) {
-                jugs.add(j.getIdJugador() + " - " + j.getNombre() + " " + j.getPaterno() + " " + j.getMaterno());
-            }
-            if (!jugs.isEmpty()) {
-                cboJugador.setModel(new DefaultComboBoxModel(jugs.toArray()));
+        if (cboEquipos.getItemCount() > 0) {
+            int idEquipo = Integer.parseInt(cboEquipos.getSelectedItem().toString().split(" - ")[0]);
+            cboJugador.removeAllItems();
+            if (idEquipo > 0) {
+                List<String> jugs = new ArrayList<>();
+                jugs.add("0 - Seleccione");
+                List<Jugadores> jugadoresBD = jugadoresDAO.consultaJugadoresEquipo(idEquipo);
+                for (Jugadores j : jugadoresBD) {
+                    jugs.add(j.getIdJugador() + " - " + j.getNombre() + " " + j.getPaterno() + " " + j.getMaterno());
+                }
+                if (!jugs.isEmpty()) {
+                    cboJugador.setModel(new DefaultComboBoxModel(jugs.toArray()));
+                }
             }
         }
     }//GEN-LAST:event_cargarJugadores
@@ -338,8 +340,8 @@ public class JugadoresSancionesVista extends FormBase {
             }
             try {
                 sancionesDAO.guardar(sanciones, idJugador);
-                limpiar(evt);
                 agregarMensajeExito("Las sanciones se guardaron correctamente");
+                limpiar(evt);
             } catch (LMFVGOException ex) {
                 agregarMensajeError(ex.getMessage());
             }
@@ -367,14 +369,15 @@ public class JugadoresSancionesVista extends FormBase {
     }//GEN-LAST:event_cargarSanciones
 
     private void cargarEquipos(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargarEquipos
-        List<Equipos> equipos = equiposDAO.consultarEquipo(null, 0);
-        DefaultComboBoxModel modelEquipos = (DefaultComboBoxModel) cboEquipos.getModel();
-        modelEquipos.addElement("0 - Seleccione");
-        for (Equipos e : equipos) {
-            modelEquipos.addElement(e.getIdEquipo() + " - " + e.getNombre());
+        if (cboFuerza.getSelectedIndex() > 0) {
+            List<Equipos> equipos = equiposDAO.consultarEquipo(null, 0);
+            DefaultComboBoxModel modelEquipos = (DefaultComboBoxModel) cboEquipos.getModel();
+            modelEquipos.addElement("0 - Seleccione");
+            for (Equipos e : equipos) {
+                modelEquipos.addElement(e.getIdEquipo() + " - " + e.getNombre());
+            }
+            cboEquipos.setModel(modelEquipos);
         }
-        cboEquipos.setModel(modelEquipos);
-        
     }//GEN-LAST:event_cargarEquipos
 
 

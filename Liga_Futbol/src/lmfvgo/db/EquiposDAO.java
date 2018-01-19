@@ -116,6 +116,30 @@ public class EquiposDAO extends BaseDAO {
         }
     }
     
+    public Equipos consultarEquipoId(int idEquipo) {
+        try {
+            sb = new StringBuilder();
+            sb.append("select id_equipo, nombre, fuerza, fecha_registro, fecha_baja, motivo_baja ")
+                    .append("from equipos where id_equipo = ")
+                    .append(idEquipo)
+                    .append(" order by fuerza, nombre");
+            ResultSet rs = getConnection().prepareStatement(sb.toString()).executeQuery();
+            while (rs.next()) {
+                Equipos eq = new Equipos();
+                eq.setIdEquipo(rs.getInt("id_equipo"));
+                eq.setNombre(rs.getString("nombre"));
+                eq.setFuerza(rs.getInt("fuerza"));
+                eq.setFechaRegistro(rs.getDate("fecha_registro"));
+                eq.setFechaBaja(rs.getObject("fecha_baja") != null ? rs.getDate("fecha_baja") : null);
+                eq.setMotivoBaja(rs.getObject("motivo_baja") != null ? rs.getString("motivo_baja") : null);
+                return eq;
+            }
+            return null;
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
+    
     public List<Equipos> consultarEquipoRol(int fuerza) {
         try {
             sb = new StringBuilder();

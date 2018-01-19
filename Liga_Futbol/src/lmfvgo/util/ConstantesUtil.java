@@ -16,4 +16,5 @@ public interface ConstantesUtil {
     public static final int JORNADA_CUARTOS = 98;
     public static final int JORNADA_SEMIS = 99;
     public static final int JORNADA_FINAL = 100;
+    public static final String CLAVE_TA = "JTA";
 }

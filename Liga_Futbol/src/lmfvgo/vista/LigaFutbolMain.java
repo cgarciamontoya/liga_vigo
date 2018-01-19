@@ -66,6 +66,7 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         menuSanciones = new javax.swing.JMenu();
         mnuJugSanciones = new javax.swing.JMenuItem();
         mnuSancionesConsulta = new javax.swing.JMenuItem();
+        mnuSancionesAmon = new javax.swing.JMenuItem();
         menuConf = new javax.swing.JMenu();
         mnuConfParam = new javax.swing.JMenuItem();
 
@@ -219,13 +220,21 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         });
         menuSanciones.add(mnuJugSanciones);
 
-        mnuSancionesConsulta.setText("Consulta");
+        mnuSancionesConsulta.setText("Expulsados");
         mnuSancionesConsulta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 abrirConsultaSanciones(evt);
             }
         });
         menuSanciones.add(mnuSancionesConsulta);
+
+        mnuSancionesAmon.setText("Amonestados");
+        mnuSancionesAmon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                abrirAmonestados(evt);
+            }
+        });
+        menuSanciones.add(mnuSancionesAmon);
 
         jMenuBar1.add(menuSanciones);
 
@@ -361,6 +370,12 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cerrandoSistema
 
+    private void abrirAmonestados(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirAmonestados
+        SancionesAmonestadosVista sav = new SancionesAmonestadosVista(connection);
+        this.add(sav);
+        sav.show();
+    }//GEN-LAST:event_abrirAmonestados
+
     /**
      * @param args the command line arguments
      */
@@ -419,6 +434,7 @@ public class LigaFutbolMain extends javax.swing.JFrame {
     private javax.swing.JMenuItem mnuJugConsulta;
     private javax.swing.JMenuItem mnuJugRegistro;
     private javax.swing.JMenuItem mnuJugSanciones;
+    private javax.swing.JMenuItem mnuSancionesAmon;
     private javax.swing.JMenuItem mnuSancionesConsulta;
     private javax.swing.JMenuItem mnuTorneoCerrar;
     private javax.swing.JMenuItem mnuTorneoNuevo;

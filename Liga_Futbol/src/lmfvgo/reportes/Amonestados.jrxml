@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Amonestados" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="603d7879-5c8b-40eb-a31e-2d9acec6ef0a">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="logo" class="java.io.InputStream"/>
+	<parameter name="escudo" class="java.io.InputStream"/>
+	<field name="fuerza" class="java.lang.Integer"/>
+	<field name="nombreJugador" class="java.lang.String"/>
+	<field name="totalTarjetas" class="java.lang.Integer"/>
+	<field name="nombreEquipo" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="78" splitType="Stretch">
+			<staticText>
+				<reportElement x="148" y="57" width="284" height="20" uuid="8bcd693e-d5c9-45cb-862b-14ff0a861eaf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[AMONESTADOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="148" y="18" width="284" height="18" uuid="363403cc-aa59-41c3-a582-a2206fdaa136"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[HACIENDA "EL CARRO"]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="148" y="36" width="284" height="18" uuid="4e79a586-708c-4271-aa69-def80be4656f"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="false" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[VILLA GONZALEZ ORTEGA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="148" y="0" width="284" height="18" uuid="cf5186b3-9fb2-4e2f-b082-431d64d146bd"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="false" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[LIGA MUNICIPAL DE FUTBOL]]></text>
+			</staticText>
+			<image isUsingCache="false">
+				<reportElement x="0" y="0" width="115" height="60" uuid="db6a13b3-f88c-49cd-81ba-fc116a6f1244">
+					<printWhenExpression><![CDATA[new Boolean($P{escudo} != null)]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$P{escudo}]]></imageExpression>
+			</image>
+			<image isUsingCache="false">
+				<reportElement x="457" y="0" width="115" height="60" uuid="d90781c7-02d0-42e5-9240-1c426ebc46da">
+					<printWhenExpression><![CDATA[new Boolean($P{logo} != null)]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="275" height="20" backcolor="#99FFFF" uuid="b04b3032-2ebc-4f7f-b138-0606ccffd250"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="442" y="0" width="65" height="20" backcolor="#99FFFF" uuid="7b17898b-a440-4efe-aafa-80a939c91a4a"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fuerza]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="507" y="0" width="65" height="20" backcolor="#99FFFF" uuid="8383f3b2-7905-4dc3-a53e-335c4d4082fa"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="275" y="0" width="167" height="20" backcolor="#99FFFF" uuid="76837225-c244-4c12-8c1e-4a4295e4a295"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Equipo]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="275" height="20" uuid="dd10188e-0d2e-4e6d-97ed-dd8a09a9a682"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[" " + $F{nombreJugador}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="442" y="0" width="65" height="20" uuid="99c9aad1-70db-4f78-8a10-aa0e25e8534f"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{fuerza}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="275" y="0" width="167" height="20" uuid="061e42ad-9cf2-496f-b461-169beb8e45d6"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nombreEquipo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="507" y="0" width="65" height="20" uuid="73770089-c388-4f89-8fee-543ebe741464"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{totalTarjetas}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement x="452" y="5" width="80" height="20" uuid="45c8e920-a4dc-43fb-9807-e68ecadb78bb"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="532" y="5" width="40" height="20" uuid="23a82c60-c13e-4bec-b78a-b8269cdef6e5"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

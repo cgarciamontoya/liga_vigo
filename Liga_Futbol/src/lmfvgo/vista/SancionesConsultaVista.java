@@ -39,6 +39,7 @@ public class SancionesConsultaVista extends FormBase {
         sancionesDAO = new SancionesDAO(con);
         reportesManager = new ReportesManager(con);
         btnExportar.setEnabled(false);
+        lblJornada.setVisible(false);
     }
 
     /**
@@ -59,6 +60,7 @@ public class SancionesConsultaVista extends FormBase {
         btnExportar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblSanciones = new javax.swing.JTable();
+        lblJornada = new javax.swing.JLabel();
 
         setClosable(true);
         setTitle("CONSULTA SANCIONES");
@@ -101,14 +103,14 @@ public class SancionesConsultaVista extends FormBase {
 
             },
             new String [] {
-                "Clave", "Jornada", "Jugador", "Equipo", "Juegos", "Multa"
+                "Clave", "Jornada", "Jugador", "Equipo", "Juegos", "Multa", "Observaciones"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Float.class
+                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Float.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -121,6 +123,8 @@ public class SancionesConsultaVista extends FormBase {
         });
         jScrollPane1.setViewportView(tblSanciones);
 
+        lblJornada.setText("jLabel3");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -128,7 +132,7 @@ public class SancionesConsultaVista extends FormBase {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 861, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 818, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -138,7 +142,8 @@ public class SancionesConsultaVista extends FormBase {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(cboEquipos, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(lblJornada)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnExportar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnBuscar)
@@ -159,7 +164,8 @@ public class SancionesConsultaVista extends FormBase {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLimpiar)
                     .addComponent(btnBuscar)
-                    .addComponent(btnExportar))
+                    .addComponent(btnExportar)
+                    .addComponent(lblJornada))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -186,6 +192,7 @@ public class SancionesConsultaVista extends FormBase {
         limpiarTabla(tblSanciones);
         btnExportar.setEnabled(false);
         sanciones = null;
+        lblJornada.setVisible(false);
     }//GEN-LAST:event_limpiar
 
     private void buscarSanciones(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarSanciones
@@ -201,10 +208,11 @@ public class SancionesConsultaVista extends FormBase {
                     modelo.addRow(new Object[]{
                         s.getClave(),
                         s.getJornada(),
-                        s.getNombreJugador(),
+                        (s.getIdJugador() + " - " + s.getNombreJugador()),
                         s.getNombreEquipo(),
                         (String.valueOf(s.getJuegosCumplidos()) + "/" + String.valueOf(s.getSancionJuegos())),
-                        (s.getSancionEconomica() != null && s.getSancionEconomica() > 0 ? s.getSancionEconomica() : null)
+                        (s.getSancionEconomica() != null && s.getSancionEconomica() > 0 ? s.getSancionEconomica() : null),
+                        s.getObservaciones()
                     });
                     agregado = true;
                 }
@@ -214,6 +222,8 @@ public class SancionesConsultaVista extends FormBase {
                 }
             }
             btnExportar.setEnabled(true);
+            lblJornada.setText("Jornada: " + sancionesDAO.getJornadaActual(cboFuerza.getSelectedIndex()));
+            lblJornada.setVisible(true);
         } else {
             agregarMensajeError("No se encontraron resultados");
         }
@@ -245,6 +255,7 @@ public class SancionesConsultaVista extends FormBase {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblJornada;
     private javax.swing.JTable tblSanciones;
     // End of variables declaration//GEN-END:variables
 }

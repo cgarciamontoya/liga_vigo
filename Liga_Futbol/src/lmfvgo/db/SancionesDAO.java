@@ -18,11 +18,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import lmfvgo.excepciones.LMFVGOException;
+import lmfvgo.modelo.Amonestado;
 import lmfvgo.modelo.Sancion;
 import lmfvgo.util.ConstantesUtil;
 
 public class SancionesDAO extends BaseDAO {
-
+    
     private StringBuilder sb;
     
     public SancionesDAO(Connection con) {
@@ -67,7 +68,7 @@ public class SancionesDAO extends BaseDAO {
     
     public List<Sancion> consultaSanciones(int idEquipo, int fuerza) {
         sb = new StringBuilder();
-        sb.append("select s.clave_reglamento, r.descripcion, ")
+        sb.append("select s.clave_reglamento, r.descripcion, s.observaciones,")
                 .append("s.id_jugador, concat(j.nombre, ' ', j.paterno, ' ', j.materno) nombre_jugador, ")
                 .append("s.jornada, s.id_torneo, s.fecha, s.activo, sum(r.sancion_juegos) sancion_juegos, r.sancion_economica, eqs.nombre nombre_equipo ")
                 .append("from sanciones s ")
@@ -91,6 +92,7 @@ public class SancionesDAO extends BaseDAO {
                 Sancion s = new Sancion();
                 s.setClave(rs.getString("clave_reglamento"));
                 s.setDescripcionClave("descripcion");
+                s.setObservaciones(rs.getString("observaciones"));
                 s.setIdJugador(rs.getInt("id_jugador"));
                 s.setNombreJugador(rs.getString("nombre_jugador"));
                 s.setJornada(rs.getInt("jornada"));
@@ -113,7 +115,7 @@ public class SancionesDAO extends BaseDAO {
     
     public List<Sancion> consultaSancionesJugador(Integer idJugador, int fuerza) {
         sb = new StringBuilder();
-        sb.append("select s.clave_reglamento, r.descripcion, ")
+        sb.append("select s.clave_reglamento, r.descripcion, s.observaciones, ")
                 .append("s.id_jugador, concat(j.nombre, ' ', j.paterno, ' ', j.materno) nombre_jugador, ")
                 .append("s.jornada, s.id_torneo, s.fecha, s.activo, r.sancion_juegos, r.sancion_economica ")
                 .append("from sanciones s ")
@@ -130,7 +132,8 @@ public class SancionesDAO extends BaseDAO {
             while (rs.next()) {
                 Sancion s = new Sancion();
                 s.setClave(rs.getString("clave_reglamento"));
-                s.setDescripcionClave("descripcion");
+                s.setDescripcionClave(rs.getString("descripcion"));
+                s.setObservaciones(rs.getString("observaciones"));
                 s.setIdJugador(rs.getInt("id_jugador"));
                 s.setNombreJugador(rs.getString("nombre_jugador"));
                 s.setJornada(rs.getInt("jornada"));
@@ -148,14 +151,88 @@ public class SancionesDAO extends BaseDAO {
         }
     }
     
-    public void bajaSancion(Integer idJugador, String clave) throws LMFVGOException {
+    public void bajaSancion(Integer idJugador, String clave, String observaciones) throws LMFVGOException {
         try {
-            PreparedStatement ps = getConnection().prepareStatement("update sanciones set activo = 0 where id_jugador = ? and clave_reglamento = ?");
-            ps.setInt(1, idJugador);
-            ps.setString(2, clave);
+            PreparedStatement ps = getConnection().prepareStatement("update sanciones set activo = 0, observaciones = ? where id_jugador = ? and clave_reglamento = ?");
+            ps.setString(1, observaciones != null ? observaciones : "");
+            ps.setInt(2, idJugador);
+            ps.setString(3, clave);
             ps.execute();
         } catch (SQLException ex) {
             throw new LMFVGOException("No se pudo eliminar la sancion debido a: " + ex.getMessage());
+        }
+    }
+    
+    public void guardarAmonestacion(List<Amonestado> amonestados) throws LMFVGOException {
+        try {
+            String query = "insert into amonestados values(?,?,?,?,?,?)";
+            PreparedStatement ps = getConnection().prepareStatement(query);
+            for (Amonestado a : amonestados) {
+                eliminarAmonestaciones(a.getIdJugador(), a.getIdJuego());
+                ps.setInt(1, a.getIdJugador());
+                ps.setInt(2, a.getIdEquipo());
+                ps.setInt(3, a.getIdJuego());
+                ps.setInt(4, a.getJornada());
+                ps.setString(5, "");
+                ps.setInt(6, 1);
+                ps.addBatch();
+            }
+            ps.executeBatch();
+        } catch (SQLException ex) {
+            throw new LMFVGOException("No fue posible guardar los amonestados debido a: " + ex.getMessage());
+        }
+    }
+    
+    private void eliminarAmonestaciones(Integer idJugador, Integer idJuego) throws SQLException {
+        PreparedStatement ps = getConnection().prepareStatement("delete from amonestados where id_jugador = ? and id_juego = ?");
+        ps.setInt(1, idJugador);
+        ps.setInt(2, idJuego);
+        ps.execute();
+    }
+    
+    public List<Amonestado> consultaAmonestados(int fuerza) {
+        try {
+            StringBuilder sb = new StringBuilder();
+            sb.append("select a.id_jugador, concat(j.nombre, ' ', j.paterno, ' ', j.materno) nombre_jugador, a.id_equipo, ")
+                    .append("e.nombre equipo, count(id_jugador) total, e.fuerza ")
+                    .append("from amonestados a ")
+                    .append("inner join equipos e using(id_equipo) ")
+                    .append("inner join jugadores j using(id_jugador) ")
+                    .append("where activo = 1 ");
+            if (fuerza > 0) {
+                sb.append("and e.fuerza = ")
+                        .append(fuerza)
+                        .append(" ");
+            }
+            sb.append("group by id_jugador ")
+                    .append("having count(id_jugador) = 2 ")
+                    .append("order by fuerza, equipo, nombre_jugador");
+            ResultSet rs = getConnection().prepareStatement(sb.toString()).executeQuery();
+            List<Amonestado> amonestados = new ArrayList<>();
+            while (rs.next()) {
+                Amonestado a = new Amonestado();
+                a.setIdJugador(rs.getInt("id_jugador"));
+                a.setNombreJugador(rs.getString("nombre_jugador"));
+                a.setIdEquipo(rs.getInt("id_equipo"));
+                a.setNombreEquipo(rs.getString("equipo"));
+                a.setTotalTarjetas(rs.getInt("total"));
+                a.setFuerza(rs.getInt("fuerza"));
+                amonestados.add(a);
+            }
+            return amonestados;
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
+    
+    public void quitarAmonestacion(Integer idJugador, String observaciones) {
+        try {
+            PreparedStatement ps = getConnection().prepareStatement("update amonestados set activo = 0, observaciones = ? where id_jugador = ?");
+            ps.setString(1, observaciones);
+            ps.setInt(2, idJugador);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("No se eliminaron las amonestaciones debido a: " + ex.getMessage());
         }
     }
     

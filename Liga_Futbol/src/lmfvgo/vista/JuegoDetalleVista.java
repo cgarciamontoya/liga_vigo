@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,12 +22,15 @@ import lmfvgo.db.EstadisticasEquipoDAO;
 import lmfvgo.db.EstadisticasJugadorDAO;
 import lmfvgo.db.JuegosDAO;
 import lmfvgo.db.JugadoresDAO;
+import lmfvgo.db.SancionesDAO;
 import lmfvgo.enums.ResultadosJuegoEnum;
 import lmfvgo.excepciones.LMFVGOException;
+import lmfvgo.modelo.Amonestado;
 import lmfvgo.modelo.EstadisticasEquipo;
 import lmfvgo.modelo.EstadisticasJugador;
 import lmfvgo.modelo.Juegos;
 import lmfvgo.modelo.Jugadores;
+import lmfvgo.modelo.Sancion;
 import lmfvgo.util.ConstantesUtil;
 import lmfvgo.util.ReportesManager;
 
@@ -38,12 +42,15 @@ public class JuegoDetalleVista extends FormBase {
     private static final long serialVersionUID = -1163107632122936758L;
     private static final String PARAM_LISTA = "paramLista";
     private static final String PARAM_EST = "paramEstEq";
+    private static final String PARAM_EXP = "paramEstExp";
+    private static final String PARAM_AMON = "paramEstAmon";
 
     private final JuegosDAO juegosDAO;
     private final JugadoresDAO jugadoresDAO;
     private final EstadisticasJugadorDAO estadisticasJugadorDAO;
     private final EstadisticasEquipoDAO estadisticasEquipoDAO;
     private final ReportesManager reportesManager;
+    private final SancionesDAO sancionesDAO;
     private final Juegos juego;
     private JComboBox cboAlineacion;
     private JComboBox cboTA;
@@ -65,6 +72,7 @@ public class JuegoDetalleVista extends FormBase {
         estadisticasJugadorDAO = new EstadisticasJugadorDAO(con);
         estadisticasEquipoDAO = new EstadisticasEquipoDAO(con);
         reportesManager = new ReportesManager(con);
+        sancionesDAO = new SancionesDAO(con);
         
         this.juego = juego;
         btnCedula.setEnabled(false);
@@ -530,8 +538,8 @@ public class JuegoDetalleVista extends FormBase {
         return true;
     }
     private void generarCedula(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generarCedula
-        Map<String, Object> listaLocal = obtenerEstadisticasTabla(tblLocal, juego.getLocal(), juego.getIdJuego(), true, estadisticaLocal);
-        Map<String, Object> listaVisitante = obtenerEstadisticasTabla(tblVisitante, juego.getVisitante(), juego.getIdJuego(), true, estadisticaVisitante);
+        Map<String, Object> listaLocal = obtenerEstadisticasTabla(tblLocal, juego.getLocal(), juego.getIdJuego(), true, estadisticaLocal, juego.getJornada());
+        Map<String, Object> listaVisitante = obtenerEstadisticasTabla(tblVisitante, juego.getVisitante(), juego.getIdJuego(), true, estadisticaVisitante, juego.getJornada());
         
         if (listaLocal == null || listaLocal.isEmpty() || listaLocal.get(PARAM_LISTA) == null ||
                 listaVisitante == null || listaVisitante.isEmpty() || listaVisitante.get(PARAM_LISTA) == null) {
@@ -548,9 +556,9 @@ public class JuegoDetalleVista extends FormBase {
 
     private void guardarEstadisticas(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarEstadisticas
         Map<String, Object> estadisticasLocal = obtenerEstadisticasTabla(tblLocal, juego.getLocal(), 
-                juego.getIdJuego(), false, estadisticaLocal);
+                juego.getIdJuego(), false, estadisticaLocal, juego.getJornada());
         Map<String, Object> estadisticasVisitante = obtenerEstadisticasTabla(tblVisitante, juego.getVisitante(), 
-                juego.getIdJuego(), false, estadisticaVisitante);
+                juego.getIdJuego(), false, estadisticaVisitante, juego.getJornada());
         
         if (estadisticasLocal == null || estadisticasLocal.isEmpty() ||
                 estadisticasVisitante == null || estadisticasVisitante.isEmpty()) {
@@ -620,6 +628,16 @@ public class JuegoDetalleVista extends FormBase {
                 estadisticasEquipoDAO.actualizarEstadisticas(estadisticaVisitante);
             }
             juegosDAO.actualizarMarcadorJuego(juego.getIdJuego(), resultado, marcador);
+            List<Amonestado> amonestados = (List<Amonestado>) estadisticasLocal.get(PARAM_AMON);
+            if (estadisticasVisitante.get(PARAM_AMON) != null) {
+                if (amonestados == null) {
+                    amonestados = new ArrayList<>();
+                }
+                amonestados.addAll((List<Amonestado>) estadisticasVisitante.get(PARAM_AMON));
+            }
+            if (amonestados != null && !amonestados.isEmpty()) {
+                sancionesDAO.guardarAmonestacion(amonestados);
+            }
             agregarMensajeExito("Se guardaron correctamente los registos");
             this.dispose();
             btnGenerarEsta.setVisible(true);
@@ -629,8 +647,8 @@ public class JuegoDetalleVista extends FormBase {
     }//GEN-LAST:event_guardarEstadisticas
 
     private void generarReporte(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generarReporte
-        Map<String, Object> listaLocal = obtenerEstadisticasTabla(tblLocal, juego.getLocal(), juego.getIdJuego(), false, estadisticaLocal);
-        Map<String, Object> listaVisitante = obtenerEstadisticasTabla(tblVisitante, juego.getVisitante(), juego.getIdJuego(), false, estadisticaVisitante);
+        Map<String, Object> listaLocal = obtenerEstadisticasTabla(tblLocal, juego.getLocal(), juego.getIdJuego(), false, estadisticaLocal, juego.getJornada());
+        Map<String, Object> listaVisitante = obtenerEstadisticasTabla(tblVisitante, juego.getVisitante(), juego.getIdJuego(), false, estadisticaVisitante, juego.getJornada());
         
         if (listaLocal == null || listaLocal.isEmpty() || listaLocal.get(PARAM_LISTA) == null ||
                 listaVisitante == null || listaVisitante.isEmpty() || listaVisitante.get(PARAM_LISTA) == null) {
@@ -650,9 +668,10 @@ public class JuegoDetalleVista extends FormBase {
         }
     }//GEN-LAST:event_generarReporte
 
-    private Map<String, Object> obtenerEstadisticasTabla(JTable tabla, Integer idEquipo, Integer idJuego, boolean expCedRep, EstadisticasEquipo ee) {
+    private Map<String, Object> obtenerEstadisticasTabla(JTable tabla, Integer idEquipo, Integer idJuego, boolean expCedRep, EstadisticasEquipo ee, int jornada) {
         Map<String, Object> mapa = new HashMap<>();
-        
+        List<Sancion> expulsados = new ArrayList<>();
+        List<Amonestado> amonestados = new ArrayList<>();
         DefaultTableModel model = (DefaultTableModel) tabla.getModel();
         
         if (model.getRowCount() >= 8) {
@@ -681,10 +700,22 @@ public class JuegoDetalleVista extends FormBase {
                     goles += ej.getGoles();
                 }
                 ejl.add(ej);
+                if (ej.getTr() > 0) {
+                    Sancion s = new Sancion();
+                    s.setIdJugador(ej.getIdJugador());
+                    s.setActivo(true);
+                    s.setFecha(new Date());
+                    s.setJornada(jornada);
+                    expulsados.add(s);
+                } else if (ej.getTa() != null && ej.getTa() == 1) {
+                    amonestados.add(new Amonestado(ej.getIdJugador(), ej.getIdEquipo(), idJuego, jornada));
+                }
             }
             ee.setGolesFavor(goles);
             mapa.put(PARAM_LISTA, ejl);
             mapa.put(PARAM_EST, ee);
+            mapa.put(PARAM_EXP, expulsados);
+            mapa.put(PARAM_AMON, amonestados);
             return mapa;
         }
         return null;

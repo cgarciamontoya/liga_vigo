@@ -172,10 +172,18 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnuSancionesConsulta">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Consulta"/>
+                <Property name="text" type="java.lang.String" value="Expulsados"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="abrirConsultaSanciones"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuSancionesAmon">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Amonestados"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="abrirAmonestados"/>
               </Events>
             </MenuItem>
           </SubComponents>

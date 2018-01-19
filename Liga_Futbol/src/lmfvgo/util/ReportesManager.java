@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import lmfvgo.db.ConfiguracionDAO;
 import lmfvgo.excepciones.LMFVGOException;
+import lmfvgo.modelo.Amonestado;
 import lmfvgo.modelo.Configuracion;
 import lmfvgo.modelo.EstadisticasEquipo;
 import lmfvgo.modelo.EstadisticasJugador;
@@ -46,6 +47,7 @@ public class ReportesManager {
     private static final String REPORTE_REGLAMENTO = "/lmfvgo/reportes/Reglamento.jasper";
     private static final String REPORTE_ROL = "/lmfvgo/reportes/Rol.jasper";
     private static final String REPORTE_SANCIONES = "/lmfvgo/reportes/Sanciones.jasper";
+    private static final String REPORTE_AMONESTADOS = "/lmfvgo/reportes/Amonestados.jasper";
     
     private final ConfiguracionDAO configuracionDAO;
     private final Configuracion configuracion;
@@ -53,6 +55,14 @@ public class ReportesManager {
     public ReportesManager(Connection con) {
         configuracionDAO = new ConfiguracionDAO(con);
         configuracion = configuracionDAO.consultaConfiguracion();
+    }
+    
+    public void amonestados(List<Amonestado> amonestados) throws LMFVGOException {
+        Map<String, Object> parametros = new HashMap<>();
+        getLogos(parametros);
+        String nombrePdf = URL_REPORTES + "Amonestados.pdf";
+        exportar(REPORTE_AMONESTADOS, parametros, nombrePdf, amonestados);
+        abrirPdf(nombrePdf);
     }
     
     public void sanciones(List<Sancion> sanciones) throws LMFVGOException {
