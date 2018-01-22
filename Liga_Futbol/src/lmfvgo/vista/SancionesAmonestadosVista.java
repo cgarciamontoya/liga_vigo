@@ -54,6 +54,7 @@ public class SancionesAmonestadosVista extends FormBase {
         btnBuscar = new javax.swing.JButton();
         btnExportar = new javax.swing.JButton();
 
+        setClosable(true);
         setTitle("CONSULTA AMONESTADOS");
 
         jLabel1.setText("Fuerza:");
