@@ -205,8 +205,8 @@ public class SancionesDAO extends BaseDAO {
                         .append(" ");
             }
             sb.append("group by id_jugador ")
-                    .append("having count(id_jugador) = 2 ")
-                    .append("order by fuerza, equipo, nombre_jugador");
+                    .append("having count(id_jugador) >= 2 ")
+                    .append("order by total desc, fuerza, equipo, nombre_jugador");
             ResultSet rs = getConnection().prepareStatement(sb.toString()).executeQuery();
             List<Amonestado> amonestados = new ArrayList<>();
             while (rs.next()) {
