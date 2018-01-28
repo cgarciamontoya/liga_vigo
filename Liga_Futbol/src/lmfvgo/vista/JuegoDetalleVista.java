@@ -700,7 +700,7 @@ public class JuegoDetalleVista extends FormBase {
                     goles += ej.getGoles();
                 }
                 ejl.add(ej);
-                if (ej.getTr() > 0) {
+                if (ej.getTr() != null && ej.getTr() > 0) {
                     Sancion s = new Sancion();
                     s.setIdJugador(ej.getIdJugador());
                     s.setActivo(true);
