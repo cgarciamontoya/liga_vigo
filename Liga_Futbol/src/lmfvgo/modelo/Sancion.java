@@ -30,6 +30,7 @@ public class Sancion implements Serializable {
     private String nombreEquipo;
     private int idEquipo;
     private String observaciones;
+    private boolean bd;
 
     public Integer getIdJugador() {
         return idJugador;
@@ -141,6 +142,14 @@ public class Sancion implements Serializable {
 
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
+    }
+
+    public boolean isBd() {
+        return bd;
+    }
+
+    public void setBd(boolean bd) {
+        this.bd = bd;
     }
     
     

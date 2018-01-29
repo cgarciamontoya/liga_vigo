@@ -14,6 +14,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,7 +33,7 @@ public class SancionesDAO extends BaseDAO {
 
     public void guardar(List<Sancion> sanciones, int idJugador) throws LMFVGOException {
         sb = new StringBuilder();
-        sb.append("insert into sanciones (clave_reglamento, id_jugador, jornada, id_torneo, fecha, activo) values (?,?,?,?,?,?)");
+        sb.append("insert into sanciones (clave_reglamento, id_jugador, jornada, id_torneo, fecha, activo, observaciones, juegos, multa) values (?,?,?,?,?,?,?,?,?)");
         try {
             PreparedStatement ps = getConnection().prepareStatement(sb.toString());
             Integer idTorneo = getIdTorneoActivo();
@@ -48,6 +49,21 @@ public class SancionesDAO extends BaseDAO {
                 ps.setInt(4, idTorneo);
                 ps.setDate(5, fecha);
                 ps.setInt(6, 1);
+                if (s.getObservaciones() != null && !s.getObservaciones().isEmpty()) {
+                    ps.setString(7, s.getObservaciones().toUpperCase());
+                } else {
+                    ps.setNull(7, Types.VARCHAR);
+                }
+                if (s.getSancionJuegos() != null && s.getSancionJuegos() > 0) {
+                    ps.setInt(8, s.getSancionJuegos());
+                } else {
+                    ps.setNull(8, Types.INTEGER);
+                }
+                if (s.getSancionEconomica() != null && s.getSancionEconomica() > 0) {
+                    ps.setFloat(9, s.getSancionEconomica());
+                } else {
+                    ps.setNull(9, Types.FLOAT);
+                }
                 ps.addBatch();
             }
             ps.executeBatch();
@@ -70,17 +86,18 @@ public class SancionesDAO extends BaseDAO {
         sb = new StringBuilder();
         sb.append("select s.clave_reglamento, r.descripcion, s.observaciones,")
                 .append("s.id_jugador, concat(j.nombre, ' ', j.paterno, ' ', j.materno) nombre_jugador, ")
-                .append("s.jornada, s.id_torneo, s.fecha, s.activo, sum(r.sancion_juegos) sancion_juegos, r.sancion_economica, eqs.nombre nombre_equipo ")
+                .append("s.jornada, s.id_torneo, s.fecha, s.activo, sum(s.juegos) sancion_juegos, s.multa sancion_economica, eqs.nombre nombre_equipo ")
                 .append("from sanciones s ")
                 .append("inner join reglamento r on r.clave = s.clave_reglamento ")
                 .append("inner join jugadores j on j.id_jugador = s.id_jugador ")
                 .append("left join rel_equipo_jugadores rel on rel.id_jugador = s.id_jugador ")
-                .append("inner join equipos eqs on eqs.id_equipo = rel.id_equipo ");
+                .append("inner join equipos eqs on eqs.id_equipo = rel.id_equipo ")
+                .append("where s.activo = 1 ");
         if (idEquipo > 0) {
-            sb.append("where rel.id_equipo = ")
+            sb.append("and rel.id_equipo = ")
                     .append(idEquipo)
                     .append(" ");
-        }
+        } 
         sb.append("group by s.id_jugador order by jornada, nombre_equipo, nombre_jugador");
         try {
             int jornadaActual = getJornadaActual(fuerza);
@@ -102,9 +119,13 @@ public class SancionesDAO extends BaseDAO {
                 s.setSancionJuegos(rs.getInt("sancion_juegos"));
                 if (jornadaActual < ConstantesUtil.JORNADA_CUARTOS) {
                     s.setJuegosCumplidos(jornadaActual - (s.getJornada() + 1));
-                    s.setActivo(!s.getJuegosCumplidos().equals(s.getSancionJuegos()));
+                    if (s.getJuegosCumplidos() < 0) {
+                        s.setJuegosCumplidos(0);
+                    }
+                    s.setActivo(true);
                 }
                 s.setNombreEquipo(rs.getString("nombre_equipo"));
+                s.setBd(true);
                 sanciones.add(s);
             }
             return sanciones;
@@ -117,7 +138,7 @@ public class SancionesDAO extends BaseDAO {
         sb = new StringBuilder();
         sb.append("select s.clave_reglamento, r.descripcion, s.observaciones, ")
                 .append("s.id_jugador, concat(j.nombre, ' ', j.paterno, ' ', j.materno) nombre_jugador, ")
-                .append("s.jornada, s.id_torneo, s.fecha, s.activo, r.sancion_juegos, r.sancion_economica ")
+                .append("s.jornada, s.id_torneo, s.fecha, s.activo, s.juegos sancion_juegos, s.multa sancion_economica ")
                 .append("from sanciones s ")
                 .append("inner join reglamento r on r.clave = s.clave_reglamento ")
                 .append("inner join jugadores j on j.id_jugador = s.id_jugador ")
@@ -142,7 +163,11 @@ public class SancionesDAO extends BaseDAO {
                 s.setSancionEconomica(rs.getFloat("sancion_economica"));
                 s.setSancionJuegos(rs.getInt("sancion_juegos"));
                 s.setJuegosCumplidos(jornadaActual - (s.getJornada() + 1));
+                if (s.getJuegosCumplidos() < 0) {
+                    s.setJuegosCumplidos(0);
+                }
                 s.setActivo(!s.getJuegosCumplidos().equals(s.getSancionJuegos()));
+                s.setBd(true);
                 sanciones.add(s);
             }
             return sanciones;

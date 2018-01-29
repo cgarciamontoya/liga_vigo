@@ -7,8 +7,6 @@
 	<parameter name="escudo" class="java.io.InputStream"/>
 	<field name="clave" class="java.lang.String"/>
 	<field name="descripcion" class="java.lang.String"/>
-	<field name="sancionJuegos" class="java.lang.Integer"/>
-	<field name="sancionEconomica" class="java.lang.Float"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -72,7 +70,7 @@
 				<text><![CDATA[Clave]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="35" y="0" width="407" height="20" uuid="b04b3032-2ebc-4f7f-b138-0606ccffd250"/>
+				<reportElement x="35" y="0" width="537" height="20" uuid="b04b3032-2ebc-4f7f-b138-0606ccffd250"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -83,32 +81,6 @@
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Descripción]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="442" y="0" width="65" height="20" uuid="7b17898b-a440-4efe-aafa-80a939c91a4a"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Juegos]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="507" y="0" width="65" height="20" uuid="8383f3b2-7905-4dc3-a53e-335c4d4082fa"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Multa]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -126,7 +98,7 @@
 				<textFieldExpression><![CDATA[$F{clave}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="35" y="0" width="407" height="20" uuid="380c5fdc-c662-44fd-ba8a-6ac7da910935"/>
+				<reportElement x="35" y="0" width="537" height="20" uuid="380c5fdc-c662-44fd-ba8a-6ac7da910935"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -135,28 +107,6 @@
 				</box>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="442" y="0" width="65" height="20" uuid="7933dff6-6349-4b52-9ff1-6ce6c5ace3ff"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{sancionJuegos}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00" isBlankWhenNull="true">
-				<reportElement x="507" y="0" width="65" height="20" uuid="30158a02-8af1-4646-8bef-01db2805f0c9"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{sancionEconomica}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

@@ -14,10 +14,10 @@ import java.io.Serializable;
  */
 public class Reglamento implements Serializable {
 
+    private static final long serialVersionUID = 693319328029127288L;
+
     private String clave;
     private String descripcion;
-    private Integer sancionJuegos;
-    private Float sancionEconomica;
 
     public String getClave() {
         return clave;
@@ -35,21 +35,4 @@ public class Reglamento implements Serializable {
         this.descripcion = descripcion;
     }
 
-    public Integer getSancionJuegos() {
-        return sancionJuegos;
-    }
-
-    public void setSancionJuegos(Integer sancionJuegos) {
-        this.sancionJuegos = sancionJuegos;
-    }
-
-    public Float getSancionEconomica() {
-        return sancionEconomica;
-    }
-
-    public void setSancionEconomica(Float sancionEconomica) {
-        this.sancionEconomica = sancionEconomica;
-    }
-    
-    
 }

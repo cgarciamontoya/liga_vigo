@@ -55,10 +55,6 @@ public class TorneoReglamentoVista extends FormBase {
         jLabel2 = new javax.swing.JLabel();
         scrollPane = new javax.swing.JScrollPane();
         txtDescripcion = new javax.swing.JTextArea();
-        jLabel3 = new javax.swing.JLabel();
-        txtJuegos = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        txtMulta = new javax.swing.JTextField();
         btnLimpiar = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
         lblEditar = new javax.swing.JLabel();
@@ -77,10 +73,6 @@ public class TorneoReglamentoVista extends FormBase {
         txtDescripcion.setColumns(20);
         txtDescripcion.setRows(5);
         scrollPane.setViewportView(txtDescripcion);
-
-        jLabel3.setText("Juegos:");
-
-        jLabel4.setText("Multa:");
 
         btnLimpiar.setText("Limpiar");
         btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
@@ -104,14 +96,14 @@ public class TorneoReglamentoVista extends FormBase {
 
             },
             new String [] {
-                "Clave", "Descripción", "Juegos", "Multa"
+                "Clave", "Descripción"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Float.class
+                java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -150,28 +142,19 @@ public class TorneoReglamentoVista extends FormBase {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 910, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel3))
+                            .addComponent(jLabel1))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(scrollPane)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(txtClave, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(74, 74, 74)
-                                        .addComponent(lblEditar))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(txtJuegos, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(26, 26, 26)
-                                        .addComponent(jLabel4)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(txtMulta, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 0, Short.MAX_VALUE))))
+                                .addComponent(txtClave, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(74, 74, 74)
+                                .addComponent(lblEditar)
+                                .addGap(0, 606, Short.MAX_VALUE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnReporte)
@@ -195,13 +178,7 @@ public class TorneoReglamentoVista extends FormBase {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
                     .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(15, 15, 15)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(txtJuegos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4)
-                    .addComponent(txtMulta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLimpiar)
                     .addComponent(btnGuardar)
@@ -209,7 +186,7 @@ public class TorneoReglamentoVista extends FormBase {
                     .addComponent(btnReporte))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 416, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(39, 39, 39))
         );
 
         pack();
@@ -219,8 +196,6 @@ public class TorneoReglamentoVista extends FormBase {
         txtClave.setText(null);
         txtClave.setEnabled(true);
         txtDescripcion.setText(null);
-        txtJuegos.setText(null);
-        txtMulta.setText(null);
         editar = false;
         lblEditar.setVisible(false);
         btnBuscar.setEnabled(true);
@@ -239,27 +214,6 @@ public class TorneoReglamentoVista extends FormBase {
             agregarMensajeAdvertencia("La descripcion es requerida");
         } else {
             r.setDescripcion(txtDescripcion.getText());
-        }
-        if (txtJuegos.getText() != null && !txtJuegos.getText().isEmpty()) {
-            try {
-                r.setSancionJuegos(Integer.parseInt(txtJuegos.getText()));
-            } catch (NumberFormatException nfe) {
-                agregarMensajeAdvertencia("El campo Juegos debe ser numérico");
-                return;
-            }
-        }
-        if (txtMulta.getText() != null && !txtMulta.getText().isEmpty()) {
-            try {
-                r.setSancionEconomica(Float.parseFloat(txtMulta.getText()));
-            } catch (NumberFormatException nfe2) {
-                agregarMensajeAdvertencia("El campo Multa debe ser numérico");
-                return;
-            }
-        }
-        if ((r.getSancionJuegos() == null || r.getSancionJuegos() == 0) &&
-                (r.getSancionEconomica() == null || r.getSancionEconomica() == 0)) {
-            agregarMensajeAdvertencia("Los juegos y/o multa son requeridos");
-            return;
         }
         try {
             if (editar) {
@@ -284,10 +238,6 @@ public class TorneoReglamentoVista extends FormBase {
                 txtClave.setText(model.getValueAt(tblResultado.getSelectedRow(), 0).toString());
                 txtClave.setEnabled(false);
                 txtDescripcion.setText(model.getValueAt(tblResultado.getSelectedRow(), 1).toString());
-                txtJuegos.setText(model.getValueAt(tblResultado.getSelectedRow(), 2) != null ? 
-                        model.getValueAt(tblResultado.getSelectedRow(), 2).toString() : null);
-                txtMulta.setText(model.getValueAt(tblResultado.getSelectedRow(), 3) != null ?
-                        model.getValueAt(tblResultado.getSelectedRow(), 3).toString() : null);
                 lblEditar.setVisible(true);
                 editar = true;
                 btnBuscar.setEnabled(false);
@@ -303,22 +253,6 @@ public class TorneoReglamentoVista extends FormBase {
         }
         if (txtDescripcion.getText() != null && !txtDescripcion.getText().isEmpty()) {
             r.setDescripcion(txtDescripcion.getText());
-        }
-        if (txtJuegos.getText() != null && !txtJuegos.getText().isEmpty()) {
-            try {
-                r.setSancionJuegos(Integer.parseInt(txtJuegos.getText()));
-            } catch (NumberFormatException ex) {
-                agregarMensajeAdvertencia("El campo Juegos debe ser numérico");
-                return;
-            }
-        }
-        if (txtMulta.getText() != null && !txtMulta.getText().isEmpty()) {
-            try {
-                r.setSancionEconomica(Float.parseFloat(txtMulta.getText()));
-            } catch (NumberFormatException ex) {
-                agregarMensajeAdvertencia("El campo Multa debe ser numérico");
-                return;
-            }
         }
         List<Reglamento> reglas = reglamentoDAO.consultaPorFiltros(r);
         if (reglas != null && !reglas.isEmpty()) {
@@ -344,9 +278,7 @@ public class TorneoReglamentoVista extends FormBase {
     private void llenarResultado(List<Reglamento> reglas) {
         DefaultTableModel modelo = (DefaultTableModel) tblResultado.getModel();
             for (Reglamento rg : reglas) {
-                modelo.addRow(new Object[]{rg.getClave(), rg.getDescripcion(),
-                        (rg.getSancionJuegos() != null && rg.getSancionJuegos() > 0 ? rg.getSancionJuegos() : null),
-                        (rg.getSancionEconomica() != null && rg.getSancionEconomica() > 0 ? rg.getSancionEconomica() : null)});
+                modelo.addRow(new Object[]{rg.getClave(), rg.getDescripcion()});
             }
     }
 
@@ -357,16 +289,12 @@ public class TorneoReglamentoVista extends FormBase {
     private javax.swing.JButton btnReporte;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblEditar;
     private javax.swing.JScrollPane scrollPane;
     private javax.swing.JTable tblResultado;
     private javax.swing.JTextField txtClave;
     private javax.swing.JTextArea txtDescripcion;
-    private javax.swing.JTextField txtJuegos;
-    private javax.swing.JTextField txtMulta;
     // End of variables declaration//GEN-END:variables
 
 }

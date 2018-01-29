@@ -6,6 +6,7 @@
 
 package lmfvgo.db;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -30,44 +31,27 @@ public class ReglamentoDAO extends BaseDAO {
 
     public void guardarReglamento(Reglamento reglamento) throws LMFVGOException {
         sb = new StringBuilder();
-        sb.append("insert into reglamento(clave, descripcion, sancion_juegos, sancion_economica) values (?,?,?,?)");
+        sb.append("insert into reglamento(clave, descripcion) values (?,?)");
         try {
             PreparedStatement ps = getConnection().prepareStatement(sb.toString());
             ps.setString(1, reglamento.getClave().toUpperCase());
             ps.setString(2, reglamento.getDescripcion().toUpperCase());
-            if (reglamento.getSancionJuegos() != null && reglamento.getSancionJuegos() > 0) {
-                ps.setInt(3, reglamento.getSancionJuegos());
-            } else {
-                ps.setNull(3, Types.INTEGER);
-            }
-            if (reglamento.getSancionEconomica() != null && reglamento.getSancionEconomica() > 0) {
-                ps.setFloat(4, reglamento.getSancionEconomica());
-            } else {
-                ps.setNull(4, Types.FLOAT);
-            }
             ps.execute();
         } catch (SQLException ex) {
+            if (ex instanceof MySQLIntegrityConstraintViolationException) {
+                throw new LMFVGOException("La clave del reglamento ya existe");
+            }
             throw new LMFVGOException("No fue posible guardar el reglamento");
         }
     }
     
     public void actualizarReglamento(Reglamento reglamento) throws LMFVGOException {
         sb = new StringBuilder();
-        sb.append("update reglamento set descripcion = ?, sancion_juegos = ?, sancion_economica = ? where clave = ?");
+        sb.append("update reglamento set descripcion = ? where clave = ?");
         try {
             PreparedStatement ps = getConnection().prepareStatement(sb.toString());
             ps.setString(1, reglamento.getDescripcion().toUpperCase());
-            if (reglamento.getSancionJuegos() != null && reglamento.getSancionJuegos() > 0) {
-                ps.setInt(2, reglamento.getSancionJuegos());
-            } else {
-                ps.setNull(2, Types.INTEGER);
-            }
-            if (reglamento.getSancionEconomica() != null && reglamento.getSancionEconomica() > 0) {
-                ps.setFloat(3, reglamento.getSancionEconomica());
-            } else {
-                ps.setNull(3, Types.FLOAT);
-            }
-            ps.setString(4, reglamento.getClave().toUpperCase());
+            ps.setString(2, reglamento.getClave().toUpperCase());
             ps.execute();
         } catch (SQLException ex) {
             throw new LMFVGOException("No fue posible actualizar el reglamento");
@@ -76,23 +60,13 @@ public class ReglamentoDAO extends BaseDAO {
     
     public List<Reglamento> consultaPorFiltros(Reglamento filtros) {
         sb = new StringBuilder();
-        sb.append("select clave, descripcion, sancion_juegos, sancion_economica from reglamento ");
+        sb.append("select clave, descripcion from reglamento ");
         if (filtros.getClave() != null && !filtros.getClave().isEmpty()) {
             sb.append("where clave = '").append(filtros.getClave().toUpperCase()).append("' ");
         }
         if (filtros.getDescripcion() != null && !filtros.getDescripcion().isEmpty()) {
             sb.append(!sb.toString().contains("where ") ? "where " : "and ")
                     .append("descripcion like '%").append(filtros.getDescripcion().toUpperCase()).append("' ");
-        }
-        if (filtros.getSancionJuegos() != null && filtros.getSancionJuegos() > 0) {
-            sb.append(!sb.toString().contains("where ") ? "where " : "and ")
-                    .append("sancion_juegos = ")
-                    .append(filtros.getSancionJuegos()).append(" ");
-        }
-        if (filtros.getSancionEconomica() != null && filtros.getSancionEconomica() > 0) {
-            sb.append(!sb.toString().contains("where ") ? "where " : "and ")
-                    .append("sancion_economica = ")
-                    .append(filtros.getSancionEconomica()).append(" ");
         }
         sb.append("order by clave");
         try {
@@ -102,8 +76,6 @@ public class ReglamentoDAO extends BaseDAO {
                 Reglamento r = new Reglamento();
                 r.setClave(rs.getString("clave"));
                 r.setDescripcion(rs.getString("descripcion"));
-                r.setSancionJuegos(rs.getInt("sancion_juegos"));
-                r.setSancionEconomica(rs.getFloat("sancion_economica"));
                 reglas.add(r);
             }
             return reglas;
@@ -114,7 +86,7 @@ public class ReglamentoDAO extends BaseDAO {
     
     public Reglamento consultaPorClave(String clave) {
         sb = new StringBuilder();
-        sb.append("select clave, descripcion, sancion_juegos, sancion_economica from reglamento where clave = '")
+        sb.append("select clave, descripcion from reglamento where clave = '")
                 .append(clave.toUpperCase()).append("'");
         try {
             ResultSet rs = getConnection().prepareStatement(sb.toString()).executeQuery();
@@ -122,8 +94,6 @@ public class ReglamentoDAO extends BaseDAO {
             while (rs.next()) {
                 r.setClave(rs.getString("clave"));
                 r.setDescripcion(rs.getString("descripcion"));
-                r.setSancionJuegos(rs.getInt("sancion_juegos"));
-                r.setSancionEconomica(rs.getFloat("sancion_economica"));
                 break;
             }
             return r;

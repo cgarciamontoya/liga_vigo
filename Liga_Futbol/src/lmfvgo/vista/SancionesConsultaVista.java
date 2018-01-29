@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import lmfvgo.db.EquiposDAO;
 import lmfvgo.db.SancionesDAO;
@@ -121,6 +123,11 @@ public class SancionesConsultaVista extends FormBase {
                 return canEdit [columnIndex];
             }
         });
+        tblSanciones.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                quitarSancion(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblSanciones);
 
         lblJornada.setText("jLabel3");
@@ -210,7 +217,7 @@ public class SancionesConsultaVista extends FormBase {
                         s.getJornada(),
                         (s.getIdJugador() + " - " + s.getNombreJugador()),
                         s.getNombreEquipo(),
-                        (String.valueOf(s.getJuegosCumplidos()) + "/" + String.valueOf(s.getSancionJuegos())),
+                        (String.valueOf(s.getJuegosCumplidos() > 0 ? s.getJuegosCumplidos() : 0) + "/" + String.valueOf(s.getSancionJuegos())),
                         (s.getSancionEconomica() != null && s.getSancionEconomica() > 0 ? s.getSancionEconomica() : null),
                         s.getObservaciones()
                     });
@@ -244,6 +251,24 @@ public class SancionesConsultaVista extends FormBase {
             }
         }
     }//GEN-LAST:event_exportar
+
+    private void quitarSancion(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_quitarSancion
+        if (SwingUtilities.isRightMouseButton(evt)) {
+            int dialogResult = JOptionPane.showConfirmDialog(null, "Desea quitar la sancion?", "Advertencia", JOptionPane.YES_NO_OPTION);
+            if (dialogResult == JOptionPane.YES_OPTION) {
+                String clave = (String) tblSanciones.getValueAt(tblSanciones.getSelectedRow(), 0);
+                String jugador = (String) tblSanciones.getValueAt(tblSanciones.getSelectedRow(), 2);
+                String observaciones = (String) tblSanciones.getValueAt(tblSanciones.getSelectedRow(), 6);
+                try {
+                    sancionesDAO.bajaSancion(Integer.valueOf(jugador.split(" - ")[0]), clave, observaciones);
+                    agregarMensajeExito("La sanción fue eliminada correctamente");
+                    ((DefaultTableModel) tblSanciones.getModel()).removeRow(tblSanciones.getSelectedRow());
+                } catch (LMFVGOException ex) {
+                    agregarMensajeError(ex.getMessage());
+                }
+            }
+        }
+    }//GEN-LAST:event_quitarSancion
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

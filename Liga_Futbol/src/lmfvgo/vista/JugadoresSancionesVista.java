@@ -104,6 +104,12 @@ public class JugadoresSancionesVista extends FormBase {
         btnClave = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         cboFuerza = new javax.swing.JComboBox();
+        jLabel6 = new javax.swing.JLabel();
+        txtJuegos = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        txtMulta = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        txtObservaciones = new javax.swing.JTextField();
 
         setClosable(true);
         setTitle("SANCIONES A JUGADORES");
@@ -146,14 +152,14 @@ public class JugadoresSancionesVista extends FormBase {
 
             },
             new String [] {
-                "Clave", "Jornada", "Jugador", "Juegos", "Multa"
+                "Clave", "Jornada", "Jugador", "Juegos", "Multa", "Observaciones", "Registrada"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Float.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Float.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -196,6 +202,12 @@ public class JugadoresSancionesVista extends FormBase {
             }
         });
 
+        jLabel6.setText("Juegos:");
+
+        jLabel7.setText("Multa:");
+
+        jLabel8.setText("Obs.:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -204,14 +216,6 @@ public class JugadoresSancionesVista extends FormBase {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 796, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cboJornada, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel3)
-                        .addGap(22, 22, 22)
-                        .addComponent(cboReglamento, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -223,24 +227,47 @@ public class JugadoresSancionesVista extends FormBase {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnLimpiar))))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addGap(18, 18, 18)
-                        .addComponent(cboFuerza, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(cboEquipos, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cboJugador, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(cboJugador, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cboJornada, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel3)
+                        .addGap(30, 30, 30)
+                        .addComponent(cboReglamento, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addGap(18, 18, 18)
+                                .addComponent(cboFuerza, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel1)
+                                .addGap(18, 18, 18)
+                                .addComponent(cboEquipos, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel6)
+                                    .addComponent(jLabel8))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(txtJuegos, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel7)
+                                        .addGap(31, 31, 31)
+                                        .addComponent(txtMulta, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(txtObservaciones))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(19, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(cboFuerza, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -256,6 +283,16 @@ public class JugadoresSancionesVista extends FormBase {
                     .addComponent(cboReglamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
                     .addComponent(cboJornada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtJuegos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7)
+                    .addComponent(txtMulta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtObservaciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLimpiar)
@@ -264,7 +301,8 @@ public class JugadoresSancionesVista extends FormBase {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnGuardar))
+                .addComponent(btnGuardar)
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         pack();
@@ -294,21 +332,47 @@ public class JugadoresSancionesVista extends FormBase {
         cboJornada.setSelectedIndex(0);
         cboReglamento.setSelectedIndex(0);
         cboFuerza.setSelectedIndex(0);
+        txtJuegos.setText("");
+        txtMulta.setText("");
+        txtObservaciones.setText("");
         limpiarTabla(tblCastigos);
     }//GEN-LAST:event_limpiar
 
     private void agregarClave(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarClave
+        if (txtJuegos.getText() != null) {
+            try {
+                Integer.parseInt(txtJuegos.getText());
+            } catch (NumberFormatException ex) {
+                agregarMensajeError("El campo Juegos debe ser numérico");
+                return;
+            }
+        }
+        if (txtMulta.getText() != null) {
+            try {
+                Float.parseFloat(txtMulta.getText());
+            } catch (NumberFormatException ex) {
+                agregarMensajeError("El campo Multa debe ser numérico");
+                return;
+            }
+        }
         DefaultTableModel modelo = (DefaultTableModel) tblCastigos.getModel();
         Reglamento r = reglamentoDAO.consultaPorClave(cboReglamento.getSelectedItem().toString().split(" - ")[0]);
         modelo.addRow(new Object[]{r.getClave(), cboJornada.getSelectedItem().toString(),
-            cboJugador.getSelectedItem().toString(),(String.valueOf(r.getSancionJuegos())), r.getSancionEconomica()});
+            cboJugador.getSelectedItem().toString(), (txtJuegos.getText() != null && !txtJuegos.getText().isEmpty() ? Integer.valueOf(txtJuegos.getText()) : null), 
+            (txtMulta.getText() != null && !txtMulta.getText().isEmpty() ? Float.valueOf(txtMulta.getText()) : null), 
+            (txtObservaciones.getText() != null ? txtObservaciones.getText() : null), "No"});
     }//GEN-LAST:event_agregarClave
 
     private void quitarClave(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_quitarClave
         if (SwingUtilities.isRightMouseButton(evt)) {
             int dialogResult = JOptionPane.showConfirmDialog(null, "Desea quitar el castigo de la lista?", "Advertencia", JOptionPane.YES_NO_OPTION);
             if (dialogResult == JOptionPane.YES_OPTION) {
-                ((DefaultTableModel) tblCastigos.getModel()).removeRow(tblCastigos.getSelectedRow());
+                String registada = (String) tblCastigos.getValueAt(tblCastigos.getSelectedRow(), 6);
+                if (registada.equalsIgnoreCase("no")) {
+                    ((DefaultTableModel) tblCastigos.getModel()).removeRow(tblCastigos.getSelectedRow());
+                } else {
+                    agregarMensajeAdvertencia("La sanción fue previamente registrada, para poder eliminarla deberá ingresar a: Sanciones -> Expulsados");
+                }
             }
         }
     }//GEN-LAST:event_quitarClave
@@ -336,6 +400,15 @@ public class JugadoresSancionesVista extends FormBase {
                         s.setJornada(Integer.parseInt(jor));
                 }
                 s.setIdJugador(idJugador);
+                if (modelo.getValueAt(i, 3) != null) {
+                    s.setSancionJuegos((Integer) modelo.getValueAt(i, 3));
+                }
+                if (modelo.getValueAt(i, 4) != null) {
+                    s.setSancionEconomica((Float) modelo.getValueAt(i, 4));
+                }
+                if (modelo.getValueAt(i, 5) != null) {
+                    s.setObservaciones((String) modelo.getValueAt(i, 5));
+                }
                 sanciones.add(s);
             }
             try {
@@ -362,7 +435,9 @@ public class JugadoresSancionesVista extends FormBase {
                 DefaultTableModel modelo = (DefaultTableModel) tblCastigos.getModel();
                 for (Sancion s : sanciones) {
                     modelo.addRow(new Object[]{s.getClave(), s.getJornada(), (s.getIdJugador() + " - " + s.getNombreJugador()), 
-                    (String.valueOf(s.getSancionJuegos())), (s.getSancionEconomica() != null && s.getSancionEconomica() > 0 ? s.getSancionEconomica() : null)});
+                    (String.valueOf(s.getSancionJuegos())), (s.getSancionEconomica() != null && s.getSancionEconomica() > 0 ? s.getSancionEconomica() : null),
+                    (s.getObservaciones() != null && !s.getObservaciones().isEmpty() ? s.getObservaciones() : null),
+                    (s.isBd() ? "Si" : "No")});
                 }
             }
         }
@@ -396,7 +471,13 @@ public class JugadoresSancionesVista extends FormBase {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblCastigos;
+    private javax.swing.JTextField txtJuegos;
+    private javax.swing.JTextField txtMulta;
+    private javax.swing.JTextField txtObservaciones;
     // End of variables declaration//GEN-END:variables
 }
