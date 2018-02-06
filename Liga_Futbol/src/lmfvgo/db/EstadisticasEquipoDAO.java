@@ -30,8 +30,8 @@ public class EstadisticasEquipoDAO extends BaseDAO {
 
     public void guardarEstadisticas(EstadisticasEquipo estadisticas) throws LMFVGOException {
         sb = new StringBuilder();
-        sb.append("insert into estadisticas_equipo (id_juego, id_equipo, goles_favor, goles_contra, puntos) ")
-                .append("values (?,?,?,?,?)");
+        sb.append("insert into estadisticas_equipo (id_juego, id_equipo, goles_favor, goles_contra, puntos, autogoles) ")
+                .append("values (?,?,?,?,?,?)");
         try {
             PreparedStatement ps = getConnection().prepareStatement(sb.toString());
                 ps.setInt(1, estadisticas.getIdJuego());
@@ -39,6 +39,7 @@ public class EstadisticasEquipoDAO extends BaseDAO {
                 ps.setInt(3, estadisticas.getGolesFavor());
                 ps.setInt(4, estadisticas.getGolesContra());
                 ps.setInt(5, estadisticas.getPuntos());
+                ps.setInt(6, estadisticas.getAutogoles());
             ps.execute();
         } catch (SQLException ex) {
             throw new LMFVGOException(ex.getMessage());
@@ -47,14 +48,15 @@ public class EstadisticasEquipoDAO extends BaseDAO {
     
     public void actualizarEstadisticas(EstadisticasEquipo estadisticas) throws LMFVGOException {
         sb = new StringBuilder();
-        sb.append("update estadisticas_equipo set goles_favor = ?, goles_contra = ?, puntos= ? ")
+        sb.append("update estadisticas_equipo set goles_favor = ?, goles_contra = ?, puntos= ?, autogoles = ? ")
                 .append("where id_estadistica = ?");
         try {
             PreparedStatement ps = getConnection().prepareStatement(sb.toString());
                 ps.setInt(1, estadisticas.getGolesFavor());
                 ps.setInt(2, estadisticas.getGolesContra());
                 ps.setInt(3, estadisticas.getPuntos());
-                ps.setInt(4, estadisticas.getIdEstadistica());
+                ps.setInt(4, estadisticas.getAutogoles());
+                ps.setInt(5, estadisticas.getIdEstadistica());
             ps.execute();
         } catch (SQLException ex) {
             throw new LMFVGOException(ex.getMessage());
@@ -63,7 +65,7 @@ public class EstadisticasEquipoDAO extends BaseDAO {
     
     public EstadisticasEquipo consultaEstadisticaEquipo(Integer idJuego, Integer idEquipo) {
         sb = new StringBuilder();
-        sb.append("select id_estadistica, id_juego, id_equipo, goles_favor, goles_contra, puntos ")
+        sb.append("select id_estadistica, id_juego, id_equipo, goles_favor, goles_contra, puntos, autogoles ")
                 .append("from estadisticas_equipo where id_juego = ? and id_equipo = ?");
         try {
             PreparedStatement ps = getConnection().prepareStatement(sb.toString());
@@ -79,6 +81,7 @@ public class EstadisticasEquipoDAO extends BaseDAO {
                 ee.setGolesFavor(rs.getInt("goles_favor"));
                 ee.setGolesContra(rs.getInt("goles_contra"));
                 ee.setPuntos(rs.getInt("puntos"));
+                ee.setAutogoles(rs.getInt("autogoles"));
             }
             return ee;
         } catch (SQLException ex) {

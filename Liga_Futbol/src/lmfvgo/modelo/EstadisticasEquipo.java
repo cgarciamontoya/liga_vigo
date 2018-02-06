@@ -27,6 +27,7 @@ public class EstadisticasEquipo implements Serializable {
     private int juegosGanados;
     private int juegosEmpatados;
     private int juegosPerdidos;
+    private int autogoles;
 
     public EstadisticasEquipo() {
     }
@@ -145,6 +146,16 @@ public class EstadisticasEquipo implements Serializable {
     public void setJuegosPerdidos(int juegosPerdidos) {
         this.juegosPerdidos = juegosPerdidos;
     }
+
+    public int getAutogoles() {
+        return autogoles;
+    }
+
+    public void setAutogoles(int autogoles) {
+        this.autogoles = autogoles;
+    }
+    
+    
     
     @Override
     public int hashCode() {

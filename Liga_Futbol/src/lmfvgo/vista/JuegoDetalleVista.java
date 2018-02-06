@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -134,9 +135,15 @@ public class JuegoDetalleVista extends FormBase {
         lblLocal.setText(juego.getLocalNombre() + 
                 (estadisticaLocal != null && estadisticaLocal.getIdEstadistica() != null && estadisticaLocal.getIdEstadistica() > 0 ? 
                         (" - " + estadisticaLocal.getGolesFavor()) : ""));
+        if (estadisticaLocal.getAutogoles() > 0) {
+            cboAGlocal.setSelectedIndex(estadisticaLocal.getAutogoles());
+        }
         lblVisitante.setText(juego.getVisitanteNombre() + 
                 (estadisticaVisitante != null && estadisticaVisitante.getIdEstadistica() != null && estadisticaVisitante.getIdEstadistica() > 0 ?
                         (" - " + estadisticaVisitante.getGolesFavor()) : ""));
+        if (estadisticaVisitante.getAutogoles() > 0) {
+            cboAGvisitante.setSelectedIndex(estadisticaVisitante.getAutogoles());
+        }
         
         if (juego.getFecha() != null && juego.getHora() != null && !juego.getHora().isEmpty()
                 && juego.getLugar() != null && !juego.getLugar().isEmpty()) {
@@ -150,6 +157,12 @@ public class JuegoDetalleVista extends FormBase {
             txtHora.setEnabled(false);
             txtLugar.setEnabled(false);
             btnActualizar.setEnabled(false);
+        } else if (juego.getFecha() == null) {
+            Calendar fechaDom = Calendar.getInstance();
+            if (fechaDom.get(Calendar.DAY_OF_WEEK) > Calendar.SUNDAY) {
+                fechaDom.add(Calendar.DATE, (8 - fechaDom.get(Calendar.DAY_OF_WEEK)));
+            }
+            txtFecha.setText(new SimpleDateFormat("dd/MM/yyyy").format(fechaDom.getTime()));
         }
         
         cargarTablaEstadisticas(juego.getIdJuego(), juego.getLocal(), tblLocal);
@@ -253,9 +266,13 @@ public class JuegoDetalleVista extends FormBase {
         btnGenerarEsta = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         cboDefault = new javax.swing.JComboBox<>();
+        jLabel5 = new javax.swing.JLabel();
+        cboAGlocal = new javax.swing.JComboBox<>();
+        jLabel6 = new javax.swing.JLabel();
+        cboAGvisitante = new javax.swing.JComboBox<>();
 
         setClosable(true);
-        setPreferredSize(new java.awt.Dimension(1150, 550));
+        setPreferredSize(new java.awt.Dimension(1150, 600));
 
         jLabel1.setText("Fecha:");
 
@@ -388,6 +405,14 @@ public class JuegoDetalleVista extends FormBase {
 
         jLabel4.setText("Gana Default:");
 
+        jLabel5.setText("Autogoles:");
+
+        cboAGlocal.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "0", "1", "2", "3", "4", "5" }));
+
+        jLabel6.setText("Autogoles:");
+
+        cboAGvisitante.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "0", "1", "2", "3", "4", "5" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -425,17 +450,29 @@ public class JuegoDetalleVista extends FormBase {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblVisitante, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 25, Short.MAX_VALUE)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 540, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel4)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 58, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel6)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(cboAGvisitante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 540, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cboDefault, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnGenerarEsta)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnGuardar)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(cboAGlocal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(cboDefault, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnGenerarEsta)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnGuardar)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -462,13 +499,19 @@ public class JuegoDetalleVista extends FormBase {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(cboAGlocal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6)
+                    .addComponent(cboAGvisitante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGuardar)
                     .addComponent(btnGenerarEsta)
                     .addComponent(jLabel4)
                     .addComponent(cboDefault, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, 0))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -583,6 +626,18 @@ public class JuegoDetalleVista extends FormBase {
             }
             estadisticaLocal.setGolesContra(estadisticaVisitante.getGolesFavor());
             estadisticaVisitante.setGolesContra(estadisticaLocal.getGolesFavor());
+            
+            // VALIDACION DE AUTOGOLES
+            if (cboAGlocal.getSelectedIndex() > 0) {
+                estadisticaLocal.setGolesContra(estadisticaLocal.getGolesContra() + 1);
+                estadisticaVisitante.setGolesFavor(estadisticaVisitante.getGolesFavor() + 1);
+                estadisticaLocal.setAutogoles(cboAGlocal.getSelectedIndex());
+            }
+            if (cboAGvisitante.getSelectedIndex() > 0) {
+                estadisticaVisitante.setGolesContra(estadisticaVisitante.getGolesContra() + 1);
+                estadisticaLocal.setGolesFavor(estadisticaLocal.getGolesFavor() + 1);
+                estadisticaVisitante.setAutogoles(cboAGvisitante.getSelectedIndex());
+            }
             int resultado = ResultadosJuegoEnum.EMPATE.getResultado();
             String marcador = "";
             if (estadisticaLocal.getGolesFavor() == estadisticaVisitante.getGolesFavor()) {
@@ -606,6 +661,7 @@ public class JuegoDetalleVista extends FormBase {
                 estadisticaVisitante.setPuntos(0);
                 estadisticaVisitante.setGolesFavor(0);
                 estadisticaVisitante.setGolesContra(0);
+                estadisticaVisitante.setAutogoles(0);
                 marcador = "0 - 0";
             } else if (cboDefault.getSelectedIndex() == 2) {
                 resultado = ResultadosJuegoEnum.VISITANTE.getResultado();
@@ -616,6 +672,7 @@ public class JuegoDetalleVista extends FormBase {
                 estadisticaLocal.setGolesContra(0);
                 estadisticaVisitante.setGolesFavor(0);
                 estadisticaVisitante.setGolesContra(0);
+                estadisticaVisitante.setAutogoles(0);
             }
             if (estadisticaLocal.getIdEstadistica() == null || estadisticaLocal.getIdEstadistica() == 0) {
                 estadisticasEquipoDAO.guardarEstadisticas(estadisticaLocal);
@@ -658,6 +715,12 @@ public class JuegoDetalleVista extends FormBase {
         try {
             EstadisticasEquipo estEqLocal = (EstadisticasEquipo) listaLocal.get(PARAM_EST);
             EstadisticasEquipo estEqVisitante = (EstadisticasEquipo) listaVisitante.get(PARAM_EST);
+            if (cboAGlocal.getSelectedIndex() > 0) {
+                estEqVisitante.setGolesFavor(estEqVisitante.getGolesFavor() + 1);
+            }
+            if (cboAGvisitante.getSelectedIndex() > 0) {
+                estEqLocal.setGolesFavor(estEqLocal.getGolesFavor() + 1);
+            }
             Map<String, Object> parametros = new HashMap<>();
             parametros.put("marcadorLocal", String.valueOf(estEqLocal.getGolesFavor()));
             parametros.put("marcadorVisitante", String.valueOf(estEqVisitante.getGolesFavor()));
@@ -727,11 +790,15 @@ public class JuegoDetalleVista extends FormBase {
     private javax.swing.JButton btnGenerarEsta;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnLimpiar;
+    private javax.swing.JComboBox<String> cboAGlocal;
+    private javax.swing.JComboBox<String> cboAGvisitante;
     private javax.swing.JComboBox<String> cboDefault;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblLocal;
