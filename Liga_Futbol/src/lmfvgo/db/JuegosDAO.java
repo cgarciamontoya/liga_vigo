@@ -14,6 +14,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -109,12 +110,13 @@ public class JuegosDAO extends BaseDAO {
     public List<Juegos> consultaJuegosJornada(Integer fuerza, Integer jornada) {
         try {
             sb = new StringBuilder();
-            sb.append("select j.id_juego, j.jornada, j.local, j.visitante, j.lugar, j.resultado, j.id_torneo, j.fecha, j.fuerza, j.marcador, ")
+            sb.append("select j.id_juego, j.jornada, j.local, j.visitante, j.lugar, j.resultado, j.id_torneo, j.fecha, j.fuerza, j.marcador, j.arbitro, ar.nombre arbitro_nombre, ")
                     .append("j.hora, l.nombre local_nombre, v.nombre visitante_nombre, j.cerrado, ")
                     .append("(select sum(goles_favor) from estadisticas_equipo where id_juego = j.id_juego and id_equipo = j.local) golesLocal, ")
                     .append("(select sum(goles_favor) from estadisticas_equipo where id_juego = j.id_juego and id_equipo = j.visitante) golesVisita ")
                     .append("from juegos j inner join equipos l on l.id_equipo = j.local ")
                     .append("inner join equipos v on v.id_equipo = j.visitante ")
+                    .append("left join arbitros ar on ar.id_arbitro = j.arbitro ")
                     .append("where j.jornada = ? and j.fuerza = ? order by id_juego");
             PreparedStatement ps = getConnection().prepareStatement(sb.toString());
             ps.setInt(1, jornada);
@@ -139,6 +141,8 @@ public class JuegosDAO extends BaseDAO {
                     j.setCerrado(rs.getInt("cerrado") == 1);
                     j.setGolesLocal(rs.getObject("golesLocal") != null ? rs.getInt("golesLocal") : null);
                     j.setGolesVisita(rs.getObject("golesVisita") != null ? rs.getInt("golesVisita") : null);
+                    j.setIdArbitro(rs.getInt("arbitro"));
+                    j.setNombreArbitro(rs.getString("arbitro_nombre"));
                     juegos.add(j);
             }
             return juegos;
@@ -150,12 +154,17 @@ public class JuegosDAO extends BaseDAO {
     public void actualizarDatosJornadaJuego(Juegos juego) throws LMFVGOException {
         try {
             sb = new StringBuilder();
-            sb.append("update juegos set lugar = ?, fecha = ?, hora = ? where id_juego = ?");
+            sb.append("update juegos set lugar = ?, fecha = ?, hora = ?, arbitro = ? where id_juego = ?");
             PreparedStatement ps = getConnection().prepareStatement(sb.toString());
             ps.setString(1, juego.getLugar().trim().toUpperCase());
             ps.setDate(2, new java.sql.Date(juego.getFecha().getTime()));
             ps.setString(3, juego.getHora());
-            ps.setInt(4, juego.getIdJuego());
+            if (juego.getIdArbitro() == null || juego.getIdArbitro() == 0) {
+                ps.setNull(4, Types.INTEGER);
+            } else {
+                ps.setInt(4, juego.getIdArbitro());
+            }
+            ps.setInt(5, juego.getIdJuego());
             ps.execute();
         } catch (SQLException ex) {
             throw new LMFVGOException(ex.getMessage());

@@ -32,6 +32,8 @@ public class Juegos implements Serializable {
     private boolean cerrado;
     private Integer golesLocal;
     private Integer golesVisita;
+    private Integer idArbitro;
+    private String nombreArbitro;
 
     public Integer getIdJuego() {
         return idJuego;
@@ -160,6 +162,24 @@ public class Juegos implements Serializable {
     public void setGolesVisita(Integer golesVisita) {
         this.golesVisita = golesVisita;
     }
+
+    public Integer getIdArbitro() {
+        return idArbitro;
+    }
+
+    public void setIdArbitro(Integer idArbitro) {
+        this.idArbitro = idArbitro;
+    }
+
+    public String getNombreArbitro() {
+        return nombreArbitro;
+    }
+
+    public void setNombreArbitro(String nombreArbitro) {
+        this.nombreArbitro = nombreArbitro;
+    }
+    
+    
     
     
 }

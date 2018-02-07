@@ -69,6 +69,8 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         mnuSancionesAmon = new javax.swing.JMenuItem();
         menuConf = new javax.swing.JMenu();
         mnuConfParam = new javax.swing.JMenuItem();
+        menuArbitros = new javax.swing.JMenu();
+        mnuArbitrosReg = new javax.swing.JMenuItem();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -250,6 +252,18 @@ public class LigaFutbolMain extends javax.swing.JFrame {
 
         jMenuBar1.add(menuConf);
 
+        menuArbitros.setText("Arbitros");
+
+        mnuArbitrosReg.setText("Consulta/Registro");
+        mnuArbitrosReg.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                arbitros(evt);
+            }
+        });
+        menuArbitros.add(mnuArbitrosReg);
+
+        jMenuBar1.add(menuArbitros);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -376,6 +390,12 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         sav.show();
     }//GEN-LAST:event_abrirAmonestados
 
+    private void arbitros(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_arbitros
+        ArbitrosVista av = new ArbitrosVista(connection);
+        this.add(av);
+        av.show();
+    }//GEN-LAST:event_arbitros
+
     /**
      * @param args the command line arguments
      */
@@ -415,6 +435,7 @@ public class LigaFutbolMain extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenu menuArbitros;
     private javax.swing.JMenu menuConf;
     private javax.swing.JMenu menuCredenciales;
     private javax.swing.JMenu menuEquipos;
@@ -422,6 +443,7 @@ public class LigaFutbolMain extends javax.swing.JFrame {
     private javax.swing.JMenu menuJugadores;
     private javax.swing.JMenu menuSanciones;
     private javax.swing.JMenu menuTorneo;
+    private javax.swing.JMenuItem mnuArbitrosReg;
     private javax.swing.JMenuItem mnuConfParam;
     private javax.swing.JMenuItem mnuCredEq;
     private javax.swing.JMenuItem mnuCredJug;

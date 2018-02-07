@@ -151,6 +151,7 @@ public class ReportesManager {
         parametros.put("lugar", juego.getLugar());
         parametros.put("listaLocal", local);
         parametros.put("listaVisitante", visitante);
+        parametros.put("arbitro", juego.getNombreArbitro());
         getLogos(parametros);
         
         String nombrePdf = URL_REPORTES + "J" + juego.getJornada() + "_" + juego.getLocalNombre() + "_VS_" + juego.getVisitanteNombre() + ".pdf";

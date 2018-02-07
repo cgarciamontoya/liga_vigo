@@ -19,6 +19,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import lmfvgo.db.ArbitrosDAO;
 import lmfvgo.db.EstadisticasEquipoDAO;
 import lmfvgo.db.EstadisticasJugadorDAO;
 import lmfvgo.db.JuegosDAO;
@@ -27,6 +28,7 @@ import lmfvgo.db.SancionesDAO;
 import lmfvgo.enums.ResultadosJuegoEnum;
 import lmfvgo.excepciones.LMFVGOException;
 import lmfvgo.modelo.Amonestado;
+import lmfvgo.modelo.Arbitro;
 import lmfvgo.modelo.EstadisticasEquipo;
 import lmfvgo.modelo.EstadisticasJugador;
 import lmfvgo.modelo.Juegos;
@@ -52,6 +54,7 @@ public class JuegoDetalleVista extends FormBase {
     private final EstadisticasEquipoDAO estadisticasEquipoDAO;
     private final ReportesManager reportesManager;
     private final SancionesDAO sancionesDAO;
+    private final ArbitrosDAO arbitrosDAO;
     private final Juegos juego;
     private JComboBox cboAlineacion;
     private JComboBox cboTA;
@@ -74,10 +77,22 @@ public class JuegoDetalleVista extends FormBase {
         estadisticasEquipoDAO = new EstadisticasEquipoDAO(con);
         reportesManager = new ReportesManager(con);
         sancionesDAO = new SancionesDAO(con);
+        arbitrosDAO = new ArbitrosDAO(con);
         
         this.juego = juego;
         btnCedula.setEnabled(false);
         iniciarCombos();
+        
+        List<Arbitro> arbitros = arbitrosDAO.consultaArbitros(null);
+        if (arbitros != null && !arbitros.isEmpty()) {
+            cboArbitros.addItem("Seleccione");
+            for (Arbitro a : arbitros) {
+                cboArbitros.addItem(a.getIdArbitro() + " - " + a.getNombre());
+            }
+        } else {
+            cboArbitros.setEnabled(false);
+        }
+        
         cargarModelosTable(tblLocal);
         cargarModelosTable(tblVisitante);
         
@@ -89,7 +104,6 @@ public class JuegoDetalleVista extends FormBase {
         
         cargarDatosJuego();
         if (juego.isCerrado()) {
-            btnActualizar.setEnabled(false);
             btnGuardar.setEnabled(false);
             btnLimpiar.setEnabled(false);
         }
@@ -151,18 +165,22 @@ public class JuegoDetalleVista extends FormBase {
             txtHora.setText(juego.getHora());
             txtLugar.setText(juego.getLugar());
             btnCedula.setEnabled(true);
-            btnActualizar.setEnabled(false);
             btnLimpiar.setEnabled(false);
-            txtFecha.setEnabled(false);
-            txtHora.setEnabled(false);
-            txtLugar.setEnabled(false);
-            btnActualizar.setEnabled(false);
         } else if (juego.getFecha() == null) {
             Calendar fechaDom = Calendar.getInstance();
             if (fechaDom.get(Calendar.DAY_OF_WEEK) > Calendar.SUNDAY) {
                 fechaDom.add(Calendar.DATE, (8 - fechaDom.get(Calendar.DAY_OF_WEEK)));
             }
             txtFecha.setText(new SimpleDateFormat("dd/MM/yyyy").format(fechaDom.getTime()));
+        }
+        
+        if (juego.getIdArbitro() != null && juego.getIdArbitro() > 0) {
+            for (int i = 0; i < cboArbitros.getItemCount(); i++) {
+                if (cboArbitros.getItemAt(i).startsWith(juego.getIdArbitro() + " - ")) {
+                    cboArbitros.setSelectedIndex(i);
+                    break;
+                }
+            }
         }
         
         cargarTablaEstadisticas(juego.getIdJuego(), juego.getLocal(), tblLocal);
@@ -270,6 +288,8 @@ public class JuegoDetalleVista extends FormBase {
         cboAGlocal = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
         cboAGvisitante = new javax.swing.JComboBox<>();
+        jLabel7 = new javax.swing.JLabel();
+        cboArbitros = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setPreferredSize(new java.awt.Dimension(1150, 600));
@@ -413,6 +433,8 @@ public class JuegoDetalleVista extends FormBase {
 
         cboAGvisitante.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "0", "1", "2", "3", "4", "5" }));
 
+        jLabel7.setText("Arbitro:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -425,22 +447,24 @@ public class JuegoDetalleVista extends FormBase {
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtHora, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(txtLugar, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 436, Short.MAX_VALUE)
-                                .addComponent(btnCedula)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnActualizar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnLimpiar))))
+                                .addComponent(txtHora, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtLugar))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cboArbitros, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnCedula)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnActualizar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnLimpiar))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -451,7 +475,7 @@ public class JuegoDetalleVista extends FormBase {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblVisitante, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 58, Short.MAX_VALUE)
+                                .addGap(0, 25, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel6)
@@ -490,7 +514,9 @@ public class JuegoDetalleVista extends FormBase {
                     .addComponent(txtLugar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnLimpiar)
                     .addComponent(btnActualizar)
-                    .addComponent(btnCedula))
+                    .addComponent(btnCedula)
+                    .addComponent(jLabel7)
+                    .addComponent(cboArbitros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblVisitante)
@@ -529,11 +555,16 @@ public class JuegoDetalleVista extends FormBase {
             try {
                 juegosDAO.actualizarDatosJornadaJuego(juego);
                 btnCedula.setEnabled(true);
-                txtFecha.setEnabled(false);
-                txtHora.setEnabled(false);
-                txtLugar.setEnabled(false);
                 btnLimpiar.setEnabled(false);
-                btnActualizar.setEnabled(false);
+                agregarMensajeExito("Se actualizaron correctamente los datos del juego");
+                if (cboArbitros.getSelectedItem().toString().equals("Seleccione")) {
+                    juego.setIdArbitro(null);
+                    juego.setNombreArbitro(null);
+                } else {
+                    String[] datosAr = cboArbitros.getSelectedItem().toString().split(" - ");
+                    juego.setIdArbitro(Integer.parseInt(datosAr[0]));
+                    juego.setNombreArbitro(datosAr[1]);
+                }
             } catch (LMFVGOException ex) {
                 agregarMensajeError(ex.getMessage());
             }
@@ -578,6 +609,11 @@ public class JuegoDetalleVista extends FormBase {
             return false;
         }
         juego.setLugar(txtLugar.getText());
+        if (cboArbitros.getItemCount() > 1 && cboArbitros.getSelectedIndex() > 0) {
+            juego.setIdArbitro(Integer.parseInt(cboArbitros.getSelectedItem().toString().split(" - ")[0]));
+        } else {
+            juego.setIdArbitro(null);
+        }
         return true;
     }
     private void generarCedula(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generarCedula
@@ -792,6 +828,7 @@ public class JuegoDetalleVista extends FormBase {
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JComboBox<String> cboAGlocal;
     private javax.swing.JComboBox<String> cboAGvisitante;
+    private javax.swing.JComboBox<String> cboArbitros;
     private javax.swing.JComboBox<String> cboDefault;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -799,6 +836,7 @@ public class JuegoDetalleVista extends FormBase {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblLocal;

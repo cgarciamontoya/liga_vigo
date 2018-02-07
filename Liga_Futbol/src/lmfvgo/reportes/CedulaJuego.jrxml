@@ -18,6 +18,7 @@
 	<parameter name="marcadorVisitante" class="java.lang.String"/>
 	<parameter name="logo" class="java.io.InputStream"/>
 	<parameter name="escudo" class="java.io.InputStream"/>
+	<parameter name="arbitro" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -98,6 +99,10 @@
 			<line>
 				<reportElement x="40" y="42" width="250" height="1" uuid="e792b7dc-5c63-4134-9fb7-2fcbfe9d1cfa"/>
 			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="40" y="25" width="246" height="20" uuid="dcf82142-fd2e-4823-b659-09677a57451f"/>
+				<textFieldExpression><![CDATA[$P{arbitro}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>
