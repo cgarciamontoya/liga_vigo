@@ -9,9 +9,13 @@ package lmfvgo.vista;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import lmfvgo.db.EquiposDAO;
 import lmfvgo.db.JugadoresDAO;
 import lmfvgo.excepciones.LMFVGOException;
+import lmfvgo.modelo.Equipos;
+import lmfvgo.modelo.Jugadores;
 import lmfvgo.reportes.vo.CredencialVO;
 import lmfvgo.util.ReportesManager;
 
@@ -24,6 +28,7 @@ public class CredencialesJugadorVista extends FormBase {
 
     private final JugadoresDAO jugadoresDAO;
     private final ReportesManager reportesManager;
+    private final EquiposDAO equiposDAO;
     
     /** Creates new form CredencialesJugadorVista
      * @param con */
@@ -31,8 +36,9 @@ public class CredencialesJugadorVista extends FormBase {
         initComponents();
         jugadoresDAO = new JugadoresDAO(con);
         reportesManager = new ReportesManager(con);
+        equiposDAO = new EquiposDAO(con);
         
-        inicializarJugadores();
+        //inicializarJugadores();
     }
     
     private void inicializarJugadores() {
@@ -56,15 +62,19 @@ public class CredencialesJugadorVista extends FormBase {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstJugadores = new javax.swing.JList<String>();
+        lstJugadores = new javax.swing.JList<>();
         jLabel1 = new javax.swing.JLabel();
         btnAgregar = new javax.swing.JButton();
         btnQuitarJugador = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        lstCred = new javax.swing.JList<String>();
+        lstCred = new javax.swing.JList<>();
         jLabel2 = new javax.swing.JLabel();
         btnGenerar = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        cboFuerza = new javax.swing.JComboBox<>();
+        cboEquipo = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setTitle("CREDENCIALES POR JUGADOR");
@@ -112,6 +122,23 @@ public class CredencialesJugadorVista extends FormBase {
             }
         });
 
+        jLabel3.setText("Fuerza:");
+
+        jLabel4.setText("Equipo:");
+
+        cboFuerza.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione", "Primera", "Segunda" }));
+        cboFuerza.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cargarEquipos(evt);
+            }
+        });
+
+        cboEquipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cargarJugadores(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -120,22 +147,30 @@ public class CredencialesJugadorVista extends FormBase {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cboFuerza, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cboEquipo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE))
-                        .addGap(14, 14, 14)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnAgregar)
-                                    .addComponent(btnQuitarJugador))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE))
+                        .addGap(14, 14, 14)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnAgregar)
+                            .addComponent(btnQuitarJugador))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnLimpiar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnGenerar)))
@@ -145,27 +180,33 @@ public class CredencialesJugadorVista extends FormBase {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnGenerar)
-                    .addComponent(btnLimpiar))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnGenerar)
+                        .addComponent(btnLimpiar))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(cboFuerza, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(cboEquipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 9, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jLabel1)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane1)
-                                .addContainerGap())
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(jScrollPane2)
-                                .addContainerGap())))
+                            .addComponent(jScrollPane1)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 118, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 105, Short.MAX_VALUE)
                         .addComponent(btnAgregar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnQuitarJugador)
@@ -235,8 +276,44 @@ public class CredencialesJugadorVista extends FormBase {
         return lista;
     }
     private void limpiar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_limpiar
-        inicializarJugadores();
+        //inicializarJugadores();
+        cboEquipo.removeAllItems();
+        cboFuerza.setSelectedIndex(0);
+        lstJugadores.setModel(new DefaultListModel());
+        lstCred.setModel(new DefaultListModel());
     }//GEN-LAST:event_limpiar
+
+    private void cargarEquipos(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargarEquipos
+        cboEquipo.removeAllItems();
+        lstJugadores.setModel(new DefaultListModel());
+        if (cboFuerza.getSelectedIndex() > 0) {
+            List<Equipos> equipos = equiposDAO.consultarEquipo(null, cboFuerza.getSelectedIndex());
+            DefaultComboBoxModel modelEquipos = (DefaultComboBoxModel) cboEquipo.getModel();
+            modelEquipos.addElement("0 - Seleccione");
+            for (Equipos e : equipos) {
+                modelEquipos.addElement(e.getIdEquipo() + " - " + e.getNombre());
+            }
+            cboEquipo.setModel(modelEquipos);
+        }
+    }//GEN-LAST:event_cargarEquipos
+
+    private void cargarJugadores(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargarJugadores
+        if (cboEquipo.getSelectedIndex() > 0) {
+            int idEquipo = Integer.parseInt(cboEquipo.getSelectedItem().toString().split(" - ")[0]);
+            lstJugadores.setModel(new DefaultListModel());
+            if (idEquipo > 0) {
+                List<String> jugs = new ArrayList<>();
+                jugs.add("0 - Seleccione");
+                List<Jugadores> jugadoresBD = jugadoresDAO.consultaJugadoresEquipo(idEquipo);
+                DefaultListModel model = new DefaultListModel();
+                model.removeAllElements();
+                for (Jugadores jug : jugadoresBD) {
+                    model.addElement(jug.getIdJugador() + " - " + jug.getNombre() + " " + jug.getPaterno() + " " + jug.getMaterno());
+                }
+                lstJugadores.setModel(model);
+            }
+        }
+    }//GEN-LAST:event_cargarJugadores
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -244,8 +321,12 @@ public class CredencialesJugadorVista extends FormBase {
     private javax.swing.JButton btnGenerar;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnQuitarJugador;
+    private javax.swing.JComboBox<String> cboEquipo;
+    private javax.swing.JComboBox<String> cboFuerza;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JList<String> lstCred;
