@@ -694,6 +694,7 @@ public class JuegoDetalleVista extends FormBase {
                 int dialogResult = JOptionPane.showConfirmDialog(null, "Default Administrativo?", "Advertencia", JOptionPane.YES_NO_OPTION);
                 if (cboDefault.getSelectedIndex() == 1) {
                     resultado = ResultadosJuegoEnum.LOCAL.getResultado();
+                    marcador = "0 - 0";
                     estadisticaLocal.setPuntos(3);
                     estadisticaLocal.setGolesFavor(0);
                     estadisticaLocal.setGolesContra(0);
@@ -705,8 +706,9 @@ public class JuegoDetalleVista extends FormBase {
                     if (dialogResult == JOptionPane.NO_OPTION) {
                         estadisticaLocal.setGolesFavor(1);
                         estadisticaVisitante.setGolesContra(1);
+                        //marcador = "1 - 0";
                     }
-                    marcador = "0 - 0";
+                    
                 } else if (cboDefault.getSelectedIndex() == 2) {
                     resultado = ResultadosJuegoEnum.VISITANTE.getResultado();
                     marcador = "0 - 0";
@@ -721,6 +723,7 @@ public class JuegoDetalleVista extends FormBase {
                     if (dialogResult == JOptionPane.NO_OPTION) {
                         estadisticaVisitante.setGolesFavor(1);
                         estadisticaLocal.setGolesContra(1);
+                        //marcador = "0 - 1";
                     }
                 }
             }

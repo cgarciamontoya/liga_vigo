@@ -219,7 +219,7 @@ public class SancionesDAO extends BaseDAO {
         try {
             StringBuilder sb = new StringBuilder();
             sb.append("select a.id_jugador, concat(j.nombre, ' ', j.paterno, ' ', j.materno) nombre_jugador, a.id_equipo, ")
-                    .append("e.nombre equipo, count(id_jugador) total, e.fuerza, group_concat(a.jornada separator ',') jornadas ")
+                    .append("e.nombre equipo, count(id_jugador) total, e.fuerza, group_concat(a.jornada order by a.jornada separator ',') jornadas ")
                     .append("from amonestados a ")
                     .append("inner join equipos e using(id_equipo) ")
                     .append("inner join jugadores j using(id_jugador) ")
