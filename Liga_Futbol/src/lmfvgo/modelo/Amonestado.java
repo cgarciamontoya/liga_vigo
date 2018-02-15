@@ -25,6 +25,7 @@ public class Amonestado implements Serializable {
     private String observaciones;
     private int totalTarjetas;
     private int fuerza;
+    private String jornadas;
 
     public Amonestado() {
     }
@@ -106,6 +107,14 @@ public class Amonestado implements Serializable {
 
     public void setFuerza(int fuerza) {
         this.fuerza = fuerza;
+    }
+
+    public String getJornadas() {
+        return jornadas;
+    }
+
+    public void setJornadas(String jornadas) {
+        this.jornadas = jornadas;
     }
     
     

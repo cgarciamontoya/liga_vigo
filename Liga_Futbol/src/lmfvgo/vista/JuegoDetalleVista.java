@@ -17,6 +17,7 @@ import java.util.Map;
 import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import lmfvgo.db.ArbitrosDAO;
@@ -689,26 +690,39 @@ public class JuegoDetalleVista extends FormBase {
                 resultado = ResultadosJuegoEnum.VISITANTE.getResultado();
             }
             marcador = estadisticaLocal.getGolesFavor() + " - " + estadisticaVisitante.getGolesFavor();
-            if (cboDefault.getSelectedIndex() == 1) {
-                resultado = ResultadosJuegoEnum.LOCAL.getResultado();
-                estadisticaLocal.setPuntos(3);
-                estadisticaLocal.setGolesFavor(0);
-                estadisticaLocal.setGolesContra(0);
-                estadisticaVisitante.setPuntos(0);
-                estadisticaVisitante.setGolesFavor(0);
-                estadisticaVisitante.setGolesContra(0);
-                estadisticaVisitante.setAutogoles(0);
-                marcador = "0 - 0";
-            } else if (cboDefault.getSelectedIndex() == 2) {
-                resultado = ResultadosJuegoEnum.VISITANTE.getResultado();
-                marcador = "0 - 0";
-                estadisticaLocal.setPuntos(0);
-                estadisticaVisitante.setPuntos(3);
-                estadisticaLocal.setGolesFavor(0);
-                estadisticaLocal.setGolesContra(0);
-                estadisticaVisitante.setGolesFavor(0);
-                estadisticaVisitante.setGolesContra(0);
-                estadisticaVisitante.setAutogoles(0);
+            if (cboDefault.getSelectedIndex() > 0) {
+                int dialogResult = JOptionPane.showConfirmDialog(null, "Default Administrativo?", "Advertencia", JOptionPane.YES_NO_OPTION);
+                if (cboDefault.getSelectedIndex() == 1) {
+                    resultado = ResultadosJuegoEnum.LOCAL.getResultado();
+                    estadisticaLocal.setPuntos(3);
+                    estadisticaLocal.setGolesFavor(0);
+                    estadisticaLocal.setGolesContra(0);
+                    estadisticaLocal.setAutogoles(0);
+                    estadisticaVisitante.setPuntos(0);
+                    estadisticaVisitante.setGolesFavor(0);
+                    estadisticaVisitante.setGolesContra(0);
+                    estadisticaVisitante.setAutogoles(0);
+                    if (dialogResult == JOptionPane.NO_OPTION) {
+                        estadisticaLocal.setGolesFavor(1);
+                        estadisticaVisitante.setGolesContra(1);
+                    }
+                    marcador = "0 - 0";
+                } else if (cboDefault.getSelectedIndex() == 2) {
+                    resultado = ResultadosJuegoEnum.VISITANTE.getResultado();
+                    marcador = "0 - 0";
+                    estadisticaLocal.setPuntos(0);
+                    estadisticaVisitante.setPuntos(3);
+                    estadisticaLocal.setGolesFavor(0);
+                    estadisticaLocal.setGolesContra(0);
+                    estadisticaLocal.setAutogoles(0);
+                    estadisticaVisitante.setGolesFavor(0);
+                    estadisticaVisitante.setGolesContra(0);
+                    estadisticaVisitante.setAutogoles(0);
+                    if (dialogResult == JOptionPane.NO_OPTION) {
+                        estadisticaVisitante.setGolesFavor(1);
+                        estadisticaLocal.setGolesContra(1);
+                    }
+                }
             }
             if (estadisticaLocal.getIdEstadistica() == null || estadisticaLocal.getIdEstadistica() == 0) {
                 estadisticasEquipoDAO.guardarEstadisticas(estadisticaLocal);

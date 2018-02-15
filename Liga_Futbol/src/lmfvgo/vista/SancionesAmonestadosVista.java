@@ -66,14 +66,14 @@ public class SancionesAmonestadosVista extends FormBase {
 
             },
             new String [] {
-                "Jugador", "Equipo", "Fuerza", "Total", "Observaciones"
+                "Jugador", "Equipo", "Fuerza", "Total", "Jornadas", "Observaciones"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, true
+                false, false, false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -178,6 +178,7 @@ public class SancionesAmonestadosVista extends FormBase {
                 (a.getIdEquipo() + " - " + a.getNombreEquipo()),
                 (a.getFuerza() == 1 ? "Primera" : "Segunda"),
                 a.getTotalTarjetas(),
+                a.getJornadas(),
                 null});
             }
             btnExportar.setEnabled(true);
@@ -190,7 +191,7 @@ public class SancionesAmonestadosVista extends FormBase {
             if (dialogResult == JOptionPane.YES_OPTION) {
                 if (tblAmonestados.getSelectedRow() >= 0 && tblAmonestados.getSelectedRowCount() == 1) {
                     Integer idJugador = Integer.parseInt(String.valueOf(tblAmonestados.getValueAt(tblAmonestados.getSelectedRow(), 0)).split(" - ")[0]);
-                    String observaciones = String.valueOf(tblAmonestados.getValueAt(tblAmonestados.getSelectedRow(), 4));
+                    String observaciones = String.valueOf(tblAmonestados.getValueAt(tblAmonestados.getSelectedRow(), 5));
                     if (observaciones == null || observaciones.isEmpty()) {
                         agregarMensajeAdvertencia("Debe capturar las observaciones");
                         return;
