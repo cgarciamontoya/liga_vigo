@@ -1,0 +1,19 @@
+14/03/2018
+* Cambiar pantalla expulsados para que funcione similar a la de amonestados, que muestre la lista de jugadores expulsados
+en base al llenado de la cédula
+CREATE TABLE `expulsados` (
+  `id_jugador` int(11) NOT NULL,
+  `id_equipo` int(11) NOT NULL,
+  `id_juego` int(11) NOT NULL,
+  `jornada` int(11) NOT NULL,
+  `observaciones` varchar(45) DEFAULT NULL,
+  `activo` int(11) DEFAULT '1',
+  `juegos` int(11) DEFAULT '1',
+  `multa` float DEFAULT NULL,
+  `claves` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+* Permitir editar los campos Claves (reglamento), número de juegos y observaciones
+* Separar la lista de jugadores de amonestados de ambas fuerzas, en el reporte mostrar una tabla por cada fuerza, igual para
+expulsados
+* En amonestados permitir ingresar la descripción Jugó o No Jugó para poder imprimir el reporte

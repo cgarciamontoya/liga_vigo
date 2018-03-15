@@ -64,9 +64,8 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         mnuCredJug = new javax.swing.JMenuItem();
         mnuCredEq = new javax.swing.JMenuItem();
         menuSanciones = new javax.swing.JMenu();
-        mnuJugSanciones = new javax.swing.JMenuItem();
-        mnuSancionesConsulta = new javax.swing.JMenuItem();
         mnuSancionesAmon = new javax.swing.JMenuItem();
+        mnuSancionesConsulta = new javax.swing.JMenuItem();
         menuConf = new javax.swing.JMenu();
         mnuConfParam = new javax.swing.JMenuItem();
         menuArbitros = new javax.swing.JMenu();
@@ -214,13 +213,13 @@ public class LigaFutbolMain extends javax.swing.JFrame {
 
         menuSanciones.setText("Sanciones");
 
-        mnuJugSanciones.setText("Registro");
-        mnuJugSanciones.addActionListener(new java.awt.event.ActionListener() {
+        mnuSancionesAmon.setText("Amonestados");
+        mnuSancionesAmon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuJugSancionesActionPerformed(evt);
+                abrirAmonestados(evt);
             }
         });
-        menuSanciones.add(mnuJugSanciones);
+        menuSanciones.add(mnuSancionesAmon);
 
         mnuSancionesConsulta.setText("Expulsados");
         mnuSancionesConsulta.addActionListener(new java.awt.event.ActionListener() {
@@ -229,14 +228,6 @@ public class LigaFutbolMain extends javax.swing.JFrame {
             }
         });
         menuSanciones.add(mnuSancionesConsulta);
-
-        mnuSancionesAmon.setText("Amonestados");
-        mnuSancionesAmon.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                abrirAmonestados(evt);
-            }
-        });
-        menuSanciones.add(mnuSancionesAmon);
 
         jMenuBar1.add(menuSanciones);
 
@@ -352,12 +343,6 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         trv.show();
     }//GEN-LAST:event_abrirReglamento
 
-    private void mnuJugSancionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuJugSancionesActionPerformed
-        JugadoresSancionesVista jsv = new JugadoresSancionesVista(connection);
-        this.add(jsv);
-        jsv.show();
-    }//GEN-LAST:event_mnuJugSancionesActionPerformed
-
     private void abrirConsultaSanciones(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirConsultaSanciones
         SancionesConsultaVista scv = new SancionesConsultaVista(connection);
         this.add(scv);
@@ -455,7 +440,6 @@ public class LigaFutbolMain extends javax.swing.JFrame {
     private javax.swing.JMenuItem mnuJgosRol;
     private javax.swing.JMenuItem mnuJugConsulta;
     private javax.swing.JMenuItem mnuJugRegistro;
-    private javax.swing.JMenuItem mnuJugSanciones;
     private javax.swing.JMenuItem mnuSancionesAmon;
     private javax.swing.JMenuItem mnuSancionesConsulta;
     private javax.swing.JMenuItem mnuTorneoCerrar;

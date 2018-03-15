@@ -10,7 +10,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,9 +31,9 @@ import lmfvgo.modelo.Amonestado;
 import lmfvgo.modelo.Arbitro;
 import lmfvgo.modelo.EstadisticasEquipo;
 import lmfvgo.modelo.EstadisticasJugador;
+import lmfvgo.modelo.Expulsado;
 import lmfvgo.modelo.Juegos;
 import lmfvgo.modelo.Jugadores;
-import lmfvgo.modelo.Sancion;
 import lmfvgo.util.ConstantesUtil;
 import lmfvgo.util.ReportesManager;
 
@@ -748,6 +747,16 @@ public class JuegoDetalleVista extends FormBase {
             if (amonestados != null && !amonestados.isEmpty()) {
                 sancionesDAO.guardarAmonestacion(amonestados);
             }
+            List<Expulsado> expulsados = (List<Expulsado>) estadisticasLocal.get(PARAM_EXP);
+            if (estadisticasVisitante.get(PARAM_EXP) != null) {
+                if (expulsados == null) {
+                    expulsados = new ArrayList<>();
+                }
+                expulsados.addAll((List<Expulsado>) estadisticasVisitante.get(PARAM_EXP));
+            }
+            if (expulsados != null && !expulsados.isEmpty()) {
+                sancionesDAO.guardarExpulsado(expulsados);
+            }
             agregarMensajeExito("Se guardaron correctamente los registos");
             this.dispose();
             btnGenerarEsta.setVisible(true);
@@ -786,7 +795,7 @@ public class JuegoDetalleVista extends FormBase {
 
     private Map<String, Object> obtenerEstadisticasTabla(JTable tabla, Integer idEquipo, Integer idJuego, boolean expCedRep, EstadisticasEquipo ee, int jornada) {
         Map<String, Object> mapa = new HashMap<>();
-        List<Sancion> expulsados = new ArrayList<>();
+        List<Expulsado> expulsados = new ArrayList<>();
         List<Amonestado> amonestados = new ArrayList<>();
         DefaultTableModel model = (DefaultTableModel) tabla.getModel();
         
@@ -817,10 +826,11 @@ public class JuegoDetalleVista extends FormBase {
                 }
                 ejl.add(ej);
                 if (ej.getTr() != null && ej.getTr() > 0) {
-                    Sancion s = new Sancion();
+                    Expulsado s = new Expulsado();
                     s.setIdJugador(ej.getIdJugador());
+                    s.setIdEquipo(idEquipo);
+                    s.setIdJuego(idJuego);
                     s.setActivo(true);
-                    s.setFecha(new Date());
                     s.setJornada(jornada);
                     expulsados.add(s);
                 } else if (ej.getTa() != null && ej.getTa() == 1) {

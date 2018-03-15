@@ -6,6 +6,7 @@
 package lmfvgo.vista;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -159,12 +160,21 @@ public class SancionesAmonestadosVista extends FormBase {
     }//GEN-LAST:event_limpiar
 
     private void exportar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportar
-        if (amonestados != null && !amonestados.isEmpty()) {
-            try {
-                reportesManager.amonestados(amonestados);
-            } catch (LMFVGOException ex) {
-                agregarMensajeError("No se generó el reporte debido a: " + ex.getMessage());
+        try {
+            List<Amonestado> lista = new ArrayList<>();
+            for (int i = 0; i < tblAmonestados.getRowCount(); i++) {
+                Amonestado a = new Amonestado();
+                a.setNombreJugador(tblAmonestados.getValueAt(i, 0).toString().split(" - ")[1]);
+                a.setNombreEquipo(tblAmonestados.getValueAt(i, 1).toString().split(" - ")[1]);
+                a.setFuerza(((String) tblAmonestados.getValueAt(i, 2)).equals("Primera") ? 1 : 2);
+                a.setTotalTarjetas((Integer) tblAmonestados.getValueAt(i, 3));
+                a.setJornadas((String) tblAmonestados.getValueAt(i, 4));
+                a.setObservaciones((String) tblAmonestados.getValueAt(i, 5));
+                lista.add(a);
             }
+            reportesManager.amonestados(lista);
+        } catch (LMFVGOException ex) {
+            agregarMensajeError("No se generó el reporte debido a: " + ex.getMessage());
         }
     }//GEN-LAST:event_exportar
 

@@ -29,22 +29,17 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane1" pref="818" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" pref="860" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="cboFuerza" min="-2" pref="150" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="cboEquipos" max="32767" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="1" attributes="0">
-                      <Component id="lblJornada" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
-                      <Component id="btnExportar" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnBuscar" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="btnExportar" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnLimpiar" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -60,19 +55,14 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="cboFuerza" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="cboEquipos" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="btnLimpiar" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnBuscar" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnLimpiar" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnExportar" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="lblJornada" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="jScrollPane1" min="-2" pref="289" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="jScrollPane1" min="-2" pref="315" max="-2" attributes="0"/>
+              <EmptySpace pref="14" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -91,24 +81,6 @@
             <StringItem index="1" value="Primera"/>
             <StringItem index="2" value="Segunda"/>
           </StringArray>
-        </Property>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="actualizarEquipos"/>
-      </Events>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-      </AuxValues>
-    </Component>
-    <Component class="javax.swing.JLabel" name="jLabel2">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Equipo:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JComboBox" name="cboEquipos">
-      <Properties>
-        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="0"/>
         </Property>
       </Properties>
       <AuxValues>
@@ -133,7 +105,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnExportar">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Exportar PDF"/>
+        <Property name="text" type="java.lang.String" value="Exportar"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="exportar"/>
@@ -150,12 +122,12 @@
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
               <Table columnCount="7" rowCount="0">
-                <Column editable="false" title="Clave" type="java.lang.String"/>
-                <Column editable="false" title="Jornada" type="java.lang.Integer"/>
                 <Column editable="false" title="Jugador" type="java.lang.String"/>
                 <Column editable="false" title="Equipo" type="java.lang.String"/>
-                <Column editable="false" title="Juegos" type="java.lang.String"/>
-                <Column editable="false" title="Multa" type="java.lang.Float"/>
+                <Column editable="false" title="Fuerza" type="java.lang.String"/>
+                <Column editable="true" title="Clave" type="java.lang.String"/>
+                <Column editable="true" title="Juegos" type="java.lang.Integer"/>
+                <Column editable="true" title="Multa" type="java.lang.Float"/>
                 <Column editable="true" title="Observaciones" type="java.lang.String"/>
               </Table>
             </Property>
@@ -208,10 +180,13 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JLabel" name="lblJornada">
+    <Component class="javax.swing.JButton" name="jButton1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="jLabel3"/>
+        <Property name="text" type="java.lang.String" value="Guardar"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="actualizarSanciones"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

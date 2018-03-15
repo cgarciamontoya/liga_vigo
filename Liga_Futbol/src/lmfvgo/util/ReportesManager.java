@@ -21,9 +21,9 @@ import lmfvgo.modelo.Amonestado;
 import lmfvgo.modelo.Configuracion;
 import lmfvgo.modelo.EstadisticasEquipo;
 import lmfvgo.modelo.EstadisticasJugador;
+import lmfvgo.modelo.Expulsado;
 import lmfvgo.modelo.Juegos;
 import lmfvgo.modelo.Reglamento;
-import lmfvgo.modelo.Sancion;
 import lmfvgo.reportes.vo.CedulaVO;
 import lmfvgo.reportes.vo.CredencialVO;
 import lmfvgo.reportes.vo.RolVO;
@@ -39,7 +39,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
  */
 public class ReportesManager {
     
-    private static final String URL_REPORTES = "C:\\lmfvgo\\";
+    private static final String URL_REPORTES = "D:\\lmfvgo\\";
     private static final String REPORTE_CEDULA_JUEGO = "/lmfvgo/reportes/CedulaJuego.jasper";
     private static final String REPORTE_TABLA_GENERAL = "/lmfvgo/reportes/TablaEstadisticas.jasper";
     private static final String REPORTE_CREDENCIALES = "/lmfvgo/reportes/Credenciales.jasper";
@@ -65,7 +65,7 @@ public class ReportesManager {
         abrirPdf(nombrePdf);
     }
     
-    public void sanciones(List<Sancion> sanciones) throws LMFVGOException {
+    public void sanciones(List<Expulsado> sanciones) throws LMFVGOException {
         Map<String, Object> parametros = new HashMap<>();
         getLogos(parametros);
         String nombrePdf = URL_REPORTES + "Sanciones.pdf";

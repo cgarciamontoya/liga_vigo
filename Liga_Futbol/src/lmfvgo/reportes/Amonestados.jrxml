@@ -10,6 +10,91 @@
 	<field name="totalTarjetas" class="java.lang.Integer"/>
 	<field name="nombreEquipo" class="java.lang.String"/>
 	<field name="jornadas" class="java.lang.String"/>
+	<field name="observaciones" class="java.lang.String"/>
+	<group name="fuerza_group">
+		<groupExpression><![CDATA[$F{fuerza}]]></groupExpression>
+		<groupHeader>
+			<band height="40">
+				<staticText>
+					<reportElement mode="Opaque" x="0" y="20" width="228" height="20" backcolor="#99FFFF" uuid="b04b3032-2ebc-4f7f-b138-0606ccffd250"/>
+					<box>
+						<pen lineWidth="1.0"/>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Nombre]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="478" y="20" width="94" height="20" backcolor="#99FFFF" uuid="7b17898b-a440-4efe-aafa-80a939c91a4a"/>
+					<box>
+						<pen lineWidth="1.0"/>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Obs.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="370" y="20" width="45" height="20" backcolor="#99FFFF" uuid="8383f3b2-7905-4dc3-a53e-335c4d4082fa"/>
+					<box>
+						<pen lineWidth="1.0"/>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[TA]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="228" y="20" width="142" height="20" backcolor="#99FFFF" uuid="76837225-c244-4c12-8c1e-4a4295e4a295"/>
+					<box>
+						<pen lineWidth="1.0"/>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Equipo]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="415" y="20" width="63" height="20" backcolor="#99FFFF" uuid="c2d45c4f-f90b-4192-bee0-8d8dac37b600"/>
+					<box>
+						<pen lineWidth="1.0"/>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Jornadas]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement x="0" y="0" width="572" height="20" uuid="7c81bbb5-94a8-4ade-8b5b-d738c4d2ebcf"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new String($F{fuerza} == 1 ? "Primera Fuerza" : "Segunda Fuerza")]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -57,84 +142,10 @@
 			</image>
 		</band>
 	</title>
-	<columnHeader>
-		<band height="20" splitType="Stretch">
-			<staticText>
-				<reportElement mode="Opaque" x="0" y="0" width="249" height="20" backcolor="#99FFFF" uuid="b04b3032-2ebc-4f7f-b138-0606ccffd250"/>
-				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Nombre]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="391" y="0" width="45" height="20" backcolor="#99FFFF" uuid="7b17898b-a440-4efe-aafa-80a939c91a4a"/>
-				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Fuerza]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="436" y="0" width="45" height="20" backcolor="#99FFFF" uuid="8383f3b2-7905-4dc3-a53e-335c4d4082fa"/>
-				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[TA]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="249" y="0" width="142" height="20" backcolor="#99FFFF" uuid="76837225-c244-4c12-8c1e-4a4295e4a295"/>
-				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Equipo]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="481" y="0" width="91" height="20" backcolor="#99FFFF" uuid="c2d45c4f-f90b-4192-bee0-8d8dac37b600"/>
-				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Jornadas]]></text>
-			</staticText>
-		</band>
-	</columnHeader>
 	<detail>
 		<band height="15" splitType="Stretch">
-			<textField>
-				<reportElement x="0" y="0" width="249" height="15" uuid="dd10188e-0d2e-4e6d-97ed-dd8a09a9a682"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="0" width="228" height="15" uuid="dd10188e-0d2e-4e6d-97ed-dd8a09a9a682"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -146,8 +157,8 @@
 				</textElement>
 				<textFieldExpression><![CDATA[" " + $F{nombreJugador}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="391" y="0" width="45" height="15" uuid="99c9aad1-70db-4f78-8a10-aa0e25e8534f"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="478" y="0" width="94" height="15" uuid="99c9aad1-70db-4f78-8a10-aa0e25e8534f"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -157,10 +168,10 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{fuerza}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{observaciones}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="249" y="0" width="142" height="15" uuid="061e42ad-9cf2-496f-b461-169beb8e45d6"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="228" y="0" width="142" height="15" uuid="061e42ad-9cf2-496f-b461-169beb8e45d6"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -172,8 +183,8 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nombreEquipo}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="436" y="0" width="45" height="15" uuid="73770089-c388-4f89-8fee-543ebe741464"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="370" y="0" width="45" height="15" uuid="73770089-c388-4f89-8fee-543ebe741464"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -185,8 +196,8 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totalTarjetas}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="481" y="0" width="91" height="15" uuid="e87b53fd-09a1-4f8d-849f-b1ba49e10f90"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="415" y="0" width="63" height="15" uuid="e87b53fd-09a1-4f8d-849f-b1ba49e10f90"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>

@@ -5,13 +5,99 @@
 	<property name="ireport.y" value="0"/>
 	<parameter name="logo" class="java.io.InputStream"/>
 	<parameter name="escudo" class="java.io.InputStream"/>
-	<field name="clave" class="java.lang.String"/>
-	<field name="sancionJuegos" class="java.lang.Integer"/>
-	<field name="juegosCumplidos" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
 	<field name="nombreJugador" class="java.lang.String"/>
-	<field name="sancionEconomica" class="java.lang.Float"/>
-	<field name="activo" class="java.lang.Boolean"/>
 	<field name="nombreEquipo" class="java.lang.String"/>
+	<field name="claves" class="java.lang.String"/>
+	<field name="fuerza" class="java.lang.Integer"/>
+	<field name="juegos" class="java.lang.Integer"/>
+	<field name="multa" class="java.lang.Float"/>
+	<group name="fuerza_group">
+		<groupExpression><![CDATA[$F{fuerza}]]></groupExpression>
+		<groupHeader>
+			<band height="40">
+				<textField isBlankWhenNull="true">
+					<reportElement x="0" y="0" width="572" height="20" uuid="3a004f1d-39ee-4fa6-9bf4-b9cf6f3a15a7"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new String($F{fuerza} == 1 ? "Primera Fuerza" : "Segunda Fuerza")]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement mode="Opaque" x="0" y="20" width="35" height="20" backcolor="#99FFFF" uuid="ada64630-ae02-4ad2-9b48-c4890e14cf2f"/>
+					<box>
+						<pen lineWidth="1.0"/>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Clave]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="35" y="20" width="240" height="20" backcolor="#99FFFF" uuid="b04b3032-2ebc-4f7f-b138-0606ccffd250"/>
+					<box>
+						<pen lineWidth="1.0"/>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Nombre]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="442" y="20" width="65" height="20" backcolor="#99FFFF" uuid="7b17898b-a440-4efe-aafa-80a939c91a4a"/>
+					<box>
+						<pen lineWidth="1.0"/>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Juegos]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="507" y="20" width="65" height="20" backcolor="#99FFFF" uuid="8383f3b2-7905-4dc3-a53e-335c4d4082fa"/>
+					<box>
+						<pen lineWidth="1.0"/>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Multa]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="275" y="20" width="167" height="20" backcolor="#99FFFF" uuid="76837225-c244-4c12-8c1e-4a4295e4a295"/>
+					<box>
+						<pen lineWidth="1.0"/>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Equipo]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -59,83 +145,9 @@
 			</image>
 		</band>
 	</title>
-	<columnHeader>
-		<band height="20" splitType="Stretch">
-			<staticText>
-				<reportElement mode="Opaque" x="0" y="0" width="35" height="20" backcolor="#99FFFF" uuid="ada64630-ae02-4ad2-9b48-c4890e14cf2f"/>
-				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Clave]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="35" y="0" width="240" height="20" backcolor="#99FFFF" uuid="b04b3032-2ebc-4f7f-b138-0606ccffd250"/>
-				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Nombre]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="442" y="0" width="65" height="20" backcolor="#99FFFF" uuid="7b17898b-a440-4efe-aafa-80a939c91a4a"/>
-				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Juegos]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="507" y="0" width="65" height="20" backcolor="#99FFFF" uuid="8383f3b2-7905-4dc3-a53e-335c4d4082fa"/>
-				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Multa]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="275" y="0" width="167" height="20" backcolor="#99FFFF" uuid="76837225-c244-4c12-8c1e-4a4295e4a295"/>
-				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Equipo]]></text>
-			</staticText>
-		</band>
-	</columnHeader>
 	<detail>
 		<band height="20" splitType="Stretch">
-			<textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="0" y="0" width="35" height="20" uuid="8fb0cba5-69f0-4ca7-92c2-d7cc0a1bc46e"/>
 				<box>
 					<topPen lineWidth="1.0"/>
@@ -143,10 +155,12 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{clave}]]></textFieldExpression>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{claves}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isStretchWithOverflow="true">
 				<reportElement x="35" y="0" width="240" height="20" uuid="dd10188e-0d2e-4e6d-97ed-dd8a09a9a682"/>
 				<box>
 					<topPen lineWidth="1.0"/>
@@ -154,39 +168,24 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement verticalAlignment="Middle"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
 				<textFieldExpression><![CDATA[" " + $F{nombreJugador}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="442" y="0" width="27" height="20" uuid="99c9aad1-70db-4f78-8a10-aa0e25e8534f"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="442" y="0" width="65" height="20" uuid="99c9aad1-70db-4f78-8a10-aa0e25e8534f"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
 					<bottomPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{juegosCumplidos}]]></textFieldExpression>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{juegos}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="469" y="0" width="12" height="20" uuid="c88aa526-8027-410f-b001-d8feb2f15704"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[/]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="481" y="0" width="26" height="20" uuid="e15e10c5-ef09-4d93-9543-00de61611ae8"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{sancionJuegos}]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="507" y="0" width="65" height="20" uuid="a3014f31-12cb-48dc-acc5-eee3908c7af0"/>
 				<box>
 					<topPen lineWidth="1.0"/>
@@ -194,10 +193,12 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{sancionEconomica}]]></textFieldExpression>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{multa}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isStretchWithOverflow="true">
 				<reportElement x="275" y="0" width="167" height="20" uuid="061e42ad-9cf2-496f-b461-169beb8e45d6"/>
 				<box>
 					<topPen lineWidth="1.0"/>
@@ -205,7 +206,9 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{nombreEquipo}]]></textFieldExpression>
 			</textField>
 		</band>

@@ -162,12 +162,12 @@
             <Property name="text" type="java.lang.String" value="Sanciones"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="mnuJugSanciones">
+            <MenuItem class="javax.swing.JMenuItem" name="mnuSancionesAmon">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Registro"/>
+                <Property name="text" type="java.lang.String" value="Amonestados"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuJugSancionesActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="abrirAmonestados"/>
               </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnuSancionesConsulta">
@@ -176,14 +176,6 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="abrirConsultaSanciones"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="mnuSancionesAmon">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Amonestados"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="abrirAmonestados"/>
               </Events>
             </MenuItem>
           </SubComponents>

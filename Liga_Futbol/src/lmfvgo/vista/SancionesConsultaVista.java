@@ -8,14 +8,13 @@ package lmfvgo.vista;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import lmfvgo.db.EquiposDAO;
 import lmfvgo.db.SancionesDAO;
 import lmfvgo.excepciones.LMFVGOException;
-import lmfvgo.modelo.Equipos;
+import lmfvgo.modelo.Expulsado;
 import lmfvgo.modelo.Sancion;
 import lmfvgo.util.ReportesManager;
 
@@ -29,7 +28,7 @@ public class SancionesConsultaVista extends FormBase {
 
     private final EquiposDAO equiposDAO;
     private final SancionesDAO sancionesDAO;
-    private List<Sancion> sanciones;
+    private List<Expulsado> sanciones;
     private ReportesManager reportesManager;
     /**
      * Creates new form SancionesConsultaVista
@@ -41,7 +40,6 @@ public class SancionesConsultaVista extends FormBase {
         sancionesDAO = new SancionesDAO(con);
         reportesManager = new ReportesManager(con);
         btnExportar.setEnabled(false);
-        lblJornada.setVisible(false);
     }
 
     /**
@@ -55,14 +53,12 @@ public class SancionesConsultaVista extends FormBase {
 
         jLabel1 = new javax.swing.JLabel();
         cboFuerza = new javax.swing.JComboBox<>();
-        jLabel2 = new javax.swing.JLabel();
-        cboEquipos = new javax.swing.JComboBox<>();
         btnLimpiar = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
         btnExportar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblSanciones = new javax.swing.JTable();
-        lblJornada = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setClosable(true);
         setTitle("CONSULTA SANCIONES");
@@ -71,13 +67,6 @@ public class SancionesConsultaVista extends FormBase {
         jLabel1.setText("Fuerza");
 
         cboFuerza.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione", "Primera", "Segunda" }));
-        cboFuerza.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                actualizarEquipos(evt);
-            }
-        });
-
-        jLabel2.setText("Equipo:");
 
         btnLimpiar.setText("Limpiar");
         btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
@@ -93,7 +82,7 @@ public class SancionesConsultaVista extends FormBase {
             }
         });
 
-        btnExportar.setText("Exportar PDF");
+        btnExportar.setText("Exportar");
         btnExportar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 exportar(evt);
@@ -105,14 +94,14 @@ public class SancionesConsultaVista extends FormBase {
 
             },
             new String [] {
-                "Clave", "Jornada", "Jugador", "Equipo", "Juegos", "Multa", "Observaciones"
+                "Jugador", "Equipo", "Fuerza", "Clave", "Juegos", "Multa", "Observaciones"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Float.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Float.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, true
+                false, false, false, true, true, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -130,7 +119,12 @@ public class SancionesConsultaVista extends FormBase {
         });
         jScrollPane1.setViewportView(tblSanciones);
 
-        lblJornada.setText("jLabel3");
+        jButton1.setText("Guardar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                actualizarSanciones(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -139,21 +133,17 @@ public class SancionesConsultaVista extends FormBase {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 818, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 860, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cboFuerza, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cboEquipos, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(lblJornada)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnExportar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnBuscar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnExportar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnLimpiar)))
                 .addContainerGap())
@@ -165,60 +155,39 @@ public class SancionesConsultaVista extends FormBase {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(cboFuerza, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
-                    .addComponent(cboEquipos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnLimpiar)
                     .addComponent(btnBuscar)
+                    .addComponent(btnLimpiar)
                     .addComponent(btnExportar)
-                    .addComponent(lblJornada))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButton1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void actualizarEquipos(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarEquipos
-        cboEquipos.removeAllItems();
-        if (cboFuerza.getSelectedIndex() > 0) {
-            List<Equipos> equipos = equiposDAO.consultarEquipo(null, cboFuerza.getSelectedIndex());
-            DefaultComboBoxModel modelEquipos = (DefaultComboBoxModel) cboEquipos.getModel();
-            modelEquipos.addElement("0 - Seleccione");
-            for (Equipos e : equipos) {
-                modelEquipos.addElement(e.getIdEquipo() + " - " + e.getNombre());
-            }
-            cboEquipos.setModel(modelEquipos);
-        }
-    }//GEN-LAST:event_actualizarEquipos
-
     private void limpiar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_limpiar
-        cboEquipos.removeAllItems();
         limpiarTabla(tblSanciones);
         btnExportar.setEnabled(false);
         sanciones = null;
-        lblJornada.setVisible(false);
     }//GEN-LAST:event_limpiar
 
     private void buscarSanciones(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarSanciones
         limpiarTabla(tblSanciones);
-        sanciones = sancionesDAO.consultaSanciones(
-                cboEquipos.getItemCount() > 0 ?
-                Integer.parseInt(cboEquipos.getSelectedItem().toString().split(" - ")[0]) : 0, cboFuerza.getSelectedIndex());
+        sanciones = sancionesDAO.consultaExpulsados(cboFuerza.getSelectedIndex());
         if (sanciones != null && !sanciones.isEmpty()) {
             DefaultTableModel modelo = (DefaultTableModel) tblSanciones.getModel();
             boolean agregado = false;
-            for (Sancion s : sanciones) {
+            for (Expulsado s : sanciones) {
                 if (s.isActivo()) {
                     modelo.addRow(new Object[]{
-                        s.getClave(),
-                        s.getJornada(),
                         (s.getIdJugador() + " - " + s.getNombreJugador()),
                         s.getNombreEquipo(),
-                        (String.valueOf(s.getJuegosCumplidos() > 0 ? s.getJuegosCumplidos() : 0) + "/" + String.valueOf(s.getSancionJuegos())),
-                        (s.getSancionEconomica() != null && s.getSancionEconomica() > 0 ? s.getSancionEconomica() : null),
+                        s.getFuerza() == 1 ? "Primera" : "Segunda",
+                        s.getClaves(),
+                        s.getJuegos(),
+                        s.getMulta(),
                         s.getObservaciones()
                     });
                     agregado = true;
@@ -229,27 +198,30 @@ public class SancionesConsultaVista extends FormBase {
                 }
             }
             btnExportar.setEnabled(true);
-            lblJornada.setText("Jornada: " + sancionesDAO.getJornadaActual(cboFuerza.getSelectedIndex()));
-            lblJornada.setVisible(true);
         } else {
             agregarMensajeError("No se encontraron resultados");
         }
     }//GEN-LAST:event_buscarSanciones
 
     private void exportar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportar
-        if (sanciones != null && !sanciones.isEmpty()) {
             try {
-                List<Sancion> activas = new ArrayList<>();
-                for (Sancion s : sanciones) {
-                    if (s.isActivo()) {
-                        activas.add(s);
-                    }
+                List<Expulsado> expulsados = new ArrayList<>();
+                for (int i = 0; i < tblSanciones.getRowCount(); i++) {
+                    Expulsado e = new Expulsado();
+                    e.setIdJugador(Integer.parseInt(tblSanciones.getValueAt(i, 0).toString().split(" - ")[0]));
+                    e.setNombreJugador(tblSanciones.getValueAt(i, 0).toString().split(" - ")[1]);
+                    e.setNombreEquipo((String) tblSanciones.getValueAt(i, 1));
+                    e.setFuerza(((String) tblSanciones.getValueAt(i, 2)).equals("Primera") ? 1 : 2);
+                    e.setClaves((String) tblSanciones.getValueAt(i, 3));
+                    e.setJuegos((Integer) tblSanciones.getValueAt(i, 4));
+                    e.setMulta((Float) tblSanciones.getValueAt(i, 5));
+                    e.setObservaciones((String) tblSanciones.getValueAt(i, 6));
+                    expulsados.add(e);
                 }
-                reportesManager.sanciones(activas);
+                reportesManager.sanciones(expulsados);
             } catch (LMFVGOException ex) {
                 agregarMensajeError(ex.getMessage());
             }
-        }
     }//GEN-LAST:event_exportar
 
     private void quitarSancion(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_quitarSancion
@@ -270,17 +242,37 @@ public class SancionesConsultaVista extends FormBase {
         }
     }//GEN-LAST:event_quitarSancion
 
+    private void actualizarSanciones(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarSanciones
+        int dialogResult = JOptionPane.showConfirmDialog(null, "Desea actualizar las sanciones?", "Advertencia", JOptionPane.YES_NO_OPTION);
+        if (dialogResult == JOptionPane.YES_OPTION) {
+            List<Expulsado> expulsados = new ArrayList<>();
+            for (int i = 0; i < tblSanciones.getRowCount(); i++) {
+                Expulsado e = new Expulsado();
+                e.setIdJugador(Integer.parseInt(tblSanciones.getValueAt(i, 0).toString().split(" - ")[0]));
+                e.setClaves((String) tblSanciones.getValueAt(i, 3));
+                e.setJuegos((Integer) tblSanciones.getValueAt(i, 4));
+                e.setMulta((Float) tblSanciones.getValueAt(i, 5));
+                e.setObservaciones((String) tblSanciones.getValueAt(i, 6));
+                expulsados.add(e);
+            }
+            try {
+                sancionesDAO.actualizarExpulsiones(expulsados);
+                agregarMensajeExito("La sanciones fueron actualizadas correctamente");
+            } catch (LMFVGOException ex) {
+                agregarMensajeError(ex.getMessage());
+            }
+        }
+    }//GEN-LAST:event_actualizarSanciones
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnExportar;
     private javax.swing.JButton btnLimpiar;
-    private javax.swing.JComboBox<String> cboEquipos;
     private javax.swing.JComboBox<String> cboFuerza;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblJornada;
     private javax.swing.JTable tblSanciones;
     // End of variables declaration//GEN-END:variables
 }
