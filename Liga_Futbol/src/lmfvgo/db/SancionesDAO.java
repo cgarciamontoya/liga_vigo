@@ -179,7 +179,7 @@ public class SancionesDAO extends BaseDAO {
     
     public void bajaSancion(Integer idJugador, String clave, String observaciones) throws LMFVGOException {
         try {
-            PreparedStatement ps = getConnection().prepareStatement("update sanciones set activo = 0, observaciones = ? where id_jugador = ? and clave_reglamento = ?");
+            PreparedStatement ps = getConnection().prepareStatement("update expulsados set activo = 0, observaciones = ? where id_jugador = ? and clave_reglamento = ?");
             ps.setString(1, observaciones != null ? observaciones : "");
             ps.setInt(2, idJugador);
             ps.setString(3, clave);
@@ -327,7 +327,7 @@ public class SancionesDAO extends BaseDAO {
         }
     }
     
-    public void quitarExpulsion(Integer idJugador, String observaciones) {
+    public void quitarExpulsion(Integer idJugador, String observaciones) throws LMFVGOException {
         try {
             PreparedStatement ps = getConnection().prepareStatement("update expulsados set activo = 0, observaciones = ? where id_jugador = ?");
             ps.setString(1, observaciones);

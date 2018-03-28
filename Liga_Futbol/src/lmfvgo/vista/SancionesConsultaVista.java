@@ -228,11 +228,10 @@ public class SancionesConsultaVista extends FormBase {
         if (SwingUtilities.isRightMouseButton(evt)) {
             int dialogResult = JOptionPane.showConfirmDialog(null, "Desea quitar la sancion?", "Advertencia", JOptionPane.YES_NO_OPTION);
             if (dialogResult == JOptionPane.YES_OPTION) {
-                String clave = (String) tblSanciones.getValueAt(tblSanciones.getSelectedRow(), 0);
-                String jugador = (String) tblSanciones.getValueAt(tblSanciones.getSelectedRow(), 2);
+                String jugador = (String) tblSanciones.getValueAt(tblSanciones.getSelectedRow(), 0);
                 String observaciones = (String) tblSanciones.getValueAt(tblSanciones.getSelectedRow(), 6);
                 try {
-                    sancionesDAO.bajaSancion(Integer.valueOf(jugador.split(" - ")[0]), clave, observaciones);
+                    sancionesDAO.quitarExpulsion(Integer.valueOf(jugador.split(" - ")[0]), observaciones);
                     agregarMensajeExito("La sanción fue eliminada correctamente");
                     ((DefaultTableModel) tblSanciones.getModel()).removeRow(tblSanciones.getSelectedRow());
                 } catch (LMFVGOException ex) {
