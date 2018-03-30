@@ -18,10 +18,13 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import lmfvgo.excepciones.LMFVGOException;
 import lmfvgo.modelo.Amonestado;
 import lmfvgo.modelo.Expulsado;
 import lmfvgo.modelo.Sancion;
+import lmfvgo.modelo.SancionEquipo;
 import lmfvgo.util.ConstantesUtil;
 
 public class SancionesDAO extends BaseDAO {
@@ -353,6 +356,72 @@ public class SancionesDAO extends BaseDAO {
             ps.executeBatch();
         } catch (SQLException ex) {
             throw new LMFVGOException("No fue posible actualizar los expulsados debido a: " + ex.getMessage());
+        }
+    }
+    
+    public List<SancionEquipo> consultaSancionesEquipo(int fuerza) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select e.id_equipo, e.nombre, se.juegos, se.multa, se.puntos, se.observaciones, se.activo, e.fuerza ")
+                .append("from sanciones_equipo se inner join equipos e using(id_equipo) ")
+                .append("where se.activo = 1 ");
+        if (fuerza > 0) {
+            sb.append("and e.fuerza = ").append(fuerza);
+        }
+        sb.append(" order by fuerza, nombre");
+        try {
+            ResultSet rs = getConnection().prepareStatement(sb.toString()).executeQuery();
+            List<SancionEquipo> lista = new ArrayList<>();
+            while (rs.next()) {
+                SancionEquipo se = new SancionEquipo();
+                se.setIdEquipo(rs.getInt("id_equipo"));
+                se.setNombreEquipo(rs.getString("nombre"));
+                se.setJuegos(rs.getInt("juegos"));
+                se.setMulta(rs.getFloat("multa"));
+                se.setPuntos(rs.getInt("puntos"));
+                se.setObservaciones(rs.getString("observaciones"));
+                se.setActivo(rs.getInt("activo") == 1);
+                se.setFuerza(rs.getInt("fuerza"));
+                lista.add(se);
+            }
+            return lista;
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
+    
+    public void guardarSanciones(List<SancionEquipo> sanciones) throws LMFVGOException {
+        try {
+            String query = "insert into sanciones_equipo values(?,?,?,?,?,?)";
+            PreparedStatement ps = getConnection().prepareStatement(query);
+            for (SancionEquipo se : sanciones) {
+                eliminarSancionEquipo(se.getIdEquipo());
+                ps.setInt(1, se.getIdEquipo());
+                ps.setInt(2, se.getJuegos() == null ? 0 : se.getJuegos());
+                ps.setFloat(3, se.getMulta() == null ? 0 : se.getMulta());
+                ps.setInt(4, se.getPuntos() == null ? 0 : se.getPuntos());
+                ps.setString(5, se.getObservaciones() == null ? "" : se.getObservaciones().toUpperCase());
+                ps.setInt(6, 1);
+                ps.addBatch();
+            }
+            ps.executeBatch();
+        } catch (SQLException ex) {
+            throw new LMFVGOException("No fue posible registrar las sanciones a los equipos debido a: " + ex.getMessage());
+        }
+    }
+    
+    private void eliminarSancionEquipo(int idEquipo) throws SQLException {
+        getConnection().prepareStatement("delete from sanciones_equipo where id_equipo = " + idEquipo).execute();
+    }
+    
+    public void quitarSancionEquipo(int idEquipo, String observaciones) throws LMFVGOException {
+        try {
+            StringBuilder sb = new StringBuilder();
+            sb.append("update sanciones_equipo set activo = 0, observaciones = '")
+                    .append(observaciones.toUpperCase()).append("' where id_equipo = ")
+                    .append(idEquipo);
+            getConnection().prepareStatement(sb.toString()).execute();
+        } catch (SQLException ex) {
+            throw new LMFVGOException("No fue posible eliminar la sanción debido a: " + ex.getMessage());
         }
     }
     

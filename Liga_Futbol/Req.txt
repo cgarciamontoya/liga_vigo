@@ -17,3 +17,17 @@ CREATE TABLE `expulsados` (
 * Separar la lista de jugadores de amonestados de ambas fuerzas, en el reporte mostrar una tabla por cada fuerza, igual para
 expulsados
 * En amonestados permitir ingresar la descripción Jugó o No Jugó para poder imprimir el reporte
+
+CREATE TABLE `lmfvgo`.`sanciones_equipo` (
+  
+`id_equipo` INT NOT NULL,
+  
+`juegos` INT NOT NULL DEFAULT 0,
+  
+`multa` FLOAT NOT NULL DEFAULT 0,
+  
+`puntos` INT NOT NULL DEFAULT 0,
+  
+`observaciones` VARCHAR(50) NULL,
+  
+`activo` INT NULL DEFAULT 1);

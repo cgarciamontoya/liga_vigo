@@ -44,6 +44,7 @@ public class LigaFutbolMain extends javax.swing.JFrame {
 
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuTorneo = new javax.swing.JMenu();
         mnuTorneoNuevo = new javax.swing.JMenuItem();
@@ -66,6 +67,7 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         menuSanciones = new javax.swing.JMenu();
         mnuSancionesAmon = new javax.swing.JMenuItem();
         mnuSancionesConsulta = new javax.swing.JMenuItem();
+        menuSancionesEquipo = new javax.swing.JMenuItem();
         menuConf = new javax.swing.JMenu();
         mnuConfParam = new javax.swing.JMenuItem();
         menuArbitros = new javax.swing.JMenu();
@@ -74,6 +76,8 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         jMenuItem1.setText("jMenuItem1");
 
         jMenuItem2.setText("jMenuItem2");
+
+        jMenuItem3.setText("jMenuItem3");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Liga Municipal de Futbol Hacienda \"El Carro\" Villa González Ortega");
@@ -229,6 +233,14 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         });
         menuSanciones.add(mnuSancionesConsulta);
 
+        menuSancionesEquipo.setText("Equipos");
+        menuSancionesEquipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                abrirSancionesEquipo(evt);
+            }
+        });
+        menuSanciones.add(menuSancionesEquipo);
+
         jMenuBar1.add(menuSanciones);
 
         menuConf.setText("Configuración");
@@ -381,6 +393,12 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         av.show();
     }//GEN-LAST:event_arbitros
 
+    private void abrirSancionesEquipo(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirSancionesEquipo
+        SancionesEquiposVista sev = new SancionesEquiposVista(connection);
+        this.add(sev);
+        sev.show();
+    }//GEN-LAST:event_abrirSancionesEquipo
+
     /**
      * @param args the command line arguments
      */
@@ -420,6 +438,7 @@ public class LigaFutbolMain extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenu menuArbitros;
     private javax.swing.JMenu menuConf;
     private javax.swing.JMenu menuCredenciales;
@@ -427,6 +446,7 @@ public class LigaFutbolMain extends javax.swing.JFrame {
     private javax.swing.JMenu menuJuegos;
     private javax.swing.JMenu menuJugadores;
     private javax.swing.JMenu menuSanciones;
+    private javax.swing.JMenuItem menuSancionesEquipo;
     private javax.swing.JMenu menuTorneo;
     private javax.swing.JMenuItem mnuArbitrosReg;
     private javax.swing.JMenuItem mnuConfParam;
