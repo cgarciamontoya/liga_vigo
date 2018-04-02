@@ -31,3 +31,26 @@ CREATE TABLE `lmfvgo`.`sanciones_equipo` (
 `observaciones` VARCHAR(50) NULL,
   
 `activo` INT NULL DEFAULT 1);
+
+
+QUITAR VALOR A LA VARIABLE secure-file-priv
+C:\ProgramData\MySQL\MySQL Server 5.7\my.ini
+CREATE DEFINER=`root`@`localhost` PROCEDURE `respaldo_fotos`()
+begin
+	declare FIN int default 0;
+    declare this_id int;
+    declare cur1 cursor for select id_jugador from jugadores where imagen is not null;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET FIN = 1;
+    open cur1;
+      read_loop: loop
+        fetch cur1 into this_id;
+        IF FIN = 1 THEN
+			LEAVE read_loop;
+		END IF;
+        set @query = concat('select imagen from jugadores where id_jugador=', 
+            this_id, ' into dumpfile "D:/lmfvgo/respaldo_fotos/', this_id,'.jpg"');
+        prepare write_file from @query;
+        execute write_file;
+      end loop;
+    close cur1;
+  end
