@@ -148,7 +148,7 @@
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="0" y="0" width="35" height="20" uuid="8fb0cba5-69f0-4ca7-92c2-d7cc0a1bc46e"/>
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="35" height="20" uuid="8fb0cba5-69f0-4ca7-92c2-d7cc0a1bc46e"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -161,7 +161,7 @@
 				<textFieldExpression><![CDATA[$F{claves}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="35" y="0" width="240" height="20" uuid="dd10188e-0d2e-4e6d-97ed-dd8a09a9a682"/>
+				<reportElement stretchType="RelativeToTallestObject" x="35" y="0" width="240" height="20" uuid="dd10188e-0d2e-4e6d-97ed-dd8a09a9a682"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -174,7 +174,7 @@
 				<textFieldExpression><![CDATA[" " + $F{nombreJugador}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="442" y="0" width="65" height="20" uuid="99c9aad1-70db-4f78-8a10-aa0e25e8534f"/>
+				<reportElement stretchType="RelativeToTallestObject" x="442" y="0" width="65" height="20" uuid="99c9aad1-70db-4f78-8a10-aa0e25e8534f"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -186,7 +186,7 @@
 				<textFieldExpression><![CDATA[$F{juegos}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00" isBlankWhenNull="true">
-				<reportElement x="507" y="0" width="65" height="20" uuid="a3014f31-12cb-48dc-acc5-eee3908c7af0"/>
+				<reportElement stretchType="RelativeToTallestObject" x="507" y="0" width="65" height="20" uuid="a3014f31-12cb-48dc-acc5-eee3908c7af0"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -199,7 +199,7 @@
 				<textFieldExpression><![CDATA[$F{multa}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="275" y="0" width="167" height="20" uuid="061e42ad-9cf2-496f-b461-169beb8e45d6"/>
+				<reportElement stretchType="RelativeToTallestObject" x="275" y="0" width="167" height="20" uuid="061e42ad-9cf2-496f-b461-169beb8e45d6"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>

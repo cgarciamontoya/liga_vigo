@@ -366,7 +366,26 @@ public class SancionesEquiposVista extends FormBase {
     }//GEN-LAST:event_guardarSanciones
 
     private void exportar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportar
-        // TODO add your handling code here:
+        if (tblSanciones.getRowCount() == 0) {
+            agregarMensajeAdvertencia("No existen sanciones para exportar");
+            return;
+        }
+        try {
+            List<SancionEquipo> sanciones = new ArrayList<>();
+            for (int i = 0; i < tblSanciones.getRowCount(); i++) {
+                SancionEquipo se = new SancionEquipo();
+                se.setNombreEquipo(((String) tblSanciones.getValueAt(i, 0)).split(" - ")[1]);
+                se.setFuerza(((String) tblSanciones.getValueAt(i, 1)).equals("Primera") ? 1 : 2);
+                se.setJuegos((Integer) tblSanciones.getValueAt(i, 2));
+                se.setMulta((Float) tblSanciones.getValueAt(i, 3));
+                se.setPuntos((Integer) tblSanciones.getValueAt(i, 4));
+                se.setObservaciones((String) tblSanciones.getValueAt(i, 5));
+                sanciones.add(se);
+            }
+            reportesManager.sancionesEquipo(sanciones);
+        } catch (LMFVGOException ex) {
+            agregarMensajeError(ex.getMessage());
+        }
     }//GEN-LAST:event_exportar
 
     private void quitarSancion(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_quitarSancion

@@ -24,6 +24,7 @@ import lmfvgo.modelo.EstadisticasJugador;
 import lmfvgo.modelo.Expulsado;
 import lmfvgo.modelo.Juegos;
 import lmfvgo.modelo.Reglamento;
+import lmfvgo.modelo.SancionEquipo;
 import lmfvgo.reportes.vo.CedulaVO;
 import lmfvgo.reportes.vo.CredencialVO;
 import lmfvgo.reportes.vo.RolVO;
@@ -48,6 +49,7 @@ public class ReportesManager {
     private static final String REPORTE_ROL = "/lmfvgo/reportes/Rol.jasper";
     private static final String REPORTE_SANCIONES = "/lmfvgo/reportes/Sanciones.jasper";
     private static final String REPORTE_AMONESTADOS = "/lmfvgo/reportes/Amonestados.jasper";
+    private static final String REPORTE_SANCIONES_EQUIPO = "/lmfvgo/reportes/SancionesEquipo.jasper";
     
     private final ConfiguracionDAO configuracionDAO;
     private final Configuracion configuracion;
@@ -62,6 +64,14 @@ public class ReportesManager {
         getLogos(parametros);
         String nombrePdf = URL_REPORTES + "Amonestados.pdf";
         exportar(REPORTE_AMONESTADOS, parametros, nombrePdf, amonestados);
+        abrirPdf(nombrePdf);
+    }
+    
+    public void sancionesEquipo(List<SancionEquipo> sanciones) throws LMFVGOException {
+        Map<String, Object> parametros = new HashMap<>();
+        getLogos(parametros);
+        String nombrePdf = URL_REPORTES + "SancionesEquipo.pdf";
+        exportar(REPORTE_SANCIONES_EQUIPO, parametros, nombrePdf, sanciones);
         abrirPdf(nombrePdf);
     }
     
