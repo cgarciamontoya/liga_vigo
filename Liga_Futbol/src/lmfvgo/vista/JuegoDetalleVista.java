@@ -665,13 +665,13 @@ public class JuegoDetalleVista extends FormBase {
             
             // VALIDACION DE AUTOGOLES
             if (cboAGlocal.getSelectedIndex() > 0) {
-                estadisticaLocal.setGolesContra(estadisticaLocal.getGolesContra() + 1);
-                estadisticaVisitante.setGolesFavor(estadisticaVisitante.getGolesFavor() + 1);
+                estadisticaLocal.setGolesContra(estadisticaLocal.getGolesContra() + cboAGlocal.getSelectedIndex());
+                estadisticaVisitante.setGolesFavor(estadisticaVisitante.getGolesFavor() + cboAGlocal.getSelectedIndex());
                 estadisticaLocal.setAutogoles(cboAGlocal.getSelectedIndex());
             }
             if (cboAGvisitante.getSelectedIndex() > 0) {
-                estadisticaVisitante.setGolesContra(estadisticaVisitante.getGolesContra() + 1);
-                estadisticaLocal.setGolesFavor(estadisticaLocal.getGolesFavor() + 1);
+                estadisticaVisitante.setGolesContra(estadisticaVisitante.getGolesContra() + cboAGvisitante.getSelectedIndex());
+                estadisticaLocal.setGolesFavor(estadisticaLocal.getGolesFavor() + cboAGvisitante.getSelectedIndex());
                 estadisticaVisitante.setAutogoles(cboAGvisitante.getSelectedIndex());
             }
             int resultado = ResultadosJuegoEnum.EMPATE.getResultado();
