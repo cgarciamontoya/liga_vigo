@@ -91,6 +91,12 @@ public class JuegosLiguillaVista extends FormBase {
 
         jLabel2.setText("Juego:");
 
+        cboJuego.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cargarJuegos(evt);
+            }
+        });
+
         jLabel3.setText("Local:");
 
         btnLimpiar.setText("Limpiar");
@@ -289,6 +295,8 @@ public class JuegosLiguillaVista extends FormBase {
         equipos = null;
         limpiarTabla(tblJuegos);
         cboFuerza.setSelectedIndex(0);
+        btnAgregar.setEnabled(true);
+        btnGuardar.setEnabled(true);
     }//GEN-LAST:event_limpiar
 
     private void agregarJuego(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarJuego
@@ -378,6 +386,37 @@ public class JuegosLiguillaVista extends FormBase {
             }
         }
     }//GEN-LAST:event_guardarJuegos
+
+    private void cargarJuegos(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargarJuegos
+        if (cboJuego.getSelectedIndex() > 0) {
+            btnGuardar.setEnabled(false);
+            btnAgregar.setEnabled(false);
+            String juegoSel = cboJuego.getSelectedItem().toString();
+            List<Juegos> juegos = null;
+            int jornada = 0;
+            switch (juegoSel) {
+                case "CUARTOS" :
+                    jornada = ConstantesUtil.JORNADA_CUARTOS;
+                    break;
+                case "SEMIFINAL" :
+                    jornada = ConstantesUtil.JORNADA_SEMIS;
+                    break;
+                case "FINAL" :
+                    jornada = ConstantesUtil.JORNADA_FINAL;
+            }
+            if (jornada > 0) {
+                juegos = juegosDAO.consultaJuegosJornada(cboFuerza.getSelectedIndex(), jornada);
+                if (juegos != null && !juegos.isEmpty()) {
+                    limpiarTabla(tblJuegos);
+                    btnGuardar.setEnabled(false);
+                    btnAgregar.setEnabled(false);
+                    for (Juegos j : juegos) {
+                        ((DefaultTableModel) tblJuegos.getModel()).addRow(new Object[]{j.getIdJuego(), j.getLocalNombre(), j.getVisitanteNombre()});
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_cargarJuegos
 
     private int getIdEquipo(String nombre) {
         for (EstadisticasEquipo ee : equipos) {
