@@ -48,7 +48,7 @@ begin
 			LEAVE read_loop;
 		END IF;
         set @query = concat('select imagen from jugadores where id_jugador=', 
-            this_id, ' into dumpfile "D:/lmfvgo/respaldo_fotos/', this_id,'.jpg"');
+            this_id, ' into dumpfile "C:/lmfvgo/respaldo_fotos/', this_id,'.jpg"');
         prepare write_file from @query;
         execute write_file;
       end loop;

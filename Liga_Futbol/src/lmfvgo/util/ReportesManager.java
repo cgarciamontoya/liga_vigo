@@ -153,7 +153,21 @@ public class ReportesManager {
         if (parametros == null) {
             parametros = new HashMap<>();
         }
-        parametros.put("jornada", "Jornada " + juego.getJornada());
+        String jornada = "";
+        switch (juego.getJornada()) {
+            case ConstantesUtil.JORNADA_CUARTOS :
+                jornada = "CUARTOS DE FINAL";
+                break;
+            case ConstantesUtil.JORNADA_SEMIS :
+                jornada = "SEMIFINALES";
+                break;
+            case ConstantesUtil.JORNADA_FINAL :
+                jornada = "FINAL";
+                break;
+            default :
+                jornada = "Jornada " + juego.getJornada();
+        }
+        parametros.put("jornada", jornada);
         parametros.put("local", juego.getLocalNombre());
         parametros.put("visitante", juego.getVisitanteNombre());
         parametros.put("fecha", juego.getFecha());

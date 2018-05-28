@@ -362,8 +362,8 @@ public class JuegosLiguillaVista extends FormBase {
             for (int i = 0; i < modelo.getRowCount(); i++) {
                 Juegos j = new Juegos();
                 j.setJornada(jornada);
-                j.setLocal(getIdEquipo(modelo.getValueAt(i, 1).toString()));
-                j.setVisitante(getIdEquipo(modelo.getValueAt(i, 2).toString()));
+                j.setLocal(chkIdaVuelta.isSelected() ? getIdEquipo(modelo.getValueAt(i, 2).toString()) : getIdEquipo(modelo.getValueAt(i, 1).toString()));
+                j.setVisitante(chkIdaVuelta.isSelected() ? getIdEquipo(modelo.getValueAt(i, 1).toString()) : getIdEquipo(modelo.getValueAt(i, 2).toString()));
                 j.setFuerza(cboFuerza.getSelectedIndex());
                 juegos.add(j);
                 if (chkIdaVuelta.isSelected()) {
@@ -389,8 +389,6 @@ public class JuegosLiguillaVista extends FormBase {
 
     private void cargarJuegos(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargarJuegos
         if (cboJuego.getSelectedIndex() > 0) {
-            btnGuardar.setEnabled(false);
-            btnAgregar.setEnabled(false);
             String juegoSel = cboJuego.getSelectedItem().toString();
             List<Juegos> juegos = null;
             int jornada = 0;
