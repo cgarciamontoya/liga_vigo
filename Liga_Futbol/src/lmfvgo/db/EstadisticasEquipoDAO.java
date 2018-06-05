@@ -101,12 +101,13 @@ public class EstadisticasEquipoDAO extends BaseDAO {
                 .append("from estadisticas_equipo ee ")
                 .append("inner join equipos eq on eq.id_equipo = ee.id_equipo ")
                 .append("inner join juegos j on j.id_juego = ee.id_juego and j.jornada < 98 ")
-                .append("where eq.fuerza = ? and eq.nombre not in ('DESCANSA') ")
+                .append("where eq.fuerza = ? and j.id_torneo = ? and eq.nombre not in ('DESCANSA') ")
                 .append("group by id_equipo ")
                 .append("order by pts desc, dif desc, gf desc, gc desc ");
         try {
             PreparedStatement ps = getConnection().prepareStatement(sb.toString());
             ps.setInt(1, fuerza);
+            ps.setInt(2, getIdTorneoActivo());
             
             int i = 1;
             ResultSet rs = ps.executeQuery();
@@ -144,11 +145,13 @@ public class EstadisticasEquipoDAO extends BaseDAO {
                 .append("inner join equipos e on e.id_equipo = rel.id_equipo ")
                 .append("inner join jugadores j on ej.id_jugador = j.id_jugador ")
                 .append("where e.fuerza = ? ")
+                .append("and jgos.id_torneo = ? ")
                 .append("group by id_jugador order by goles desc, equipo, nombre ")
                 .append("limit 0, 5 ");
         try {
             PreparedStatement ps = getConnection().prepareStatement(sb.toString());
             ps.setInt(1, fuerza);
+            ps.setInt(2, getIdTorneoActivo());
             
             ResultSet rs = ps.executeQuery();
             List<EstadisticasJugador> estadisticas = new ArrayList<>();

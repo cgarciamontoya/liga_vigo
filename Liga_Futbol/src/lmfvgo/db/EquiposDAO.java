@@ -169,7 +169,12 @@ public class EquiposDAO extends BaseDAO {
     
     public void limpiarEquipo(int idEquipo) throws LMFVGOException {
         try {
-            getConnection().prepareStatement("delete from rel_equipo_jugadores where id_equipo = " + idEquipo).execute();
+            StringBuilder sb = new StringBuilder();
+            sb.append("delete from rel_equipo_jugadores where id_equipo = ")
+                    .append(idEquipo)
+                    .append(" and id_torneo = ")
+                    .append(getIdTorneoActivo());
+            getConnection().prepareStatement(sb.toString()).execute();
         } catch (SQLException ex) {
             throw new LMFVGOException("Ocurrio un error al limpiar los datos del equipo");
         }

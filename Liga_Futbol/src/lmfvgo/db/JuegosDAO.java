@@ -58,10 +58,11 @@ public class JuegosDAO extends BaseDAO {
             sb.append("select j.id_juego, j.jornada, j.local, j.visitante, j.lugar, j.resultado, j.id_torneo, j.fecha, j.fuerza, j.marcador, ")
                     .append("l.nombre local_nombre, v.nombre visitante_nombre, j.cerrado ")
                     .append("from juegos j inner join equipos l on l.id_equipo = j.local ")
-                    .append("inner join equipos v on v.id_equipo = j.visitante ")
-                    .append("where j.fuerza = ? order by jornada, id_juego");
+                    .append("inner join equipos v on v.id_equipo = j.visitante where j.fuerza = ? ")
+                    .append("and j.id_torneo = ? order by jornada, id_juego");
             PreparedStatement ps = getConnection().prepareStatement(sb.toString());
             ps.setInt(1, fuerza);
+            ps.setInt(2, getIdTorneoActivo());
             ResultSet rs = ps.executeQuery();
             Map<Integer, List<Juegos>> rol = null;
             if (rs != null) {
@@ -96,7 +97,7 @@ public class JuegosDAO extends BaseDAO {
     public List<Integer> consultaNumeroJornadas(Integer fuerza) {
         try {
             ResultSet rs = getConnection().prepareStatement("select distinct(jornada) jornada from juegos where fuerza = " + 
-                    fuerza + " order by jornada").executeQuery();
+                    fuerza + " and id_torneo = " + getIdTorneoActivo() + " order by jornada").executeQuery();
             List<Integer> jornadas = new ArrayList<>();
             while (rs.next()) {
                 jornadas.add(rs.getInt("jornada"));
@@ -117,10 +118,11 @@ public class JuegosDAO extends BaseDAO {
                     .append("from juegos j inner join equipos l on l.id_equipo = j.local ")
                     .append("inner join equipos v on v.id_equipo = j.visitante ")
                     .append("left join arbitros ar on ar.id_arbitro = j.arbitro ")
-                    .append("where j.jornada = ? and j.fuerza = ? order by id_juego");
+                    .append("where j.jornada = ? and j.fuerza = ? and j.id_torneo = ? order by id_juego");
             PreparedStatement ps = getConnection().prepareStatement(sb.toString());
             ps.setInt(1, jornada);
             ps.setInt(2, fuerza);
+            ps.setInt(3, getIdTorneoActivo());
             ResultSet rs = ps.executeQuery();
             List<Juegos> juegos = new ArrayList<>();
             while (rs.next()) {

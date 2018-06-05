@@ -216,7 +216,7 @@ public class JuegosRolVista extends FormBase {
         DefaultTableModel modelo = (DefaultTableModel) tblRol.getModel();
         int jornada = 1;
         int totalJornadas = juegosDAO.getTotalJornadas(cboFuerza.getSelectedIndex());
-        while (jornada <= totalJornadas) {
+        while (jornada <= totalJornadas || (jornada <= rol.size())) {
             List<Juegos> juegos = rol.get(jornada);
             String jornadaTitulo = "";
             switch (jornada) {

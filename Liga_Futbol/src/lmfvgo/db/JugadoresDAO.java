@@ -85,9 +85,12 @@ public class JugadoresDAO extends BaseDAO {
         sb.append("select j.id_jugador, j.nombre, j.paterno, j.materno, j.lugar_procedencia, ")
                 .append("e.nombre equipo_nombre, e.fuerza, rel.numero ")
                 .append("from jugadores j left join rel_equipo_jugadores rel on rel.id_jugador = j.id_jugador ")
-                .append("left join equipos e on e.id_equipo = rel.id_equipo ");
+                .append("left join equipos e on e.id_equipo = rel.id_equipo ")
+                .append("where rel.id_torneo = ")
+                .append(getIdTorneoActivo())
+                .append(" ");
         if (filtros.getNombre() != null && !filtros.getNombre().trim().isEmpty()) {
-            sb.append("where j.nombre like '").append(filtros.getNombre().trim().toUpperCase()).append("%' ");
+            sb.append("and j.nombre like '").append(filtros.getNombre().trim().toUpperCase()).append("%' ");
         }
         if (filtros.getPaterno() != null && !filtros.getPaterno().trim().isEmpty()) {
             sb.append(!sb.toString().contains("where") ? "where " : "and ")
@@ -181,6 +184,8 @@ public class JugadoresDAO extends BaseDAO {
                     .append("from jugadores j inner join rel_equipo_jugadores r on r.id_jugador = j.id_jugador ")
                     .append("where r.id_equipo = ")
                     .append(idEquipo)
+                    .append(" and id_torneo = ")
+                    .append(getIdTorneoActivo())
                     .append(" order by nombre, paterno, materno");
             ResultSet rs = getConnection().prepareStatement(sb.toString()).executeQuery();
             List<Jugadores> jug = new ArrayList<>();
@@ -206,7 +211,9 @@ public class JugadoresDAO extends BaseDAO {
                     .append("e.nombre equipo_nombre, e.fuerza ")
                     .append("from jugadores j inner join rel_equipo_jugadores r on r.id_jugador = j.id_jugador ")
                     .append("inner join equipos e on r.id_equipo = e.id_equipo ")
-                    .append("order by equipo_nombre, nombre");
+                    .append("where r.id_torneo = ")
+                    .append(getIdTorneoActivo())
+                    .append(" order by equipo_nombre, nombre");
             ResultSet rs = getConnection().prepareStatement(sb.toString()).executeQuery();
             List<String> jug = new ArrayList<>();
             while (rs.next()) {
@@ -229,12 +236,15 @@ public class JugadoresDAO extends BaseDAO {
                 .append("from jugadores j left join rel_equipo_jugadores rel on rel.id_jugador = j.id_jugador ")
                 .append("inner join equipos e on e.id_equipo = rel.id_equipo ");
             if (idEquipo != null && idEquipo > 0) {
-                sb.append("where e.id_equipo = ? order by jugador_nombre");
+                sb.append("where e.id_equipo = ? and rel.id_torneo = ? order by jugador_nombre");
                 
                 ps = getConnection().prepareStatement(sb.toString());
                 ps.setInt(1, idEquipo);
+                ps.setInt(2, torneo.getIdTorneo());
             } else {
-                sb.append("where j.id_jugador in (");
+                sb.append("where rel.id_torneo = ")
+                        .append(torneo.getIdTorneo())
+                        .append(" and j.id_jugador in (");
                 for (i = 0; i < ids.size(); i++) {
                     sb.append("?, ");
                 }
@@ -285,10 +295,11 @@ public class JugadoresDAO extends BaseDAO {
                 .append("e.nombre equipo_nombre, e.fuerza, rel.numero, j.imagen ")
                 .append("from jugadores j left join rel_equipo_jugadores rel on rel.id_jugador = j.id_jugador ")
                 .append("inner join equipos e on e.id_equipo = rel.id_equipo ");
-                sb.append("where e.id_equipo = ? order by jugador_nombre");
+                sb.append("where e.id_equipo = ? and rel.id_torneo = ? order by jugador_nombre");
                 
                 ps = getConnection().prepareStatement(sb.toString());
                 ps.setInt(1, idEquipo);
+                ps.setInt(2, getIdTorneoActivo());
             ResultSet rs = ps.executeQuery();
             List<CedulaVO> credenciales = new ArrayList<>();
             while (rs.next()) {
