@@ -270,7 +270,7 @@ public class TorneoCierreVista extends FormBase {
                 agregarMensajeAdvertencia("Debe seleccionar el Subcampeón de Segunda");
                 return;
             } else {
-                torneo.setSubcampeonPrimera(
+                torneo.setSubcampeonSegunda(
                         Integer.parseInt(txtSub2.getText().split(" - ")[0]));
             }
             if (torneo.getCampeonPrimera().equals(torneo.getSubcampeonPrimera())) {

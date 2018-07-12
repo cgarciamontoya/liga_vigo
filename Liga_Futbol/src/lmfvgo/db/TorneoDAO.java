@@ -84,7 +84,8 @@ public class TorneoDAO extends BaseDAO {
             ps.setInt(8, torneo.getIdTorneo());
             ps.execute();
             
-            getConnection().prepareStatement("update amonestados set observaciones = 'CIERRE DE TORNEO' where activo = 1").execute();
+            getConnection().prepareStatement("update amonestados set observaciones = 'CIERRE DE TORNEO', activo = 0 where activo = 1").execute();
+            getConnection().prepareStatement("update amonestados set activo = 0 where activo = 1").execute();
         } catch (SQLException ex) {
             throw new LMFVGOException(ex.getMessage());
         }
