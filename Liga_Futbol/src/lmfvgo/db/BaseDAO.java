@@ -58,6 +58,16 @@ public class BaseDAO {
         }
     }
     
+    public Integer getIdTorneoAnterior() {
+        try {
+            ResultSet rs = getConnection().prepareStatement("select max(id_torneo) id_torneo from torneo where id_torneo < (select max(id_torneo) from torneo)").executeQuery();
+            rs.next();
+            return rs.getInt("id_torneo");
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
+    
     public Torneo torneoActivo() {
         try {
             ResultSet rs = getConnection().prepareStatement("select id_torneo, nombre, fecha_inicio, presidente, secretario, tesorero from torneo where fecha_fin is null").executeQuery();

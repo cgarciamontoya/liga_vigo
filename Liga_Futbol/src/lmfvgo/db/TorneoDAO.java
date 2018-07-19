@@ -43,8 +43,25 @@ public class TorneoDAO extends BaseDAO {
                 ps.setNull(5, Types.VARCHAR);
             }
             ps.execute();
+            
+            mantenerJugadoresEquipos();
         } catch (SQLException ex) {
             throw new LMFVGOException("Ocurrio un error al guardar el torneo");
+        }
+    }
+    
+    private void mantenerJugadoresEquipos() throws SQLException {
+        int torneoActivo = getIdTorneoActivo();
+        if (torneoActivo > 1) {
+            int torneoAnterior = getIdTorneoAnterior();
+            StringBuilder sb = new StringBuilder();
+            sb.append("insert into rel_equipo_jugadores (id_equipo, id_jugador, id_torneo, numero) ")
+                    .append("select id_equipo, id_jugador, ")
+                    .append(torneoActivo)
+                    .append(", numero from rel_equipo_jugadores where id_torneo = ")
+                    .append(torneoAnterior);
+            
+            getConnection().prepareStatement(sb.toString()).execute();
         }
     }
     
