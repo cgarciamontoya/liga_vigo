@@ -113,17 +113,21 @@ public class ReportesManager {
     }
     
     public void cedulaEquipo(List<CedulaVO> lista, String equipo) throws LMFVGOException {
-        if (lista.size() < 20) {
-            for (int i = lista.size(); i < 20; i++) {
+        if (lista.size() < 24) {
+            for (int i = lista.size(); i < 24; i++) {
                 lista.add(new CedulaVO(equipo));
             }
         }
+        int conteo = lista.size() / 2;
+        if ((lista.size() % 2) > 0) {
+            conteo += 1;
+        }
         List<CedulaVO> lista1 = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < conteo; i++) {
             lista1.add(lista.get(i));
         }
         List<CedulaVO> lista2 = new ArrayList<>();
-        for (int i = 10; i < 20; i++) {
+        for (int i = conteo; i < lista.size(); i++) {
             lista2.add(lista.get(i));
         }
         

@@ -57,7 +57,7 @@
 				<text><![CDATA[CÉDULA INSCRIPCIÓN]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="289" y="58" width="143" height="20" uuid="ebba4998-804b-469a-83d7-a0c20791c6dd"/>
+				<reportElement x="289" y="58" width="283" height="20" uuid="ebba4998-804b-469a-83d7-a0c20791c6dd"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
