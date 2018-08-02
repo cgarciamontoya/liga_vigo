@@ -370,6 +370,7 @@ public class JugadoresRegistroVista extends FormBase {
                 }
                 jugadoresDAO.guardarJugador(jugador);
                 agregarMensajeExito("El registro fue almacenado correctamente");
+                this.dispose();
             } catch (LMFVGOException ex) {
                 agregarMensajeError(ex.getMessage());
             }

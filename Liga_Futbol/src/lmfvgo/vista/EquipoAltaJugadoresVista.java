@@ -235,7 +235,7 @@ public class EquipoAltaJugadoresVista extends FormBase {
             Jugadores filtro = new Jugadores();
             filtro.setEquipo(Integer.parseInt(cboEquipos.getSelectedItem().toString().split(" - ")[0].trim()));
             if (filtro.getEquipo() > 0) {
-                List<Jugadores> jgs = jugadoresDAO.consultarJugadores(filtro);
+                List<Jugadores> jgs = jugadoresDAO.consultarJugadores(filtro, false);
                 if (jgs != null && !jgs.isEmpty()) {
                     DefaultTableModel modelo = (DefaultTableModel) tblJugEq.getModel();
                     for (Jugadores j : jgs) {

@@ -146,12 +146,15 @@ public class EstadisticasEquipoDAO extends BaseDAO {
                 .append("inner join jugadores j on ej.id_jugador = j.id_jugador ")
                 .append("where e.fuerza = ? ")
                 .append("and jgos.id_torneo = ? ")
+                .append("and rel.id_torneo = ? ")
                 .append("group by id_jugador order by goles desc, equipo, nombre ")
                 .append("limit 0, 5 ");
         try {
+            int idTorneoActivo = getIdTorneoActivo();
             PreparedStatement ps = getConnection().prepareStatement(sb.toString());
             ps.setInt(1, fuerza);
-            ps.setInt(2, getIdTorneoActivo());
+            ps.setInt(2, idTorneoActivo);
+            ps.setInt(3, idTorneoActivo);
             
             ResultSet rs = ps.executeQuery();
             List<EstadisticasJugador> estadisticas = new ArrayList<>();

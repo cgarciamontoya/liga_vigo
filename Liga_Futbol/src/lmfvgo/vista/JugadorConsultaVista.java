@@ -218,7 +218,7 @@ public class JugadorConsultaVista extends FormBase {
             return;
         }
         
-        List<Jugadores> jugadores = jugadoresDAO.consultarJugadores(filtros);
+        List<Jugadores> jugadores = jugadoresDAO.consultarJugadores(filtros, true);
         limpiar(evt);
         if (jugadores != null && !jugadores.isEmpty()) {
             DefaultTableModel model = (DefaultTableModel) tblResultados.getModel();

@@ -59,6 +59,9 @@ public class JugadoresDAO extends BaseDAO {
                 }
                 
             } else {
+                if (existeJugador(jugador)) {
+                    throw new LMFVGOException("El jugador ya existe");
+                }
                 sb.append("insert into jugadores(nombre, paterno, materno, fecha_nacimiento, lugar_procedencia, fecha_registro, ")
                         .append("imagen) values(?,?,?,?,?,?,?)");
                 ps = getConnection().prepareStatement(sb.toString());
@@ -80,7 +83,24 @@ public class JugadoresDAO extends BaseDAO {
         }
     }
     
-    public List<Jugadores> consultarJugadores(Jugadores filtros) {
+    private boolean existeJugador(Jugadores j) {
+        String q = "select count(*) conteo from jugadores where nombre = ? and paterno = ? and materno = ? and fecha_nacimiento = ?";
+        try {
+            PreparedStatement ps = getConnection().prepareStatement(q);
+            ps.setString(1, j.getNombre().trim().toUpperCase());
+            ps.setString(2, j.getPaterno().trim().toUpperCase());
+            ps.setString(3, j.getMaterno().trim().toUpperCase());
+            ps.setDate(4, new java.sql.Date(j.getFechaNacimiento().getTime()));
+            
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            return rs.getInt("conteo") > 0;
+        } catch(SQLException ex) {
+            return false;
+        }
+    }
+    
+    public List<Jugadores> consultarJugadores(Jugadores filtros, boolean bolUnion) {
         sb = new StringBuilder();
         int idTorneoActivo = getIdTorneoActivo();
         StringBuilder union = new StringBuilder();
@@ -122,10 +142,10 @@ public class JugadoresDAO extends BaseDAO {
             sb.append(!sb.toString().contains("where") ? "where " : "and ")
                     .append("e.fuerza = ").append(filtros.getFuerza()).append(" ");
         }
-        union.append("order by nombre, paterno, materno, equipo_nombre");
+        String order = "order by nombre, paterno, materno, equipo_nombre";
         try {
             List<Jugadores> resultado = new ArrayList<>();
-            ResultSet rs = getConnection().prepareStatement(sb.toString() + union.toString()).executeQuery();
+            ResultSet rs = getConnection().prepareStatement(sb.toString() + (bolUnion ? union.toString() : "") + order).executeQuery();
             while (rs.next()) {
                 Jugadores j = new Jugadores();
                 j.setIdJugador(rs.getInt("id_jugador"));
