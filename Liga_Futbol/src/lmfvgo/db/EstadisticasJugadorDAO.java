@@ -33,11 +33,12 @@ public class EstadisticasJugadorDAO extends BaseDAO {
                 .append("concat(j.id_jugador, ' - ',j.nombre, ' ', j.paterno, ' ', j.materno) jugador_nombre, rel.numero ")
                 .append("from estadisticas_jugador ej inner join jugadores j on j.id_jugador = ej.id_jugador ")
                 .append("left join rel_equipo_jugadores rel on rel.id_jugador = j.id_jugador ")
-                .append("where ej.id_equipo = ? and ej.id_juego = ?");
+                .append("where ej.id_equipo = ? and ej.id_juego = ? and rel.id_torneo = ?");
         try {
             PreparedStatement ps = getConnection().prepareStatement(sb.toString());
             ps.setInt(1, idEquipo);
             ps.setInt(2, idJuego);
+            ps.setInt(3, getIdTorneoActivo());
             
             List<EstadisticasJugador> estadisticas = new ArrayList<>();
             

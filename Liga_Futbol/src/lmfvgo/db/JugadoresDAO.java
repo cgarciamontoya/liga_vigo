@@ -82,22 +82,36 @@ public class JugadoresDAO extends BaseDAO {
     
     public List<Jugadores> consultarJugadores(Jugadores filtros) {
         sb = new StringBuilder();
+        int idTorneoActivo = getIdTorneoActivo();
+        StringBuilder union = new StringBuilder();
         sb.append("select j.id_jugador, j.nombre, j.paterno, j.materno, j.lugar_procedencia, ")
                 .append("e.nombre equipo_nombre, e.fuerza, rel.numero ")
                 .append("from jugadores j left join rel_equipo_jugadores rel on rel.id_jugador = j.id_jugador ")
                 .append("left join equipos e on e.id_equipo = rel.id_equipo ")
                 .append("where rel.id_torneo = ")
-                .append(getIdTorneoActivo())
+                .append(idTorneoActivo)
                 .append(" ");
+        
+        union.append(" union select j.id_jugador, j.nombre, j.paterno, j.materno, j.lugar_procedencia, ")
+                .append("null equipo_nombre, null fuerza, null numero ")
+                .append("from jugadores j ")
+                .append("where j.id_jugador not in (select distinct(id_jugador) from rel_equipo_jugadores where id_torneo = ")
+                .append(idTorneoActivo)
+                .append(") ");
         if (filtros.getNombre() != null && !filtros.getNombre().trim().isEmpty()) {
             sb.append("and j.nombre like '").append(filtros.getNombre().trim().toUpperCase()).append("%' ");
+            union.append("and j.nombre like '").append(filtros.getNombre().trim().toUpperCase()).append("%' ");
         }
         if (filtros.getPaterno() != null && !filtros.getPaterno().trim().isEmpty()) {
             sb.append(!sb.toString().contains("where") ? "where " : "and ")
                     .append("j.paterno like '").append(filtros.getPaterno().trim().toUpperCase()).append("%' ");
+            union.append(!sb.toString().contains("where") ? "where " : "and ")
+                    .append("j.paterno like '").append(filtros.getPaterno().trim().toUpperCase()).append("%' ");
         }
         if (filtros.getMaterno() != null && !filtros.getMaterno().trim().isEmpty()) {
             sb.append(!sb.toString().contains("where") ? "where " : "and ")
+                    .append("j.materno like '").append(filtros.getMaterno().trim().toUpperCase()).append("%' ");
+            union.append(!sb.toString().contains("where") ? "where " : "and ")
                     .append("j.materno like '").append(filtros.getMaterno().trim().toUpperCase()).append("%' ");
         }
         if (filtros.getEquipo() > 0) {
@@ -108,10 +122,10 @@ public class JugadoresDAO extends BaseDAO {
             sb.append(!sb.toString().contains("where") ? "where " : "and ")
                     .append("e.fuerza = ").append(filtros.getFuerza()).append(" ");
         }
-        sb.append("order by nombre, paterno, materno, equipo_nombre");
+        union.append("order by nombre, paterno, materno, equipo_nombre");
         try {
             List<Jugadores> resultado = new ArrayList<>();
-            ResultSet rs = getConnection().prepareStatement(sb.toString()).executeQuery();
+            ResultSet rs = getConnection().prepareStatement(sb.toString() + union.toString()).executeQuery();
             while (rs.next()) {
                 Jugadores j = new Jugadores();
                 j.setIdJugador(rs.getInt("id_jugador"));
