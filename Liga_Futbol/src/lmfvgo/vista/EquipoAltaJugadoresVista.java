@@ -248,7 +248,7 @@ public class EquipoAltaJugadoresVista extends FormBase {
 
     private void quitar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitar
         DefaultTableModel modelo = (DefaultTableModel) tblJugEq.getModel();
-        if (tblJugEq.getSelectedRow() > 0) {
+        if (tblJugEq.getSelectedRow() >= 0) {
             if (lstJugadores.getModel() == null || lstJugadores.getModel().getSize() == 0) {
                 lstJugadores.setModel(new DefaultListModel());
             }
