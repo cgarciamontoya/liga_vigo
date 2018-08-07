@@ -95,9 +95,9 @@ public class EstadisticasEquipoDAO extends BaseDAO {
                 .append("sum(ee.goles_favor) gf, sum(ee.goles_contra) gc, ")
                 .append("(sum(ee.goles_favor) - sum(ee.goles_contra)) dif, ")
                 .append("sum(ee.puntos) pts, count(ee.id_juego) jj, ")
-                .append("(select count(jgsg.id_juego) from juegos jgsg where jgsg.local = ee.id_equipo and jgsg.resultado = 1) + (select count(jgsg2.id_juego) from juegos jgsg2 where jgsg2.visitante = ee.id_equipo and jgsg2.resultado = 2) as jg, ")
-                .append("(select count(jgse.id_juego) from juegos jgse where jgse.resultado = 0 and (jgse.local = ee.id_equipo or jgse.visitante = ee.id_equipo)) je, ")
-                .append("(select count(jgsp.id_juego) from juegos jgsp where jgsp.local = ee.id_equipo and jgsp.resultado = 2) + (select count(jgsp2.id_juego) from juegos jgsp2 where jgsp2.visitante = ee.id_equipo and jgsp2.resultado = 1) jp ")
+                .append("(select count(jgsg.id_juego) from juegos jgsg where jgsg.local = ee.id_equipo and jgsg.resultado = 1 and jgsg.id_torneo = ?) + (select count(jgsg2.id_juego) from juegos jgsg2 where jgsg2.visitante = ee.id_equipo and jgsg2.resultado = 2 and jgsg2.id_torneo = ?) as jg, ")
+                .append("(select count(jgse.id_juego) from juegos jgse where jgse.resultado = 0 and jgse.id_torneo = ? and (jgse.local = ee.id_equipo or jgse.visitante = ee.id_equipo)) je, ")
+                .append("(select count(jgsp.id_juego) from juegos jgsp where jgsp.local = ee.id_equipo and jgsp.resultado = 2 and jgsp.id_torneo = ?) + (select count(jgsp2.id_juego) from juegos jgsp2 where jgsp2.visitante = ee.id_equipo and jgsp2.resultado = 1 and jgsp2.id_torneo = ?) jp ")
                 .append("from estadisticas_equipo ee ")
                 .append("inner join equipos eq on eq.id_equipo = ee.id_equipo ")
                 .append("inner join juegos j on j.id_juego = ee.id_juego and j.jornada < 98 ")
@@ -105,9 +105,15 @@ public class EstadisticasEquipoDAO extends BaseDAO {
                 .append("group by id_equipo ")
                 .append("order by pts desc, dif desc, gf desc, gc desc ");
         try {
+            int idTorneoActivo = getIdTorneoActivo();
             PreparedStatement ps = getConnection().prepareStatement(sb.toString());
-            ps.setInt(1, fuerza);
-            ps.setInt(2, getIdTorneoActivo());
+            ps.setInt(1, idTorneoActivo);
+            ps.setInt(2, idTorneoActivo);
+            ps.setInt(3, idTorneoActivo);
+            ps.setInt(4, idTorneoActivo);
+            ps.setInt(5, idTorneoActivo);
+            ps.setInt(6, fuerza);
+            ps.setInt(7, idTorneoActivo);
             
             int i = 1;
             ResultSet rs = ps.executeQuery();
