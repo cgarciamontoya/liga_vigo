@@ -137,10 +137,12 @@ public class JugadoresDAO extends BaseDAO {
         if (filtros.getEquipo() > 0) {
             sb.append(!sb.toString().contains("where") ? "where " : "and ")
                     .append("e.id_equipo = ").append(filtros.getEquipo()).append(" ");
+            bolUnion = false;
         }
         if (filtros.getFuerza() > 0) {
             sb.append(!sb.toString().contains("where") ? "where " : "and ")
                     .append("e.fuerza = ").append(filtros.getFuerza()).append(" ");
+            bolUnion = false;
         }
         String order = "order by nombre, paterno, materno, equipo_nombre";
         try {
