@@ -52,7 +52,7 @@ import lmfvgo.modelo.Jugadores;
  */
 public class JugadoresRegistroVista extends FormBase {
 
-    private static final int PICTURE_MAX_SIZE = 65500;
+    private static final int PICTURE_MAX_SIZE = 102400;
     private static final long serialVersionUID = -40885056066966584L;
     private SimpleDateFormat sdf;
     private Date fechaActual;
@@ -353,7 +353,7 @@ public class JugadoresRegistroVista extends FormBase {
                     File foto = new File(txtFotografia.getText());
                     if (foto != null && foto.isFile()) {
                         if (foto.length() > PICTURE_MAX_SIZE) {
-                            agregarMensajeAdvertencia("El tamaño de la imagen debe ser menor a 65KB");
+                            agregarMensajeAdvertencia("El tamaño de la imagen debe ser menor a 100KB");
                             return;
                         }
                         try {
