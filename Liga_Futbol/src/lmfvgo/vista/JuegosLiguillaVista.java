@@ -255,18 +255,29 @@ public class JuegosLiguillaVista extends FormBase {
             List<String> equiposVisitante = new ArrayList<>();
             equiposLocal.add("Seleccione");
             equiposVisitante.add("Seleccione");
-            int numEL = equiposLiguilla.size()/ 2;
-            if (equiposLiguilla.size() == 6) {
-                numEL++;
-            }
-            
-            for (int i = 0; i < equiposLiguilla.size(); i++) {
-                if (equiposLiguilla.get(i).getPosicion() <= numEL) {
-                    equiposLocal.add(equiposLiguilla.get(i).getPosicion() + "o. - " + equiposLiguilla.get(i).getNombre());
+            if (equiposLiguilla.size() == 2) {
+                if (equiposLiguilla.get(0).getPosicion() < equiposLiguilla.get(1).getPosicion()) {
+                    equiposLocal.add(equiposLiguilla.get(0).getPosicion() + "o. - " + equiposLiguilla.get(0).getNombre());
+                    equiposVisitante.add(equiposLiguilla.get(1).getPosicion() + "o. - " + equiposLiguilla.get(1).getNombre());
                 } else {
-                    equiposVisitante.add(equiposLiguilla.get(i).getPosicion() + "o. - " + equiposLiguilla.get(i).getNombre());
+                    equiposLocal.add(equiposLiguilla.get(1).getPosicion() + "o. - " + equiposLiguilla.get(1).getNombre());
+                    equiposVisitante.add(equiposLiguilla.get(0).getPosicion() + "o. - " + equiposLiguilla.get(0).getNombre());
                 }
                 
+            } else {
+                int numEL = equiposLiguilla.size()/ 2;
+                if (equiposLiguilla.size() == 6) {
+                    numEL++;
+                }
+
+                for (int i = 0; i < equiposLiguilla.size(); i++) {
+                    if (equiposLiguilla.get(i).getPosicion() <= numEL) {
+                        equiposLocal.add(equiposLiguilla.get(i).getPosicion() + "o. - " + equiposLiguilla.get(i).getNombre());
+                    } else {
+                        equiposVisitante.add(equiposLiguilla.get(i).getPosicion() + "o. - " + equiposLiguilla.get(i).getNombre());
+                    }
+
+                }
             }
             cboEquipos.setModel(new DefaultComboBoxModel(equiposLocal.toArray()));
             cboEquiposVisitante.setModel(new DefaultComboBoxModel(equiposVisitante.toArray()));
