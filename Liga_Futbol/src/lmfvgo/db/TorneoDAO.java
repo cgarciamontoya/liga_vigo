@@ -62,6 +62,15 @@ public class TorneoDAO extends BaseDAO {
                     .append(torneoAnterior);
             
             getConnection().prepareStatement(sb.toString()).execute();
+            
+            sb = new StringBuilder();
+            sb.append("insert into configuracion (equipos_califican, escudo, logo, id_torneo) ")
+                    .append("select equipos_califican, escudo, logo, ")
+                    .append(torneoActivo)
+                    .append(" from configuracion where id_torneo = ")
+                    .append(torneoAnterior);
+            
+            getConnection().prepareStatement(sb.toString()).execute();
         }
     }
     
