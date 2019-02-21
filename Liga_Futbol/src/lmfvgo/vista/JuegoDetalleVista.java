@@ -125,7 +125,7 @@ public class JuegoDetalleVista extends FormBase {
         cboTR.addItem(1);
         
         cboGoles = new JComboBox();
-        for (int i = 0; i <= 10; i++) {
+        for (int i = 0; i <= ConstantesUtil.MAX_GOLES; i++) {
             cboGoles.addItem(i);
         }
     }
