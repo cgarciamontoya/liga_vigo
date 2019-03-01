@@ -10,10 +10,12 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import lmfvgo.db.ConfiguracionDAO;
 import lmfvgo.excepciones.LMFVGOException;
@@ -33,6 +35,10 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.view.JRSaveContributor;
+import net.sf.jasperreports.view.JRViewer;
+import net.sf.jasperreports.view.JasperViewer;
+import net.sf.jasperreports.view.save.JRPdfSaveContributor;
 
 /**
  * Descripcion:
@@ -62,42 +68,42 @@ public class ReportesManager {
     public void amonestados(List<Amonestado> amonestados) throws LMFVGOException {
         Map<String, Object> parametros = new HashMap<>();
         getLogos(parametros);
-        String nombrePdf = URL_REPORTES + "Amonestados.pdf";
+        String nombrePdf = "Amonestados.pdf";
         exportar(REPORTE_AMONESTADOS, parametros, nombrePdf, amonestados);
-        abrirPdf(nombrePdf);
+        //abrirPdf(nombrePdf);
     }
     
     public void sancionesEquipo(List<SancionEquipo> sanciones) throws LMFVGOException {
         Map<String, Object> parametros = new HashMap<>();
         getLogos(parametros);
-        String nombrePdf = URL_REPORTES + "SancionesEquipo.pdf";
+        String nombrePdf = "SancionesEquipo.pdf";
         exportar(REPORTE_SANCIONES_EQUIPO, parametros, nombrePdf, sanciones);
-        abrirPdf(nombrePdf);
+        //abrirPdf(nombrePdf);
     }
     
     public void sanciones(List<Expulsado> sanciones) throws LMFVGOException {
         Map<String, Object> parametros = new HashMap<>();
         getLogos(parametros);
-        String nombrePdf = URL_REPORTES + "Sanciones.pdf";
+        String nombrePdf = "Sanciones.pdf";
         exportar(REPORTE_SANCIONES, parametros, nombrePdf, sanciones);
-        abrirPdf(nombrePdf);
+        //abrirPdf(nombrePdf);
     }
     
     public void rol(List<RolVO> rol, int fuerza) throws LMFVGOException {
         Map<String, Object> parametros = new HashMap<>();
         parametros.put("fuerza", (fuerza == 1) ? "Primera Fuerza" : "Segunda Fuerza");
         getLogos(parametros);
-        String nombrePdf = URL_REPORTES + "Rol.pdf";
+        String nombrePdf = "Rol.pdf";
         exportar(REPORTE_ROL, parametros, nombrePdf, rol);
-        abrirPdf(nombrePdf);
+        //abrirPdf(nombrePdf);
     }
     
     public void reglamento(List<Reglamento> lista) throws LMFVGOException {
         Map<String, Object> parametros = new HashMap<>();
         getLogos(parametros);
-        String nombrePdf = URL_REPORTES + "Reglamento.pdf";
+        String nombrePdf = "Reglamento.pdf";
         exportar(REPORTE_REGLAMENTO, parametros, nombrePdf, lista);
-        abrirPdf(nombrePdf);
+        //abrirPdf(nombrePdf);
     }
     
     private void getLogos(Map<String, Object> parametros) {
@@ -137,9 +143,9 @@ public class ReportesManager {
         parametros.put("equipo", equipo);
         getLogos(parametros);
         
-        String nombrePdf = URL_REPORTES + "Cedula_" + equipo + ".pdf";
+        String nombrePdf = "Cedula_" + equipo + ".pdf";
         exportar(REPORTE_CEDULA, parametros, nombrePdf);
-        abrirPdf(nombrePdf);
+        //abrirPdf(nombrePdf);
     }
     
     public void credenciales(List<CredencialVO> lista1, List<CredencialVO> lista2) throws LMFVGOException {
@@ -148,9 +154,9 @@ public class ReportesManager {
         parametros.put("lista2", lista2);
         getLogos(parametros);
         
-        String nombrePdf = URL_REPORTES + "Credenciales.pdf";
+        String nombrePdf = "Credenciales.pdf";
         exportar(REPORTE_CREDENCIALES, parametros, nombrePdf);
-        abrirPdf(nombrePdf);
+        //abrirPdf(nombrePdf);
     }
 
     public void cedulaJuego(Juegos juego, List<EstadisticasJugador> local, List<EstadisticasJugador> visitante, Map<String, Object> parametros) throws LMFVGOException {
@@ -182,9 +188,9 @@ public class ReportesManager {
         parametros.put("arbitro", juego.getNombreArbitro());
         getLogos(parametros);
         
-        String nombrePdf = URL_REPORTES + "J" + juego.getJornada() + "_" + juego.getLocalNombre() + "_VS_" + juego.getVisitanteNombre() + ".pdf";
+        String nombrePdf = "J" + juego.getJornada() + "_" + juego.getLocalNombre() + "_VS_" + juego.getVisitanteNombre() + ".pdf";
         exportar(REPORTE_CEDULA_JUEGO, parametros, nombrePdf);
-        abrirPdf(nombrePdf);
+        //abrirPdf(nombrePdf);
         
     }
     
@@ -194,9 +200,9 @@ public class ReportesManager {
         parametros.put("listaTabla", ee);
         parametros.put("listaGoleo", goleo);
         getLogos(parametros);
-        String nombrePdf = URL_REPORTES + "Tabla_" + (fuerza == 1 ? "Primera" : "Segunda") + ".pdf";
+        String nombrePdf = "Tabla_" + (fuerza == 1 ? "Primera" : "Segunda") + ".pdf";
         exportar(REPORTE_TABLA_GENERAL, parametros, nombrePdf);
-        abrirPdf(nombrePdf);
+        //abrirPdf(nombrePdf);
     }
     
     private void abrirPdf(String nombrePdf) {
@@ -211,9 +217,16 @@ public class ReportesManager {
         try {
             InputStream reporte = ReportesManager.class.getResourceAsStream(nombreReporte);
             JasperPrint jp = (JasperPrint) JasperFillManager.fillReport(reporte, parametros, new JRBeanCollectionDataSource(detalle));
-            File archivo = new File(nombrePdf);
+            JasperViewer jv = new JasperViewer(jp, false);
+            Field jrViewerField = jv.getClass().getDeclaredField("viewer");
+            jrViewerField.setAccessible(true);
+            JRViewer jrViewer = (JRViewer) jrViewerField.get(jv);
+            jrViewer.setSaveContributors(new JRSaveContributor[]{new JRPdfSaveContributor(Locale.getDefault(), null)});
+            jv.setTitle(nombrePdf);
+            jv.setVisible(true);
+            /*File archivo = new File(nombrePdf);
             archivo.createNewFile();
-            JasperExportManager.exportReportToPdfFile(jp, nombrePdf);
+            JasperExportManager.exportReportToPdfFile(jp, nombrePdf);*/
         } catch (Exception ex) {
             ex.printStackTrace();
             throw new LMFVGOException("No se pudo generar el reporte debido a: " + ex.getMessage());
@@ -224,9 +237,16 @@ public class ReportesManager {
         try {
             InputStream reporte = ReportesManager.class.getResourceAsStream(nombreReporte);
             JasperPrint jp = (JasperPrint) JasperFillManager.fillReport(reporte, parametros, new JREmptyDataSource());
-            File archivo = new File(nombrePdf);
+            JasperViewer jv = new JasperViewer(jp, false);
+            Field jrViewerField = jv.getClass().getDeclaredField("viewer");
+            jrViewerField.setAccessible(true);
+            JRViewer jrViewer = (JRViewer) jrViewerField.get(jv);
+            jrViewer.setSaveContributors(new JRSaveContributor[]{new JRPdfSaveContributor(Locale.getDefault(), null)});
+            jv.setTitle(nombrePdf);
+            jv.setVisible(true);
+            /*File archivo = new File(nombrePdf);
             archivo.createNewFile();
-            JasperExportManager.exportReportToPdfFile(jp, nombrePdf);
+            JasperExportManager.exportReportToPdfFile(jp, nombrePdf);*/
         } catch (Exception ex) {
             ex.printStackTrace();
             throw new LMFVGOException("No se pudo generar el reporte debido a: " + ex.getMessage());

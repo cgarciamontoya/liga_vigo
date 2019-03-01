@@ -242,6 +242,7 @@ public class EquipoRegistroVista extends FormBase {
         lblActualizando.setVisible(false);
         btnEliminar.setVisible(false);
         btnCedula.setVisible(false);
+        equipoSeleccionado = null;
     }//GEN-LAST:event_limpiar
 
     private void buscar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscar
