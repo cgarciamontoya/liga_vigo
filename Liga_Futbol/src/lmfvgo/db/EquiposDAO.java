@@ -80,7 +80,16 @@ public class EquiposDAO extends BaseDAO {
             sb.append("update equipos set motivo_baja = '").append(motivoBaja.trim().toUpperCase()).append("', ")
                     .append("fecha_baja = '").append(new SimpleDateFormat("yyyy-MM-dd").format(new Date())).append("' ")
                     .append("where id_equipo = ").append(idEquipo);
-            getConnection().prepareStatement(sb.toString()).execute();
+            Connection con = getConnection();
+            con.prepareStatement(sb.toString()).execute();
+            
+            sb = new StringBuilder();
+            sb.append("delete from rel_equipo_jugadores where id_equipo = ")
+                    .append(idEquipo)
+                    .append(" and id_torneo = ")
+                    .append(getIdTorneoActivo());
+            
+            con.prepareStatement(sb.toString()).execute();
         } catch (SQLException ex) {
             throw new LMFVGOException(ex.getMessage());
         }
