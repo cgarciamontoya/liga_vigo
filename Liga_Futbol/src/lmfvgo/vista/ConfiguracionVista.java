@@ -28,7 +28,7 @@ import lmfvgo.modelo.Configuracion;
  */
 public class ConfiguracionVista extends FormBase {
     
-    private static final int PICTURE_MAX_SIZE = 65500;
+    private static final int PICTURE_MAX_SIZE = 200500;
     private static final long serialVersionUID = 4235684075125932638L;
 
     private final ConfiguracionDAO configuracionDAO;
@@ -229,7 +229,7 @@ public class ConfiguracionVista extends FormBase {
                 File foto = new File(txtEscudo.getText());
                 if (foto.isFile()) {
                     if (foto.length() > PICTURE_MAX_SIZE) {
-                        agregarMensajeAdvertencia("El tamaño del Escudo debe ser menor a 65KB");
+                        agregarMensajeAdvertencia("El tamaño del Escudo debe ser menor a 200KB");
                         return;
                     }
                     try {
@@ -243,7 +243,7 @@ public class ConfiguracionVista extends FormBase {
                 File foto = new File(txtLogo.getText());
                 if (foto.isFile()) {
                     if (foto.length() > PICTURE_MAX_SIZE) {
-                        agregarMensajeAdvertencia("El tamaño del Logo debe ser menor a 65KB");
+                        agregarMensajeAdvertencia("El tamaño del Logo debe ser menor a 200KB");
                         return;
                     }
                     try {
