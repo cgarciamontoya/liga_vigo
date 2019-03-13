@@ -3,6 +3,16 @@
 	<property name="ireport.zoom" value="2.1435888100000016"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<style name="estiloRelleno">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($F{fuerza}.equalsIgnoreCase("primera"))]]></conditionExpression>
+			<style mode="Opaque" forecolor="#000000" backcolor="#FF8000"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($F{fuerza}.equalsIgnoreCase("segunda"))]]></conditionExpression>
+			<style mode="Opaque" forecolor="#000000" backcolor="#99FFFF"/>
+		</conditionalStyle>
+	</style>
 	<parameter name="logo" class="java.io.InputStream"/>
 	<parameter name="escudo" class="java.io.InputStream"/>
 	<field name="nombre" class="java.lang.String"/>
@@ -30,14 +40,14 @@
 				<text><![CDATA[Acredita a:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="91" y="41" width="173" height="13" backcolor="#99FFFF" uuid="410a2975-3f78-4d81-8a83-0bf0be06d338"/>
+				<reportElement style="estiloRelleno" mode="Opaque" x="91" y="41" width="173" height="13" uuid="410a2975-3f78-4d81-8a83-0bf0be06d338"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="26" y="93" width="55" height="13" backcolor="#99FFFF" uuid="6dafb0b4-11a2-47f9-bddc-0e00f3bc0a76"/>
+				<reportElement style="estiloRelleno" mode="Opaque" x="26" y="93" width="55" height="13" uuid="6dafb0b4-11a2-47f9-bddc-0e00f3bc0a76"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
@@ -51,7 +61,7 @@
 				<text><![CDATA[Como miembro activo del equipo:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="91" y="67" width="173" height="13" backcolor="#99FFFF" uuid="75ff989a-ae53-46ee-85b4-9cce3f4adba8"/>
+				<reportElement style="estiloRelleno" mode="Opaque" x="91" y="67" width="173" height="13" uuid="75ff989a-ae53-46ee-85b4-9cce3f4adba8"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
@@ -65,7 +75,7 @@
 				<text><![CDATA[Número:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="91" y="93" width="55" height="13" backcolor="#99FFFF" uuid="496c3df1-96f5-43b3-ab3b-afab06065f53"/>
+				<reportElement style="estiloRelleno" mode="Opaque" x="91" y="93" width="55" height="13" uuid="496c3df1-96f5-43b3-ab3b-afab06065f53"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
@@ -79,7 +89,7 @@
 				<text><![CDATA[Fuerza:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="149" y="93" width="55" height="13" backcolor="#99FFFF" uuid="ebc7fb58-e3a1-41f9-9dc6-19b1535df741"/>
+				<reportElement style="estiloRelleno" mode="Opaque" x="149" y="93" width="55" height="13" uuid="ebc7fb58-e3a1-41f9-9dc6-19b1535df741"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 				</textElement>
@@ -153,7 +163,7 @@
 				<text><![CDATA[Categoría:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="208" y="92" width="55" height="13" backcolor="#99FFFF" uuid="62751fd6-9fca-4a83-8dfa-0df2bdcc8191"/>
+				<reportElement style="estiloRelleno" mode="Opaque" x="208" y="92" width="55" height="13" uuid="62751fd6-9fca-4a83-8dfa-0df2bdcc8191"/>
 				<textElement verticalAlignment="Middle" markup="none">
 					<font size="8" isBold="false"/>
 				</textElement>
