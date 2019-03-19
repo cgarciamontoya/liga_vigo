@@ -33,6 +33,7 @@ import java.sql.Connection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -42,8 +43,10 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
+import javax.swing.table.DefaultTableModel;
 import lmfvgo.db.JugadoresDAO;
 import lmfvgo.excepciones.LMFVGOException;
+import lmfvgo.modelo.HistoricoJugador;
 import lmfvgo.modelo.Jugadores;
 
 /**
@@ -80,6 +83,16 @@ public class JugadoresRegistroVista extends FormBase {
             }
             lblEditando.setVisible(true);
         }
+        
+        List<HistoricoJugador> historico = jugadoresDAO.consultaHistorialJugador(idJugador);
+        if (historico != null && !historico.isEmpty()) {
+            DefaultTableModel model = (DefaultTableModel) tblHistorico.getModel();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            for (HistoricoJugador h : historico) {
+                model.addRow(new Object[]{h.getIdTorneo(), h.getNombreTorneo(), sdf.format(h.getFechaTorneo()), h.getNombreEquipo()});
+            }
+            resizeColumnWidth(tblHistorico);
+        }
     }
 
     private void initLocal() {
@@ -89,6 +102,7 @@ public class JugadoresRegistroVista extends FormBase {
         jugadoresDAO = new JugadoresDAO(connection);
         txtFechaReg.setText(sdf.format(fechaActual));
         txtNombre.requestFocus();
+        tblHistorico.setEnabled(false);
     }
 
     private BufferedImage scaleImage(int WIDTH, int HEIGHT, byte[] image) {
@@ -123,6 +137,8 @@ public class JugadoresRegistroVista extends FormBase {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
@@ -145,9 +161,27 @@ public class JugadoresRegistroVista extends FormBase {
         btnCamara = new javax.swing.JButton();
         btnNuevo = new javax.swing.JButton();
         lblEditando = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblHistorico = new javax.swing.JTable();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
 
         setClosable(true);
         setTitle("Registro de Jugadores");
+        setPreferredSize(new java.awt.Dimension(492, 500));
 
         jLabel1.setText("Nombre");
 
@@ -207,6 +241,43 @@ public class JugadoresRegistroVista extends FormBase {
         lblEditando.setForeground(new java.awt.Color(255, 51, 51));
         lblEditando.setText("Editando...");
 
+        tblHistorico.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Torneo", "Nombre", "Fecha T.", "Equipo"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblHistorico.setRowSelectionAllowed(false);
+        jScrollPane2.setViewportView(tblHistorico);
+        if (tblHistorico.getColumnModel().getColumnCount() > 0) {
+            tblHistorico.getColumnModel().getColumn(0).setResizable(false);
+            tblHistorico.getColumnModel().getColumn(1).setResizable(false);
+            tblHistorico.getColumnModel().getColumn(2).setResizable(false);
+            tblHistorico.getColumnModel().getColumn(3).setResizable(false);
+        }
+
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel8.setText("HISTÓRICO");
+
+        jLabel9.setText("* Torneo actual");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -214,6 +285,7 @@ public class JugadoresRegistroVista extends FormBase {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jSeparator1)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(lblEditando)
@@ -259,7 +331,9 @@ public class JugadoresRegistroVista extends FormBase {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel3)
                                     .addComponent(txtMaterno, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jLabel4))
+                            .addComponent(jLabel4)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel9))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -306,7 +380,12 @@ public class JugadoresRegistroVista extends FormBase {
                     .addComponent(jButton3)
                     .addComponent(btnNuevo)
                     .addComponent(lblEditando))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(9, 9, 9)
+                .addComponent(jLabel9))
         );
 
         pack();
@@ -416,6 +495,8 @@ public class JugadoresRegistroVista extends FormBase {
         lblFoto.setIcon(null);
         this.idJugador = 0;
         lblEditando.setVisible(false);
+        limpiarTabla(tblHistorico);
+        tblHistorico.setEnabled(false);
     }//GEN-LAST:event_nuevoRegistro
 
     private boolean jugadorValido() {
@@ -502,9 +583,15 @@ public class JugadoresRegistroVista extends FormBase {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JTable jTable1;
     private javax.swing.JLabel lblEditando;
     private javax.swing.JLabel lblFoto;
+    private javax.swing.JTable tblHistorico;
     private javax.swing.JTextField txtFechaNac;
     private javax.swing.JTextField txtFechaReg;
     private javax.swing.JTextField txtFotografia;

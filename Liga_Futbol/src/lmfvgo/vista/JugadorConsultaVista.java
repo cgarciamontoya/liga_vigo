@@ -14,8 +14,11 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import lmfvgo.db.EquiposDAO;
 import lmfvgo.db.JugadoresDAO;
+import lmfvgo.excepciones.LMFVGOException;
 import lmfvgo.modelo.Equipos;
 import lmfvgo.modelo.Jugadores;
+import lmfvgo.reportes.vo.ConsultaJugadoresVO;
+import lmfvgo.util.ReportesManager;
 
 /**
  *
@@ -27,6 +30,7 @@ public class JugadorConsultaVista extends FormBase {
     
     private final JugadoresDAO jugadoresDAO;
     private final EquiposDAO equiposDAO;
+    private final ReportesManager reportesManager;
     private Connection connection;
 
     /**
@@ -38,6 +42,7 @@ public class JugadorConsultaVista extends FormBase {
         initComponents();
         jugadoresDAO = new JugadoresDAO(con);
         equiposDAO = new EquiposDAO(con);
+        reportesManager = new ReportesManager(con);
         
     }
 
@@ -64,6 +69,7 @@ public class JugadorConsultaVista extends FormBase {
         btnBuscar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblResultados = new javax.swing.JTable();
+        btnExportar = new javax.swing.JButton();
 
         setClosable(true);
         setTitle("CONSULTA DE JUGADORES");
@@ -129,6 +135,13 @@ public class JugadorConsultaVista extends FormBase {
         });
         jScrollPane1.setViewportView(tblResultados);
 
+        btnExportar.setText("Exportar");
+        btnExportar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportar(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -136,7 +149,7 @@ public class JugadorConsultaVista extends FormBase {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 614, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 671, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -149,12 +162,14 @@ public class JugadorConsultaVista extends FormBase {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel4)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 343, Short.MAX_VALUE))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(cboEquipos, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGap(83, 83, 83)))
+                                        .addGap(36, 36, 36)
+                                        .addComponent(btnExportar)
+                                        .addGap(7, 7, 7)))
                                 .addComponent(btnBuscar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnLimpiar))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -186,7 +201,9 @@ public class JugadorConsultaVista extends FormBase {
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                             .addComponent(jLabel4)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(cboEquipos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(cboEquipos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnExportar)))
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnBuscar)
                             .addComponent(btnLimpiar)))
@@ -195,7 +212,7 @@ public class JugadorConsultaVista extends FormBase {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cboFuerza, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -226,6 +243,7 @@ public class JugadorConsultaVista extends FormBase {
                 model.addRow(new Object[]{j.getIdJugador(), j.getNombre(), j.getPaterno(), j.getMaterno(),
                 j.getLugarProcedencia(), j.getEquipoNombre()});
             }
+            resizeColumnWidth(tblResultados);
         } else {
             agregarMensajeError("No se encontraron resultados");
         }
@@ -288,9 +306,29 @@ public class JugadorConsultaVista extends FormBase {
         }
     }//GEN-LAST:event_abrirDetalle
 
+    private void exportar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportar
+        if (tblResultados.getRowCount() > 0) {
+            List<ConsultaJugadoresVO> consulta = new ArrayList<>();
+            for (int i = 0; i < tblResultados.getRowCount(); i++) {
+                ConsultaJugadoresVO vo = new ConsultaJugadoresVO();
+                vo.setFolio((int) tblResultados.getValueAt(i, 0));
+                vo.setNombre((String) tblResultados.getValueAt(i, 1) + " " + (String) tblResultados.getValueAt(i, 2) + " " + (String) tblResultados.getValueAt(i, 3));
+                vo.setProcedencia((String) tblResultados.getValueAt(i, 4));
+                vo.setEquipo((String) tblResultados.getValueAt(i, 5));
+                consulta.add(vo);
+            }
+            try {
+                reportesManager.consultaJugadores(consulta);
+            } catch (LMFVGOException ex) {
+                agregarMensajeError(ex.getMessage());
+            }
+        }
+    }//GEN-LAST:event_exportar
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnExportar;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JComboBox<String> cboEquipos;
     private javax.swing.JComboBox<String> cboFuerza;

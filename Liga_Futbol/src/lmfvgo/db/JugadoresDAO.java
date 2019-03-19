@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import lmfvgo.excepciones.LMFVGOException;
+import lmfvgo.modelo.HistoricoJugador;
 import lmfvgo.modelo.Jugadores;
 import lmfvgo.modelo.Torneo;
 import lmfvgo.reportes.vo.CedulaVO;
@@ -350,6 +351,52 @@ public class JugadoresDAO extends BaseDAO {
                 credenciales.add(c);
             }
             return credenciales;
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
+    
+    public List<HistoricoJugador> consultaHistorialJugador(int idJugador) {
+        List<HistoricoJugador> historico = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+        sb.append("select e.id_equipo, e.nombre equipo ")
+                .append("from rel_equipo_jugadores r ")
+                .append("left join equipos e on e.id_equipo = r.id_equipo ")
+                .append("where r.id_jugador = ? and r.id_torneo = ?");
+        int idTorneoActual = getIdTorneoActivo();
+        Connection con = getConnection();
+        try {
+            ResultSet rs = con.prepareStatement("select id_torneo, nombre, fecha_inicio from torneo order by id_torneo desc").executeQuery();
+            while (rs.next()) {
+                HistoricoJugador vo = new HistoricoJugador();
+                vo.setIdTorneo(rs.getInt("id_torneo"));
+                vo.setNombreTorneo(rs.getString("nombre"));
+                if (vo.getIdTorneo() == idTorneoActual) {
+                    vo.setNombreTorneo(vo.getNombreTorneo() + " *");
+                }
+                vo.setFechaTorneo(rs.getDate("fecha_inicio"));
+                
+                PreparedStatement psHist = con.prepareStatement(sb.toString());
+                psHist.setInt(1, idJugador);
+                psHist.setInt(2, vo.getIdTorneo());
+                
+                try {
+                    ResultSet rs2 = psHist.executeQuery();
+                    while (rs2.next()) {
+                        vo.setIdEquipo(rs2.getInt("id_equipo"));
+                        vo.setNombreEquipo(rs2.getString("equipo"));
+                    }
+                } catch (SQLException ex2) {
+                    vo.setIdEquipo(-1);
+                    vo.setNombreEquipo("SIN JUGAR");
+                }
+                if (vo.getNombreEquipo() == null || vo.getNombreEquipo().isEmpty()) {
+                    vo.setIdEquipo(-1);
+                    vo.setNombreEquipo("SIN EQUIPO");
+                }
+                historico.add(vo);
+            }
+            return historico;
         } catch (SQLException ex) {
             return null;
         }

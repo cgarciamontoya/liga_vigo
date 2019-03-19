@@ -30,6 +30,7 @@ public class EquipoAltaJugadoresVista extends FormBase {
 
     private final EquiposDAO equiposDAO;
     private final JugadoresDAO jugadoresDAO;
+    private List<String> jugadoresLibres;
 
     /**
      * Creates new form EquipoAltaJugadoresVista
@@ -45,10 +46,16 @@ public class EquipoAltaJugadoresVista extends FormBase {
     }
 
     private void inicializarJugadores() {
-        List<String> jugadores = jugadoresDAO.consultaJugadoresLibre();
+        if (jugadoresLibres == null || jugadoresLibres.isEmpty()) {
+            jugadoresLibres = jugadoresDAO.consultaJugadoresLibre();
+        }
+        llenarListaJugadoresLibres(jugadoresLibres);
+    }
+    
+    private void llenarListaJugadoresLibres(List<String> lista) {
         DefaultListModel model = new DefaultListModel();
         model.removeAllElements();
-        for (String jug : jugadores) {
+        for (String jug : lista) {
             model.addElement(jug);
         }
         lstJugadores.setModel(model);
@@ -75,6 +82,8 @@ public class EquipoAltaJugadoresVista extends FormBase {
         tblJugEq = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
         cboFuerza = new javax.swing.JComboBox();
+        jLabel4 = new javax.swing.JLabel();
+        txtFiltro = new javax.swing.JTextField();
 
         setClosable(true);
         setTitle("ALTA DE JUGADORES EN EQUIPOS");
@@ -148,6 +157,14 @@ public class EquipoAltaJugadoresVista extends FormBase {
             }
         });
 
+        jLabel4.setText("Filtro:");
+
+        txtFiltro.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                filtrarJugadores(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -156,14 +173,19 @@ public class EquipoAltaJugadoresVista extends FormBase {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtFiltro))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnQuitar, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addComponent(btnQuitar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(476, 476, 476)
@@ -199,15 +221,20 @@ public class EquipoAltaJugadoresVista extends FormBase {
                             .addComponent(jLabel1)
                             .addComponent(jLabel3)
                             .addComponent(cboFuerza, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(20, 20, 20)
-                                .addComponent(jScrollPane1))
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 17, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(1, 1, 1)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel4)
+                                    .addComponent(txtFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane1)))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 19, Short.MAX_VALUE)
                 .addComponent(btnGuardar)
-                .addGap(0, 7, Short.MAX_VALUE))
+                .addGap(0, 9, Short.MAX_VALUE))
         );
 
         pack();
@@ -221,6 +248,10 @@ public class EquipoAltaJugadoresVista extends FormBase {
                 ((DefaultListModel) lstJugadores.getModel()).removeElementAt(lstJugadores.getSelectedIndex());
 
                 modelo.addRow(new Object[]{seleccionado.split(" - ")[0], seleccionado.split(" - ")[1], null});
+                jugadoresLibres.remove(seleccionado);
+                resizeColumnWidth(tblJugEq);
+                txtFiltro.setText(null);
+                llenarListaJugadoresLibres(jugadoresLibres);
             } else {
                 agregarMensajeAdvertencia("Debe seleccionar un jugador");
             }
@@ -242,6 +273,7 @@ public class EquipoAltaJugadoresVista extends FormBase {
                         modelo.addRow(new Object[]{j.getIdJugador(), (j.getNombre() + " " + j.getPaterno() + " " + j.getMaterno()), j.getNumero()});
                     }
                 }
+                resizeColumnWidth(tblJugEq);
             }
         }
     }//GEN-LAST:event_actualizarJugadores
@@ -257,6 +289,10 @@ public class EquipoAltaJugadoresVista extends FormBase {
             
             ((DefaultListModel) lstJugadores.getModel()).addElement(seleccionado);
             modelo.removeRow(tblJugEq.getSelectedRow());
+            jugadoresLibres.add(seleccionado);
+            resizeColumnWidth(tblJugEq);
+            txtFiltro.setText(null);
+            llenarListaJugadoresLibres(jugadoresLibres);
         } else {
             agregarMensajeAdvertencia("Debe seleccionar un jugador");
         }
@@ -317,6 +353,18 @@ public class EquipoAltaJugadoresVista extends FormBase {
         }
     }//GEN-LAST:event_actualizarEquipos
 
+    private void filtrarJugadores(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_filtrarJugadores
+        if (txtFiltro.getText() != null && !txtFiltro.getText().isEmpty()) {
+            List<String> filtrado = new ArrayList<>();
+            for (String j : jugadoresLibres) {
+                if (j.toLowerCase().contains(txtFiltro.getText().toLowerCase())) {
+                    filtrado.add(j);
+                }
+            }
+            llenarListaJugadoresLibres(filtrado);
+        }
+    }//GEN-LAST:event_filtrarJugadores
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
@@ -327,9 +375,11 @@ public class EquipoAltaJugadoresVista extends FormBase {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JList<String> lstJugadores;
     private javax.swing.JTable tblJugEq;
+    private javax.swing.JTextField txtFiltro;
     // End of variables declaration//GEN-END:variables
 }

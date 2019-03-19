@@ -7,7 +7,6 @@
 package lmfvgo.util;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
@@ -28,10 +27,10 @@ import lmfvgo.modelo.Juegos;
 import lmfvgo.modelo.Reglamento;
 import lmfvgo.modelo.SancionEquipo;
 import lmfvgo.reportes.vo.CedulaVO;
+import lmfvgo.reportes.vo.ConsultaJugadoresVO;
 import lmfvgo.reportes.vo.CredencialVO;
 import lmfvgo.reportes.vo.RolVO;
 import net.sf.jasperreports.engine.JREmptyDataSource;
-import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -56,6 +55,7 @@ public class ReportesManager {
     private static final String REPORTE_SANCIONES = "/lmfvgo/reportes/Sanciones.jasper";
     private static final String REPORTE_AMONESTADOS = "/lmfvgo/reportes/Amonestados.jasper";
     private static final String REPORTE_SANCIONES_EQUIPO = "/lmfvgo/reportes/SancionesEquipo.jasper";
+    private static final String REPORTE_CONSULTA_JUGADORES = "/lmfvgo/reportes/ConsultaJugadores.jasper";
     
     private final ConfiguracionDAO configuracionDAO;
     private final Configuracion configuracion;
@@ -63,6 +63,14 @@ public class ReportesManager {
     public ReportesManager(Connection con) {
         configuracionDAO = new ConfiguracionDAO(con);
         configuracion = configuracionDAO.consultaConfiguracion();
+    }
+    
+    public void consultaJugadores(List<ConsultaJugadoresVO> jugadores) throws LMFVGOException {
+        Map<String, Object> parametros = new HashMap<>();
+        getLogos(parametros);
+        String nombrePdf = "ConsultaJugadores.pdf";
+        exportar(REPORTE_CONSULTA_JUGADORES, parametros, nombrePdf, jugadores);
+        //abrirPdf(nombrePdf);
     }
     
     public void amonestados(List<Amonestado> amonestados) throws LMFVGOException {
