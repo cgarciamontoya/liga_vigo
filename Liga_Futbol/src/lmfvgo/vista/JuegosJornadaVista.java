@@ -92,14 +92,14 @@ public class JuegosJornadaVista extends FormBase {
 
             },
             new String [] {
-                "ID", "Local", "G Local", "G Visita", "Visitante"
+                "ID", "Local", "G Local", "G Visita", "Visitante", "Hora", "Lugar"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, true, false, false
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -143,7 +143,7 @@ public class JuegosJornadaVista extends FormBase {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 530, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 754, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -256,7 +256,8 @@ public class JuegosJornadaVista extends FormBase {
                 model.addRow(new Object[]{j.getIdJuego(), j.getLocalNombre(), 
                     j.getGolesLocal() != null ? j.getGolesLocal() : null,
                     j.getGolesVisita() != null ? j.getGolesVisita() : null,
-                    j.getVisitanteNombre()});
+                    j.getVisitanteNombre(),
+                    j.getHora(), j.getLugar()});
             } else {
                 jgoDes = i;
             }
@@ -264,9 +265,9 @@ public class JuegosJornadaVista extends FormBase {
         if (jgoDes >= 0) {
             Juegos j = juegos.get(jgoDes);
             if (j.getLocalNombre().equalsIgnoreCase("DESCANSA")) {
-                model.addRow(new Object[]{j.getIdJuego(), j.getLocalNombre(), null, null, j.getVisitanteNombre()});
+                model.addRow(new Object[]{j.getIdJuego(), j.getLocalNombre(), null, null, j.getVisitanteNombre(), "", ""});
             } else {
-                model.addRow(new Object[]{j.getIdJuego(), j.getVisitanteNombre(), null, null, j.getLocalNombre()});
+                model.addRow(new Object[]{j.getIdJuego(), j.getVisitanteNombre(), null, null, j.getLocalNombre(), "", ""});
             }
         }
         btnCerrarJornada.setEnabled(!jornadaCerrada);
@@ -445,6 +446,8 @@ public class JuegosJornadaVista extends FormBase {
                 juego.setJornada(jc);
                 juego.setLocal(model.getValueAt(i, 1).toString());
                 juego.setVisitante(model.getValueAt(i, 4).toString());
+                juego.setHora(model.getValueAt(i, 5) != null ? model.getValueAt(i, 5).toString() : "");
+                juego.setCampo(model.getValueAt(i, 6) != null ? model.getValueAt(i, 6).toString() : "");
                 reporte.add(juego);
             }
             try {

@@ -56,6 +56,7 @@ public class ReportesManager {
     private static final String REPORTE_AMONESTADOS = "/lmfvgo/reportes/Amonestados.jasper";
     private static final String REPORTE_SANCIONES_EQUIPO = "/lmfvgo/reportes/SancionesEquipo.jasper";
     private static final String REPORTE_CONSULTA_JUGADORES = "/lmfvgo/reportes/ConsultaJugadores.jasper";
+    private static final String REPORTE_ROL_JORNADA = "/lmfvgo/reportes/RolJornada.jasper";
     
     private final ConfiguracionDAO configuracionDAO;
     private final Configuracion configuracion;
@@ -63,6 +64,15 @@ public class ReportesManager {
     public ReportesManager(Connection con) {
         configuracionDAO = new ConfiguracionDAO(con);
         configuracion = configuracionDAO.consultaConfiguracion();
+    }
+    
+    public void rolJornada(List<Juegos> juegos, int jornada, String fecha) throws LMFVGOException {
+        Map<String, Object> parametros = new HashMap<>();
+        getLogos(parametros);
+        parametros.put("jornada", jornada);
+        parametros.put("fecha", fecha);
+        String nombrePdf = "Rol_Jornada_" + jornada + ".pdf";
+        exportar(REPORTE_ROL_JORNADA, parametros, nombrePdf, juegos);
     }
     
     public void consultaJugadores(List<ConsultaJugadoresVO> jugadores) throws LMFVGOException {

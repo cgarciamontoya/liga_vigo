@@ -59,6 +59,7 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         mnuJugRegistro = new javax.swing.JMenuItem();
         menuJuegos = new javax.swing.JMenu();
         mnuJgosRol = new javax.swing.JMenuItem();
+        mnuRolJornada = new javax.swing.JMenuItem();
         mnuJgosJornada = new javax.swing.JMenuItem();
         mnuJgoLiguilla = new javax.swing.JMenuItem();
         menuCredenciales = new javax.swing.JMenu();
@@ -176,6 +177,14 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         });
         menuJuegos.add(mnuJgosRol);
 
+        mnuRolJornada.setText("Rol por Jornada");
+        mnuRolJornada.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuRolJornadaActionPerformed(evt);
+            }
+        });
+        menuJuegos.add(mnuRolJornada);
+
         mnuJgosJornada.setText("Registro de Jornada");
         mnuJgosJornada.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -279,6 +288,8 @@ public class LigaFutbolMain extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 479, Short.MAX_VALUE)
         );
+
+        getAccessibleContext().setAccessibleName("Liga de Futbol Hacienda \"El Carro\" Villa González Ortega");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -399,6 +410,12 @@ public class LigaFutbolMain extends javax.swing.JFrame {
         sev.show();
     }//GEN-LAST:event_abrirSancionesEquipo
 
+    private void mnuRolJornadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuRolJornadaActionPerformed
+        JuegosRolJornada jrj = new JuegosRolJornada(connection);
+        this.add(jrj);
+        jrj.show();
+    }//GEN-LAST:event_mnuRolJornadaActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -460,6 +477,7 @@ public class LigaFutbolMain extends javax.swing.JFrame {
     private javax.swing.JMenuItem mnuJgosRol;
     private javax.swing.JMenuItem mnuJugConsulta;
     private javax.swing.JMenuItem mnuJugRegistro;
+    private javax.swing.JMenuItem mnuRolJornada;
     private javax.swing.JMenuItem mnuSancionesAmon;
     private javax.swing.JMenuItem mnuSancionesConsulta;
     private javax.swing.JMenuItem mnuTorneoCerrar;

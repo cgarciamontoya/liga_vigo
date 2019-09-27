@@ -129,7 +129,7 @@
 				<textElement textAlignment="Center">
 					<font size="12" isBold="false" isItalic="false"/>
 				</textElement>
-				<text><![CDATA[LIGA MUNICIPAL DE FUTBOL]]></text>
+				<text><![CDATA[LIGA DE FUTBOL]]></text>
 			</staticText>
 			<image isUsingCache="false">
 				<reportElement x="0" y="0" width="115" height="60" uuid="db6a13b3-f88c-49cd-81ba-fc116a6f1244">

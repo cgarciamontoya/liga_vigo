@@ -18,6 +18,8 @@ public class RolVO implements Serializable {
     private String jornada;
     private String local;
     private String visitante;
+    private String hora;
+    private String campo;
 
     public String getJornada() {
         return jornada;
@@ -41,6 +43,22 @@ public class RolVO implements Serializable {
 
     public void setVisitante(String visitante) {
         this.visitante = visitante;
+    }
+
+    public String getHora() {
+        return hora;
+    }
+
+    public void setHora(String hora) {
+        this.hora = hora;
+    }
+
+    public String getCampo() {
+        return campo;
+    }
+
+    public void setCampo(String campo) {
+        this.campo = campo;
     }
 
     

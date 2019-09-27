@@ -88,14 +88,14 @@ public class JuegosRolVista extends FormBase {
 
             },
             new String [] {
-                "Local", "Visitante"
+                "Local", "Visitante", "Hora", "Campo"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -136,21 +136,21 @@ public class JuegosRolVista extends FormBase {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(bnExportar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnGuardar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnLimpiar))
+                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(cboFuerza, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnGenerar))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(bnExportar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnGuardar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnLimpiar)
+                        .addComponent(btnGenerar)
+                        .addGap(0, 392, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -238,7 +238,7 @@ public class JuegosRolVista extends FormBase {
                 Juegos juego = juegos.get(i);
                 if (!juego.getLocalNombre().equalsIgnoreCase("DESCANSA") &&
                         !juego.getVisitanteNombre().equalsIgnoreCase("DESCANSA")) {
-                    modelo.addRow(new Object[]{juego.getLocalNombre(), juego.getVisitanteNombre()});
+                    modelo.addRow(new Object[]{juego.getLocalNombre(), juego.getVisitanteNombre(), juego.getHora(), juego.getLugar()});
                 } else {
                     jgoDesc = i;
                 }
@@ -246,9 +246,9 @@ public class JuegosRolVista extends FormBase {
             if (jgoDesc >= 0) {
                 Juegos juego = juegos.get(jgoDesc);
                 if (juego.getLocalNombre().equalsIgnoreCase("DESCANSA")) {
-                    modelo.addRow(new Object[]{juego.getLocalNombre(), juego.getVisitanteNombre()});
+                    modelo.addRow(new Object[]{juego.getLocalNombre(), juego.getVisitanteNombre(), "", ""});
                 } else {
-                    modelo.addRow(new Object[]{juego.getVisitanteNombre(), juego.getLocalNombre()});
+                    modelo.addRow(new Object[]{juego.getVisitanteNombre(), juego.getLocalNombre(), "", ""});
                 }
             }
             jornada++;
@@ -316,6 +316,8 @@ public class JuegosRolVista extends FormBase {
                 juego.setJornada(jornada);
                 juego.setLocal(model.getValueAt(i, 0).toString());
                 juego.setVisitante(model.getValueAt(i, 1).toString());
+                juego.setHora(model.getValueAt(i, 2) != null ? model.getValueAt(i, 2).toString() : "");
+                juego.setCampo(model.getValueAt(i, 3) != null ? model.getValueAt(i, 3).toString() : "");
                 reporte.add(juego);
             }
             try {

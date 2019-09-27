@@ -56,7 +56,7 @@ public class JuegosDAO extends BaseDAO {
         try {
             sb = new StringBuilder();
             sb.append("select j.id_juego, j.jornada, j.local, j.visitante, j.lugar, j.resultado, j.id_torneo, j.fecha, j.fuerza, j.marcador, ")
-                    .append("l.nombre local_nombre, v.nombre visitante_nombre, j.cerrado ")
+                    .append("l.nombre local_nombre, v.nombre visitante_nombre, j.cerrado, j.hora, j.lugar ")
                     .append("from juegos j inner join equipos l on l.id_equipo = j.local ")
                     .append("inner join equipos v on v.id_equipo = j.visitante where j.fuerza = ? ")
                     .append("and j.id_torneo = ? order by jornada, id_juego");
@@ -82,6 +82,8 @@ public class JuegosDAO extends BaseDAO {
                     j.setFuerza(rs.getInt("fuerza"));
                     j.setMarcador(rs.getString("marcador"));
                     j.setCerrado(rs.getInt("cerrado") == 1);
+                    j.setHora(rs.getString("hora"));
+                    j.setLugar(rs.getString("lugar"));
                     if (rol.get(j.getJornada()) == null) {
                         rol.put(j.getJornada(), new ArrayList<Juegos>());
                     }

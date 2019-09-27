@@ -117,7 +117,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="6" isBold="false"/>
 				</textElement>
-				<text><![CDATA[LIGA MUNICIPAL DE FUTBOL]]></text>
+				<text><![CDATA[LIGA DE FUTBOL]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="91" y="137" width="88" height="13" uuid="d24c84e7-78f2-4749-8779-9ea345e31960"/>

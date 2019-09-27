@@ -21,7 +21,7 @@
 				<textElement textAlignment="Center">
 					<font size="12" isBold="false" isItalic="false"/>
 				</textElement>
-				<text><![CDATA[LIGA MUNICIPAL DE FUTBOL]]></text>
+				<text><![CDATA[LIGA DE FUTBOL]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="148" y="50" width="284" height="20" uuid="6bba6c69-b0a5-4232-9aaf-541505888cdb"/>

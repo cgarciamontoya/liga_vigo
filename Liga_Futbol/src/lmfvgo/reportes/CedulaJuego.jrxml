@@ -50,7 +50,7 @@
 				<textElement textAlignment="Center">
 					<font size="12" isBold="false" isItalic="false"/>
 				</textElement>
-				<text><![CDATA[LIGA MUNICIPAL DE FUTBOL]]></text>
+				<text><![CDATA[LIGA DE FUTBOL]]></text>
 			</staticText>
 			<image>
 				<reportElement x="0" y="0" width="115" height="60" uuid="e0ca29a7-fc9f-4673-b49d-e4603e31e0d7">
