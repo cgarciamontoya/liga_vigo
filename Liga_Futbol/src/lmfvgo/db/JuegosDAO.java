@@ -16,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -110,6 +111,22 @@ public class JuegosDAO extends BaseDAO {
         }
     }
     
+    public Date consultaFechaJornada(Integer jornada) {
+        try {
+            sb = new StringBuilder();
+            sb.append("select max(fecha) fecha from juegos where id_torneo = ? and jornada = ?");
+            PreparedStatement ps = getConnection().prepareStatement(sb.toString());
+            ps.setInt(1, getIdTorneoActivo());
+            ps.setInt(2, jornada);
+            
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            return rs.getDate("fecha");
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
+    
     public List<Juegos> consultaJuegosJornada(Integer fuerza, Integer jornada) {
         try {
             sb = new StringBuilder();
@@ -160,8 +177,16 @@ public class JuegosDAO extends BaseDAO {
             sb = new StringBuilder();
             sb.append("update juegos set lugar = ?, fecha = ?, hora = ?, arbitro = ? where id_juego = ?");
             PreparedStatement ps = getConnection().prepareStatement(sb.toString());
-            ps.setString(1, juego.getLugar().trim().toUpperCase());
-            ps.setDate(2, new java.sql.Date(juego.getFecha().getTime()));
+            if (juego.getLugar() != null && !juego.getLugar().isEmpty()) {
+                ps.setString(1, juego.getLugar().trim().toUpperCase());
+            } else {
+                ps.setNull(1, Types.VARCHAR);
+            }
+            if (juego.getFecha() != null) {
+                ps.setDate(2, new java.sql.Date(juego.getFecha().getTime()));
+            } else {
+                ps.setNull(2, Types.DATE);
+            }
             ps.setString(3, juego.getHora());
             if (juego.getIdArbitro() == null || juego.getIdArbitro() == 0) {
                 ps.setNull(4, Types.INTEGER);

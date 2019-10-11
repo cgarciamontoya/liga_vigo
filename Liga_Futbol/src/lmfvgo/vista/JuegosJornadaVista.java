@@ -92,14 +92,14 @@ public class JuegosJornadaVista extends FormBase {
 
             },
             new String [] {
-                "ID", "Local", "G Local", "G Visita", "Visitante", "Hora", "Lugar"
+                "ID", "Local", "G Local", "G Visita", "Visitante"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -256,8 +256,7 @@ public class JuegosJornadaVista extends FormBase {
                 model.addRow(new Object[]{j.getIdJuego(), j.getLocalNombre(), 
                     j.getGolesLocal() != null ? j.getGolesLocal() : null,
                     j.getGolesVisita() != null ? j.getGolesVisita() : null,
-                    j.getVisitanteNombre(),
-                    j.getHora(), j.getLugar()});
+                    j.getVisitanteNombre()});
             } else {
                 jgoDes = i;
             }
@@ -446,8 +445,6 @@ public class JuegosJornadaVista extends FormBase {
                 juego.setJornada(jc);
                 juego.setLocal(model.getValueAt(i, 1).toString());
                 juego.setVisitante(model.getValueAt(i, 4).toString());
-                juego.setHora(model.getValueAt(i, 5) != null ? model.getValueAt(i, 5).toString() : "");
-                juego.setCampo(model.getValueAt(i, 6) != null ? model.getValueAt(i, 6).toString() : "");
                 reporte.add(juego);
             }
             try {

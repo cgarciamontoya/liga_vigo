@@ -158,12 +158,15 @@ public class JuegoDetalleVista extends FormBase {
         if (estadisticaVisitante.getAutogoles() > 0) {
             cboAGvisitante.setSelectedIndex(estadisticaVisitante.getAutogoles());
         }
-        
-        if (juego.getFecha() != null && juego.getHora() != null && !juego.getHora().isEmpty()
-                && juego.getLugar() != null && !juego.getLugar().isEmpty()) {
-            txtFecha.setText(new SimpleDateFormat("dd/MM/yyyy").format(juego.getFecha()));
+        if (juego.getHora() != null && !juego.getHora().isEmpty()) {
             txtHora.setText(juego.getHora());
+        }
+        if (juego.getLugar() != null && !juego.getLugar().isEmpty()) {
             txtLugar.setText(juego.getLugar());
+        }
+        
+        if (juego.getFecha() != null) {
+            txtFecha.setText(new SimpleDateFormat("dd/MM/yyyy").format(juego.getFecha()));
             btnCedula.setEnabled(true);
             btnLimpiar.setEnabled(false);
         } else if (juego.getFecha() == null) {

@@ -13,144 +13,148 @@
 	<field name="juegosGanados" class="java.lang.Integer"/>
 	<field name="juegosEmpatados" class="java.lang.Integer"/>
 	<field name="juegosPerdidos" class="java.lang.Integer"/>
+	<variable name="variable1" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<columnHeader>
 		<band height="20" splitType="Stretch">
 			<staticText>
-				<reportElement x="482" y="0" width="30" height="20" uuid="56bbdbfa-b376-4a64-b288-42e60dab10e1"/>
+				<reportElement mode="Opaque" x="482" y="0" width="30" height="20" forecolor="#FFFFFF" backcolor="#0066FF" uuid="56bbdbfa-b376-4a64-b288-42e60dab10e1"/>
 				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
+					<pen lineWidth="1.0" lineColor="#0066FF"/>
+					<topPen lineWidth="1.0" lineColor="#0066FF"/>
+					<leftPen lineWidth="1.0" lineColor="#0066FF"/>
+					<bottomPen lineWidth="1.0" lineColor="#0066FF"/>
+					<rightPen lineWidth="1.0" lineColor="#0066FF"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[GC]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="20" y="0" width="312" height="20" uuid="68f881a4-9470-4752-98c6-08ebb147f87a"/>
+				<reportElement mode="Opaque" x="20" y="0" width="312" height="20" forecolor="#FFFFFF" backcolor="#0066FF" uuid="68f881a4-9470-4752-98c6-08ebb147f87a"/>
 				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
+					<pen lineWidth="1.0" lineColor="#0066FF"/>
+					<topPen lineWidth="1.0" lineColor="#0066FF"/>
+					<leftPen lineWidth="1.0" lineColor="#0066FF"/>
+					<bottomPen lineWidth="1.0" lineColor="#0066FF"/>
+					<rightPen lineWidth="1.0" lineColor="#0066FF"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Equipo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="512" y="0" width="30" height="20" uuid="99a615a4-a649-409e-af41-e317d695eab0"/>
+				<reportElement mode="Opaque" x="512" y="0" width="30" height="20" forecolor="#FFFFFF" backcolor="#0066FF" uuid="99a615a4-a649-409e-af41-e317d695eab0"/>
 				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
+					<pen lineWidth="1.0" lineColor="#0066FF"/>
+					<topPen lineWidth="1.0" lineColor="#0066FF"/>
+					<leftPen lineWidth="1.0" lineColor="#0066FF"/>
+					<bottomPen lineWidth="1.0" lineColor="#0066FF"/>
+					<rightPen lineWidth="1.0" lineColor="#0066FF"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[DIF]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="20" height="20" uuid="93a5c7b8-133c-4af8-b85f-0e257bd5c8cb"/>
+				<reportElement mode="Opaque" x="0" y="0" width="20" height="20" forecolor="#FFFFFF" backcolor="#0066FF" uuid="93a5c7b8-133c-4af8-b85f-0e257bd5c8cb"/>
 				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
+					<pen lineWidth="1.0" lineColor="#0066FF"/>
+					<topPen lineWidth="1.0" lineColor="#0066FF"/>
+					<leftPen lineWidth="1.0" lineColor="#0066FF"/>
+					<bottomPen lineWidth="1.0" lineColor="#0066FF"/>
+					<rightPen lineWidth="1.0" lineColor="#0066FF"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[#]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="452" y="0" width="30" height="20" uuid="391395b2-84a7-48ff-a870-3c081ed876cc"/>
+				<reportElement mode="Opaque" x="452" y="0" width="30" height="20" forecolor="#FFFFFF" backcolor="#0066FF" uuid="391395b2-84a7-48ff-a870-3c081ed876cc"/>
 				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
+					<pen lineWidth="1.0" lineColor="#0066FF"/>
+					<topPen lineWidth="1.0" lineColor="#0066FF"/>
+					<leftPen lineWidth="1.0" lineColor="#0066FF"/>
+					<bottomPen lineWidth="1.0" lineColor="#0066FF"/>
+					<rightPen lineWidth="1.0" lineColor="#0066FF"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[GF]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="542" y="0" width="30" height="20" uuid="fb219e0b-4a57-4165-ad44-abe4058f01ac"/>
+				<reportElement mode="Opaque" x="542" y="0" width="30" height="20" forecolor="#FFFFFF" backcolor="#0066FF" uuid="fb219e0b-4a57-4165-ad44-abe4058f01ac"/>
 				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
+					<pen lineWidth="1.0" lineColor="#0066FF"/>
+					<topPen lineWidth="1.0" lineColor="#0066FF"/>
+					<leftPen lineWidth="1.0" lineColor="#0066FF"/>
+					<bottomPen lineWidth="1.0" lineColor="#0066FF"/>
+					<rightPen lineWidth="1.0" lineColor="#0066FF"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[PTS]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="332" y="0" width="30" height="20" uuid="f28b03fa-eb34-4442-a2d3-9f78925f6a88"/>
+				<reportElement mode="Opaque" x="332" y="0" width="30" height="20" forecolor="#FFFFFF" backcolor="#0066FF" uuid="f28b03fa-eb34-4442-a2d3-9f78925f6a88"/>
 				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
+					<pen lineWidth="1.0" lineColor="#0066FF"/>
+					<topPen lineWidth="1.0" lineColor="#0066FF"/>
+					<leftPen lineWidth="1.0" lineColor="#0066FF"/>
+					<bottomPen lineWidth="1.0" lineColor="#0066FF"/>
+					<rightPen lineWidth="1.0" lineColor="#0066FF"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[JJ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="362" y="0" width="30" height="20" uuid="e28bcdd6-017f-4ebf-bbb0-171eaafbef71"/>
+				<reportElement mode="Opaque" x="362" y="0" width="30" height="20" forecolor="#FFFFFF" backcolor="#0066FF" uuid="e28bcdd6-017f-4ebf-bbb0-171eaafbef71"/>
 				<box>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
+					<pen lineWidth="1.0" lineColor="#0066FF"/>
+					<topPen lineWidth="1.0" lineColor="#0066FF"/>
+					<leftPen lineWidth="1.0" lineColor="#0066FF"/>
+					<bottomPen lineWidth="1.0" lineColor="#0066FF"/>
+					<rightPen lineWidth="1.0" lineColor="#0066FF"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[JG]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="392" y="0" width="30" height="20" uuid="7abe2fa6-dc5c-44b5-afaa-6ef469948b31"/>
+				<reportElement mode="Opaque" x="392" y="0" width="30" height="20" forecolor="#FFFFFF" backcolor="#0066FF" uuid="7abe2fa6-dc5c-44b5-afaa-6ef469948b31"/>
 				<box>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
+					<pen lineWidth="1.0" lineColor="#0066FF"/>
+					<topPen lineWidth="1.0" lineColor="#0066FF"/>
+					<leftPen lineWidth="1.0" lineColor="#0066FF"/>
+					<bottomPen lineWidth="1.0" lineColor="#0066FF"/>
+					<rightPen lineWidth="1.0" lineColor="#0066FF"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[JE]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="422" y="0" width="30" height="20" uuid="1c3b8636-d6ba-443b-b6d2-dcc871dd4ea9"/>
+				<reportElement mode="Opaque" x="422" y="0" width="30" height="20" forecolor="#FFFFFF" backcolor="#0066FF" uuid="1c3b8636-d6ba-443b-b6d2-dcc871dd4ea9"/>
 				<box>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
+					<pen lineWidth="1.0" lineColor="#0066FF"/>
+					<topPen lineWidth="1.0" lineColor="#0066FF"/>
+					<leftPen lineWidth="1.0" lineColor="#0066FF"/>
+					<bottomPen lineWidth="1.0" lineColor="#0066FF"/>
+					<rightPen lineWidth="1.0" lineColor="#0066FF"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[JP]]></text>
@@ -159,9 +163,14 @@
 	</columnHeader>
 	<detail>
 		<band height="20" splitType="Stretch">
+			<rectangle>
+				<reportElement mode="Opaque" x="0" y="0" width="571" height="20" backcolor="#E0F4FD" uuid="70b1583b-871e-4a13-ac99-e03e96becc06">
+					<printWhenExpression><![CDATA[new Boolean(($V{REPORT_COUNT} % 2) == 0)]]></printWhenExpression>
+				</reportElement>
+			</rectangle>
 			<textField>
 				<reportElement x="20" y="0" width="312" height="20" uuid="f7509b51-75bf-4230-b242-9b535df8e550"/>
-				<box>
+				<box leftPadding="3" rightPadding="3">
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>

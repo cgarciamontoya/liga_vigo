@@ -13,63 +13,63 @@
 	<columnHeader>
 		<band height="40" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="20" width="20" height="20" uuid="791ae4b6-2a6b-4ab9-856c-0b05875bb010"/>
+				<reportElement mode="Opaque" x="0" y="20" width="20" height="20" forecolor="#FFFFFF" backcolor="#0066FF" uuid="791ae4b6-2a6b-4ab9-856c-0b05875bb010"/>
 				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
+					<pen lineWidth="1.0" lineColor="#0066FF"/>
+					<topPen lineWidth="1.0" lineColor="#0066FF"/>
+					<leftPen lineWidth="1.0" lineColor="#0066FF"/>
+					<bottomPen lineWidth="1.0" lineColor="#0066FF"/>
+					<rightPen lineWidth="1.0" lineColor="#0066FF"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[#]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="20" y="20" width="200" height="20" uuid="e1981ed6-8631-48a6-b215-a7cb066e8a86"/>
+				<reportElement mode="Opaque" x="20" y="20" width="200" height="20" forecolor="#FFFFFF" backcolor="#0066FF" uuid="e1981ed6-8631-48a6-b215-a7cb066e8a86"/>
 				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
+					<pen lineWidth="1.0" lineColor="#0066FF"/>
+					<topPen lineWidth="1.0" lineColor="#0066FF"/>
+					<leftPen lineWidth="1.0" lineColor="#0066FF"/>
+					<bottomPen lineWidth="1.0" lineColor="#0066FF"/>
+					<rightPen lineWidth="1.0" lineColor="#0066FF"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Jugador]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="220" y="20" width="200" height="20" uuid="a3aa9fa5-21d3-4916-852e-4b5c059ccc3b"/>
+				<reportElement mode="Opaque" x="220" y="20" width="200" height="20" forecolor="#FFFFFF" backcolor="#0066FF" uuid="a3aa9fa5-21d3-4916-852e-4b5c059ccc3b"/>
 				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
+					<pen lineWidth="1.0" lineColor="#0066FF"/>
+					<topPen lineWidth="1.0" lineColor="#0066FF"/>
+					<leftPen lineWidth="1.0" lineColor="#0066FF"/>
+					<bottomPen lineWidth="1.0" lineColor="#0066FF"/>
+					<rightPen lineWidth="1.0" lineColor="#0066FF"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Equipo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="420" y="20" width="30" height="20" uuid="bde67a5c-1b6f-4dbe-9049-6fcb77bec167"/>
+				<reportElement mode="Opaque" x="420" y="20" width="30" height="20" forecolor="#FFFFFF" backcolor="#0066FF" uuid="bde67a5c-1b6f-4dbe-9049-6fcb77bec167"/>
 				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
+					<pen lineWidth="1.0" lineColor="#0066FF"/>
+					<topPen lineWidth="1.0" lineColor="#0066FF"/>
+					<leftPen lineWidth="1.0" lineColor="#0066FF"/>
+					<bottomPen lineWidth="1.0" lineColor="#0066FF"/>
+					<rightPen lineWidth="1.0" lineColor="#0066FF"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Goles]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="450" height="20" uuid="d7209b96-83a4-476a-a130-22a4cdbf0504"/>
+				<reportElement x="0" y="0" width="450" height="20" backcolor="#0066FF" uuid="d7209b96-83a4-476a-a130-22a4cdbf0504"/>
 				<textElement textAlignment="Center">
 					<font size="12" isBold="true"/>
 				</textElement>
@@ -79,6 +79,11 @@
 	</columnHeader>
 	<detail>
 		<band height="20" splitType="Stretch">
+			<rectangle>
+				<reportElement stretchType="RelativeToTallestObject" mode="Opaque" x="0" y="0" width="450" height="20" backcolor="#E0F4FD" uuid="a027a2d0-99d2-4807-af2e-740e3cf861ab">
+					<printWhenExpression><![CDATA[new Boolean(($V{REPORT_COUNT} % 2) == 0)]]></printWhenExpression>
+				</reportElement>
+			</rectangle>
 			<textField>
 				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="20" height="20" uuid="fc28868a-8706-4d73-981a-93ecfe2fb3dc"/>
 				<box>
@@ -88,29 +93,31 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{posicion}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="20" y="0" width="200" height="20" uuid="3dafa74a-7f50-426d-bdf9-756e19441a1d"/>
-				<box>
+				<box leftPadding="3" rightPadding="3">
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{nombreJugador}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="220" y="0" width="200" height="20" uuid="0a64738b-fef0-4ece-942b-c6f3e3123547"/>
-				<box>
+				<box leftPadding="3" rightPadding="3">
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{nombreEquipo}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -122,7 +129,7 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{goles}]]></textFieldExpression>
 			</textField>
 		</band>

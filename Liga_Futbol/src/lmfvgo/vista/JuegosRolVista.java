@@ -88,14 +88,14 @@ public class JuegosRolVista extends FormBase {
 
             },
             new String [] {
-                "Local", "Visitante", "Hora", "Campo"
+                "Local", "Visitante"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -238,7 +238,7 @@ public class JuegosRolVista extends FormBase {
                 Juegos juego = juegos.get(i);
                 if (!juego.getLocalNombre().equalsIgnoreCase("DESCANSA") &&
                         !juego.getVisitanteNombre().equalsIgnoreCase("DESCANSA")) {
-                    modelo.addRow(new Object[]{juego.getLocalNombre(), juego.getVisitanteNombre(), juego.getHora(), juego.getLugar()});
+                    modelo.addRow(new Object[]{juego.getLocalNombre(), juego.getVisitanteNombre()});
                 } else {
                     jgoDesc = i;
                 }
@@ -246,9 +246,9 @@ public class JuegosRolVista extends FormBase {
             if (jgoDesc >= 0) {
                 Juegos juego = juegos.get(jgoDesc);
                 if (juego.getLocalNombre().equalsIgnoreCase("DESCANSA")) {
-                    modelo.addRow(new Object[]{juego.getLocalNombre(), juego.getVisitanteNombre(), "", ""});
+                    modelo.addRow(new Object[]{juego.getLocalNombre(), juego.getVisitanteNombre()});
                 } else {
-                    modelo.addRow(new Object[]{juego.getVisitanteNombre(), juego.getLocalNombre(), "", ""});
+                    modelo.addRow(new Object[]{juego.getVisitanteNombre(), juego.getLocalNombre()});
                 }
             }
             jornada++;
@@ -316,8 +316,6 @@ public class JuegosRolVista extends FormBase {
                 juego.setJornada(jornada);
                 juego.setLocal(model.getValueAt(i, 0).toString());
                 juego.setVisitante(model.getValueAt(i, 1).toString());
-                juego.setHora(model.getValueAt(i, 2) != null ? model.getValueAt(i, 2).toString() : "");
-                juego.setCampo(model.getValueAt(i, 3) != null ? model.getValueAt(i, 3).toString() : "");
                 reporte.add(juego);
             }
             try {
