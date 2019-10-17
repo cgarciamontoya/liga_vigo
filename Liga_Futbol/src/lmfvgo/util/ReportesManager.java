@@ -214,7 +214,7 @@ public class ReportesManager {
     
     public void tablaEstadisticas(int fuerza, List<EstadisticasEquipo> ee, List<EstadisticasJugador> goleo) throws LMFVGOException {
         Map<String, Object> parametros = new HashMap<>();
-        parametros.put("fuerza", fuerza == 1 ? "Primera Fuerza" : "Segunda Fuerza");
+        parametros.put("fuerza", fuerza == 1 ? "ESTADISTICA PRIMERA FUERZA" : "ESTADISTICA SEGUNDA FUERZA");
         parametros.put("listaTabla", ee);
         parametros.put("listaGoleo", goleo);
         getLogos(parametros);

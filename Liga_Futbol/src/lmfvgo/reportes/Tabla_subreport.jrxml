@@ -164,7 +164,7 @@
 	<detail>
 		<band height="20" splitType="Stretch">
 			<rectangle>
-				<reportElement mode="Opaque" x="0" y="0" width="571" height="20" backcolor="#E0F4FD" uuid="70b1583b-871e-4a13-ac99-e03e96becc06">
+				<reportElement mode="Opaque" x="0" y="0" width="572" height="20" backcolor="#E0F4FD" uuid="70b1583b-871e-4a13-ac99-e03e96becc06">
 					<printWhenExpression><![CDATA[new Boolean(($V{REPORT_COUNT} % 2) == 0)]]></printWhenExpression>
 				</reportElement>
 			</rectangle>

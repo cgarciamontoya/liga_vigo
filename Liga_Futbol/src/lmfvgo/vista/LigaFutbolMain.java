@@ -5,9 +5,12 @@
  */
 package lmfvgo.vista;
 
+import java.awt.Component;
 import java.sql.Connection;
 import java.sql.SQLException;
+import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JRootPane;
 import lmfvgo.db.TorneoDAO;
 import lmfvgo.modelo.Torneo;
 
@@ -31,6 +34,21 @@ public class LigaFutbolMain extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "NO EXISTE TORNEO ACTIVO", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
         this.connection = torneoDAO.getConnection();
+    }
+    
+    private void closeAllWindows() {
+        for (Component c : this.getComponents()) {
+            if (c instanceof JRootPane) {
+                JRootPane jif = (JRootPane) c;
+                for (Component c2 : jif.getContentPane().getComponents()) {
+                    if (c2 instanceof JInternalFrame) {
+                        JInternalFrame frame = (JInternalFrame) c2;
+                        frame.dispose();
+                        jif.getContentPane().remove(c2);
+                    }
+                }
+            } 
+        }
     }
 
     /**
@@ -295,90 +313,105 @@ public class LigaFutbolMain extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void mnuEqRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuEqRegistroActionPerformed
+        closeAllWindows();
         EquipoRegistroVista equipos= new EquipoRegistroVista(connection);
         this.add(equipos);
         equipos.show();
     }//GEN-LAST:event_mnuEqRegistroActionPerformed
 
     private void jugadorRegistro(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jugadorRegistro
+        closeAllWindows();
         JugadoresRegistroVista jugadores = new JugadoresRegistroVista();
         this.add(jugadores);
         jugadores.show();
     }//GEN-LAST:event_jugadorRegistro
 
     private void abrirConsultaJugadores(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirConsultaJugadores
+        closeAllWindows();
         JugadorConsultaVista jcv = new JugadorConsultaVista(connection);
         this.add(jcv);
         jcv.show();
     }//GEN-LAST:event_abrirConsultaJugadores
 
     private void mnuEqConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuEqConsultaActionPerformed
+        closeAllWindows();
         EquipoAltaJugadoresVista ejv = new EquipoAltaJugadoresVista(connection);
         this.add(ejv);
         ejv.show();
     }//GEN-LAST:event_mnuEqConsultaActionPerformed
 
     private void mnuTorneoNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuTorneoNuevoActionPerformed
+        closeAllWindows();
         TorneoRegistroVista trv = new TorneoRegistroVista(connection);
         this.add(trv);
         trv.show();
     }//GEN-LAST:event_mnuTorneoNuevoActionPerformed
 
     private void abrirRolJuegos(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirRolJuegos
+        closeAllWindows();
         JuegosRolVista jrv = new JuegosRolVista(connection);
         this.add(jrv);
         jrv.show();
     }//GEN-LAST:event_abrirRolJuegos
 
     private void abrirRegistroJornada(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirRegistroJornada
+        closeAllWindows();
         JuegosJornadaVista jjv = new JuegosJornadaVista(connection);
         this.add(jjv);
         jjv.show();
     }//GEN-LAST:event_abrirRegistroJornada
 
     private void abrirEstadisticasEquipo(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirEstadisticasEquipo
+        closeAllWindows();
         EquipoEstadisticasVista eev = new EquipoEstadisticasVista(connection);
         this.add(eev);
         eev.show();
     }//GEN-LAST:event_abrirEstadisticasEquipo
 
     private void abrirCredJugador(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirCredJugador
+        closeAllWindows();
         CredencialesJugadorVista cjv = new CredencialesJugadorVista(connection);
         this.add(cjv);
         cjv.show();
     }//GEN-LAST:event_abrirCredJugador
 
     private void abrirCredEquipo(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirCredEquipo
+        closeAllWindows();
         CredencialesEquipoVista cev = new CredencialesEquipoVista(connection);
         this.add(cev);
         cev.show();
     }//GEN-LAST:event_abrirCredEquipo
 
     private void abrirCierreTorneo(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirCierreTorneo
+        closeAllWindows();
         TorneoCierreVista tcv = new TorneoCierreVista(connection);
         this.add(tcv);
         tcv.show();
     }//GEN-LAST:event_abrirCierreTorneo
 
     private void abrirReglamento(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirReglamento
+        closeAllWindows();
         TorneoReglamentoVista trv = new TorneoReglamentoVista(connection);
         this.add(trv);
         trv.show();
     }//GEN-LAST:event_abrirReglamento
 
     private void abrirConsultaSanciones(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirConsultaSanciones
+        closeAllWindows();
         SancionesConsultaVista scv = new SancionesConsultaVista(connection);
         this.add(scv);
         scv.show();
     }//GEN-LAST:event_abrirConsultaSanciones
 
     private void abrirConfiguracion(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirConfiguracion
+        closeAllWindows();
         ConfiguracionVista cv = new ConfiguracionVista(connection);
         this.add(cv);
         cv.show();
     }//GEN-LAST:event_abrirConfiguracion
 
     private void abrirLiguilla(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirLiguilla
+        closeAllWindows();
         JuegosLiguillaVista jlv = new JuegosLiguillaVista(connection);
         this.add(jlv);
         jlv.show();
@@ -393,24 +426,28 @@ public class LigaFutbolMain extends javax.swing.JFrame {
     }//GEN-LAST:event_cerrandoSistema
 
     private void abrirAmonestados(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirAmonestados
+        closeAllWindows();
         SancionesAmonestadosVista sav = new SancionesAmonestadosVista(connection);
         this.add(sav);
         sav.show();
     }//GEN-LAST:event_abrirAmonestados
 
     private void arbitros(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_arbitros
+        closeAllWindows();
         ArbitrosVista av = new ArbitrosVista(connection);
         this.add(av);
         av.show();
     }//GEN-LAST:event_arbitros
 
     private void abrirSancionesEquipo(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirSancionesEquipo
+        closeAllWindows();
         SancionesEquiposVista sev = new SancionesEquiposVista(connection);
         this.add(sev);
         sev.show();
     }//GEN-LAST:event_abrirSancionesEquipo
 
     private void mnuRolJornadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuRolJornadaActionPerformed
+        closeAllWindows();
         JuegosRolJornada jrj = new JuegosRolJornada(connection);
         this.add(jrj);
         jrj.show();
