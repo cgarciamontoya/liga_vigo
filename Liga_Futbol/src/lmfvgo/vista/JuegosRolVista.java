@@ -191,6 +191,12 @@ public class JuegosRolVista extends FormBase {
         }
         Torneo torneo = torneoDAO.torneoActivo();
         switch (equipos.size()) {
+            case 6 :
+                rol = GeneradorRolJuegos.generarRol6(equipos, torneo.getIdTorneo());
+                break;
+            case 8 :
+                rol = GeneradorRolJuegos.generarRol8(equipos, torneo.getIdTorneo());
+                break;
             case 10 :
                 rol = GeneradorRolJuegos.generarRol10(equipos, torneo.getIdTorneo());
                 break;
@@ -204,7 +210,7 @@ public class JuegosRolVista extends FormBase {
                 rol = GeneradorRolJuegos.generarRol16(equipos, torneo.getIdTorneo());
                 break;
             default :
-                agregarMensajeError("No se puede generar el rol para un torneo de menos de 10 equipos o mayor de 16");
+                agregarMensajeError("No se puede generar el rol para un torneo de menos de 6 equipos o mayor de 16");
                 return;
         }
         limpiarTabla(tblRol);
@@ -272,6 +278,7 @@ public class JuegosRolVista extends FormBase {
         try {
             juegosDAO.guardarRol(rol, cboFuerza.getSelectedIndex());
             agregarMensajeExito("El rol de guardó correctamente");
+            btnGuardar.setEnabled(false);
         } catch (LMFVGOException ex) {
             agregarMensajeError(ex.getMessage());
         }

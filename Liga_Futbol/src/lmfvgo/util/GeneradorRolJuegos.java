@@ -31,6 +31,63 @@ public class GeneradorRolJuegos {
         List<Equipos> resultado = new ArrayList<>(mapa.values());
         return resultado;
     }
+    
+    public static Map<Integer, List<Juegos>> generarRol6(List<Equipos> equipos, Integer idTorneo) {
+        equipos = reorderEquipos(equipos);
+        Map<Integer, List<Juegos>> rol = new HashMap<>();
+        Integer[] j1 = new Integer[]{1,4,2,5,3,0};
+        Integer[] j2 = new Integer[]{0,2,4,3,5,1};
+        Integer[] j3 = new Integer[]{1,0,2,3,5,4};
+        Integer[] j4 = new Integer[]{0,5,2,4,3,1};
+        Integer[] j5 = new Integer[]{1,2,4,0,5,3};
+        
+        rol.put(1, generarJornada(j1, equipos, idTorneo, 1));
+        rol.put(2, generarJornada(j2, equipos, idTorneo, 2));
+        rol.put(3, generarJornada(j3, equipos, idTorneo, 3));
+        rol.put(4, generarJornada(j4, equipos, idTorneo, 4));
+        rol.put(5, generarJornada(j5, equipos, idTorneo, 5));
+        
+        //2a vuelta
+        rol.put(6, generarJornada2a(j1, equipos, idTorneo, 6));
+        rol.put(7, generarJornada2a(j2, equipos, idTorneo, 7));
+        rol.put(8, generarJornada2a(j3, equipos, idTorneo, 8));
+        rol.put(9, generarJornada2a(j4, equipos, idTorneo, 9));
+        rol.put(10, generarJornada2a(j5, equipos, idTorneo, 10));
+        
+        return rol;
+    }
+    
+    public static Map<Integer, List<Juegos>> generarRol8(List<Equipos> equipos, Integer idTorneo) {
+        equipos = reorderEquipos(equipos);
+        Map<Integer, List<Juegos>> rol = new HashMap<>();
+        Integer[] j1 = new Integer[]{0,1,2,7,3,6,5,4};
+        Integer[] j2 = new Integer[]{1,5,4,3,6,2,7,0};
+        Integer[] j3 = new Integer[]{2,4,3,1,5,0,6,7};
+        Integer[] j4 = new Integer[]{0,3,1,2,4,6,7,5};
+        Integer[] j5 = new Integer[]{2,0,3,5,4,7,6,1};
+        Integer[] j6 = new Integer[]{0,6,1,4,3,7,5,2};
+        Integer[] j7 = new Integer[]{2,3,4,0,6,5,7,1};
+        
+        rol.put(1, generarJornada(j1, equipos, idTorneo, 1));
+        rol.put(2, generarJornada(j2, equipos, idTorneo, 2));
+        rol.put(3, generarJornada(j3, equipos, idTorneo, 3));
+        rol.put(4, generarJornada(j4, equipos, idTorneo, 4));
+        rol.put(5, generarJornada(j5, equipos, idTorneo, 5));
+        rol.put(6, generarJornada(j6, equipos, idTorneo, 6));
+        rol.put(7, generarJornada(j7, equipos, idTorneo, 7));
+        
+        //2a vuelta
+        rol.put(8, generarJornada2a(j1, equipos, idTorneo, 8));
+        rol.put(9, generarJornada2a(j2, equipos, idTorneo, 9));
+        rol.put(10, generarJornada2a(j3, equipos, idTorneo, 10));
+        rol.put(11, generarJornada2a(j4, equipos, idTorneo, 11));
+        rol.put(12, generarJornada2a(j5, equipos, idTorneo, 12));
+        rol.put(13, generarJornada2a(j6, equipos, idTorneo, 13));
+        rol.put(14, generarJornada2a(j7, equipos, idTorneo, 14));
+        
+        return rol;
+    }
+    
     public static Map<Integer, List<Juegos>> generarRol10(List<Equipos> equipos, Integer idTorneo) {
         equipos = reorderEquipos(equipos);
         Map<Integer, List<Juegos>> rol = new HashMap<>();
